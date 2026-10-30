@@ -8,4 +8,5 @@
 
 
 
-- Shared engine primitives and tests are newly authored and await CI. Callers must refresh a session when the app resumes; per-question duplicate submission protection and game-specific progression are not yet implemented.
+- Shared engine primitives passed CI run 41086929248. Callers must refresh a session when the app resumes; per-question duplicate submission protection and game-specific progression are not yet implemented.
+

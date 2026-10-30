@@ -1,24 +1,24 @@
 PROJECT: MindSprint
 
-CURRENT MILESTONE: 7 — Shared game engine (IN PROGRESS)
-CURRENT SUBTASK: Validate shared engine in GitHub Actions, fix build/test issues, assess integration readiness.
+CURRENT MILESTONE: 8 — Core UI and input system (NOT STARTED)
+CURRENT SUBTASK: Implement core navigation, design and input in bounded testable pieces; split as needed.
 
-LAST COMPLETED WORK: Authored UI-independent game identifiers, configuration/difficulty, a generic game-rules protocol, score policy, session lifecycle, injected continuous monotonic clock, expiry-on-input and seeded SplitMix64 generator. Added five deterministic XCTest cases for random sequence, deadline, lifecycle, scoring and overflow. No game implemented. These changes have not yet been compiled or tested on macOS.
+LAST COMPLETED WORK: Milestone 7 introduced UI-independent game IDs and difficulty configuration, game-rules protocol, score policy, session lifecycle, injectable ContinuousClock monotonic time and deterministic SplitMix64 RNG. Five new XCTest cases cover seeded output, expiry, lifecycle, scoring and overflow. GitHub Actions run 41086929248 at source commit 3c64e43bf73ec9d796e78f162bb8b93bd6198fe6 passed six total tests, device build, arm64/ZIP checks and IPA upload.
 
-FILES CREATED OR MODIFIED: MindSprint/Engine/GameModels.swift, GameSession.swift, SeededRandomNumberGenerator.swift; MindSprintTests/GameEngineTests.swift; docs/project-state/ROADMAP.md, HANDOFF.md, PROJECT_STATE.md, DECISIONS.md and KNOWN_ISSUES.md.
+FILES CREATED OR MODIFIED: MindSprint/Engine/GameModels.swift, GameSession.swift, SeededRandomNumberGenerator.swift; MindSprintTests/GameEngineTests.swift; docs/project-state/ROADMAP.md, HANDOFF.md, PROJECT_STATE.md, DECISIONS.md, KNOWN_ISSUES.md.
 
-LATEST COMMIT: Inspect GitHub main for the engine commit and subsequent checkpoint. Local Git history is not synchronized with remote due to ownership mismatch.
+LATEST COMMIT: Inspect GitHub main for checkpoint; last tested source commit 3c64e43bf73ec9d796e78f162bb8b93bd6198fe6. Local Git history is not synchronized to GitHub due to ownership mismatch.
 
-BUILD STATUS: Previous passing run 41080417640 at source 9a11f27. Engine CI run pending; inspect GitHub Actions for current source commit and do not claim a passing build before it completes.
+BUILD STATUS: Passed run https://github.com/zekromy123456789/MindSprint/actions/runs/41086929248; unsigned arm64 IPA artifact https://github.com/zekromy123456789/MindSprint/actions/runs/41086929248/artifacts/12993300058 expires 2027-01-28. This remains a scaffold without playable games.
 
-TEST STATUS: Five new XCTest cases authored but not yet run. The prior scaffold smoke test passed in run 41080417640.
+TEST STATUS: Six XCTest tests passed, zero failures (five engine plus one existing smoke test).
 
-KNOWN ISSUES: Session needs caller to refresh on background return; game-specific duplicate input handling and question progression remain to be implemented. No gameplay; reference discrepancies and risks remain in mechanics report. Physical LiveContainer compatibility unverified. CI is needed to check compilation.
+KNOWN ISSUES: No gameplay. Session callers must refresh on background return; per-question duplicate input prevention and progression are game-specific and not implemented. Reference discrepancies and risks remain in mechanics report. Physical LiveContainer compatibility unverified. XcodeGen unpinned. Local Git ownership mismatch persists.
 
-CURRENT BLOCKERS: Local Windows lacks Swift and Xcode; use GitHub Actions. Local Git ownership mismatch; remote connector commits used.
+CURRENT BLOCKERS: None identified for milestone 8; local Windows lacks Xcode, use GitHub Actions.
 
-NEXT EXACT TASK: Inspect CI run for the engine source commit. If failure, review logs, fix and rerun. Once tests and build pass, review engine's ability to support games, document the tested behavior and limitations, mark milestone 7 complete if acceptance criteria met, update checkpoint and stop. Do not start milestone 8 during this session.
+NEXT EXACT TASK: Begin milestone 8 only. Inspect scaffold and requirements in MASTER_BRIEF.md section 18 and keypad details in section 9. Build design/navigation, preparation, gameplay/results templates, persistent numeric keypad with sign/decimal/backspace/clear and hardware input, haptic manager. Split into independently testable subtasks if necessary; do not claim games are playable. Run appropriate tests and CI, update checkpoint and stop.
 
-NEXT TASK ACCEPTANCE CRITERIA: Shared infrastructure compiles; deterministic unit tests pass; no unnecessary UI coupling; next game can use it without engine rewrite.
+NEXT TASK ACCEPTANCE CRITERIA: App builds, navigation works, keypad functional with tested edge cases and hardware keyboard support, core UI usable across iPhone sizes, haptics available. Document unverified visual/device checks.
 
-IMPORTANT CONTEXT: Read HANDOFF then ROADMAP and verify GitHub main/build. Full brief in docs/MASTER_BRIEF.md. One numbered milestone or bounded subtask per session. User approved public repository. Use monotonic timing and independent code. Never claim LiveContainer compatibility without physical verification.
+IMPORTANT CONTEXT: Read HANDOFF then ROADMAP, verify GitHub main/build. Full brief in docs/MASTER_BRIEF.md. One milestone or bounded subtask per session. User approved public repository. No runtime web dependency; use independently written code. Never claim LiveContainer compatibility without physical verification.
