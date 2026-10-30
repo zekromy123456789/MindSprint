@@ -31,6 +31,16 @@ jobs:
             -destination "platform=iOS Simulator,id=$SIMULATOR_ID" \
             -resultBundlePath artifacts/TestResults.xcresult \
             CODE_SIGNING_ALLOWED=NO 2>&1 | tee artifacts/logs/test.log
+      - name: Test UI on a larger iPhone simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          SIMULATOR_ID=$(python3 scripts/select_simulator.py --large < artifacts/logs/simulators.json)
+          xcodebuild test -project MindSprint.xcodeproj -scheme MindSprint \
+            -destination "platform=iOS Simulator,id=$SIMULATOR_ID" \
+            -only-testing:MindSprintUITests \
+            -resultBundlePath artifacts/LargeUITests.xcresult \
+            CODE_SIGNING_ALLOWED=NO 2>&1 | tee artifacts/logs/large-ui-test.log
       - name: Build unsigned iPhone device app
         shell: bash
         run: |
@@ -64,6 +74,6 @@ jobs:
           path: |
             artifacts/logs
             artifacts/TestResults.xcresult
+            artifacts/LargeUITests.xcresult
           if-no-files-found: warn
-
 

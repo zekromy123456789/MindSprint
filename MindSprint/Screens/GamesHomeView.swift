@@ -51,6 +51,7 @@ struct GamesHomeView: View {
                         .overlay(RoundedRectangle(cornerRadius: 16).stroke(.secondary.opacity(0.15)))
                     }
                     .buttonStyle(.plain)
+                    .accessibilityIdentifier("game-\(game.id.rawValue)")
                 }
             }
             .padding()

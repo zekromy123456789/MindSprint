@@ -33,12 +33,26 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.mindsprint.app.tests
         GENERATE_INFOPLIST_FILE: YES
         CODE_SIGNING_ALLOWED: NO
+  MindSprintUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - MindSprintUITests
+    dependencies:
+      - target: MindSprint
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mindsprint.app.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGNING_ALLOWED: NO
 schemes:
   MindSprint:
     build:
       targets:
         MindSprint: all
         MindSprintTests: [test]
+        MindSprintUITests: [test]
     test:
       targets:
         - MindSprintTests
+        - MindSprintUITests

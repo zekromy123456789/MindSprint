@@ -1,24 +1,24 @@
 PROJECT: MindSprint
 
 CURRENT MILESTONE: 8 — Core UI and input system (IN PROGRESS)
-CURRENT SUBTASK: 8D — UI and interaction verification across iPhone sizes; real hardware keyboard and haptic verification where feasible.
+CURRENT SUBTASK: 8D — Validate new simulator UI tests and screenshots in CI; inspect visual results.
 
-LAST COMPLETED WORK: 8C added NumericInputAction mapping and NumericKeypad hardware key routing for digits, sign, decimal, delete, escape/clear and Enter; it gates input when disabled/submitted. Added UIKit haptic feedback manager and persisted Haptics and Keypress haptics settings. GitHub Actions run 41091082669 at source 68af9c3f3947de9d5f10b5f1e085d9ea4118bcaf passed twelve XCTest tests and unsigned device build. No physical keyboard, haptic or UI interaction verification yet.
+LAST COMPLETED WORK: Added debug-only keypad harness, XCUITest catalog/preparation/settings/records and keypad editing/submission checks, screenshot attachments, and standard/large iPhone simulator selection plus second UI test run. Release builds do not expose the harness. Changes await CI; no navigation, keypad visual layout, hardware keyboard or physical haptic verification is yet claimed.
 
-FILES CREATED OR MODIFIED: MindSprint/Input/NumericInputAction.swift, NumericKeypad.swift; MindSprint/Feedback/HapticFeedback.swift; MindSprint/ContentView.swift; MindSprintTests/NumericInputActionTests.swift; project-state HANDOFF.md, PROJECT_STATE.md, KNOWN_ISSUES.md and DECISIONS.md.
+FILES CREATED OR MODIFIED: MindSprint/MindSprintApp.swift, MindSprint/Screens/GamesHomeView.swift, MindSprintUITests/MindSprintUITests.swift, project.yml, scripts/select_simulator.py, .github/workflows/ios.yml; project-state HANDOFF.md, PROJECT_STATE.md and KNOWN_ISSUES.md.
 
-LATEST COMMIT: Inspect GitHub main for checkpoint. Last tested source commit 68af9c3f3947de9d5f10b5f1e085d9ea4118bcaf. Local Git history not synchronized due to ownership mismatch.
+LATEST COMMIT: Inspect GitHub main for UI-test source commit. Local Git history not synchronized due to ownership mismatch.
 
-BUILD STATUS: Passed GitHub Actions run https://github.com/zekromy123456789/MindSprint/actions/runs/41091082669, including unsigned arm64 device build and IPA upload.
+BUILD STATUS: New UI tests and two-simulator workflow await CI. Last passing run 41091082669 at source 68af9c3; twelve unit tests and unsigned device build passed.
 
-TEST STATUS: Twelve XCTest tests passed, zero failures; two tests cover mapping and input action locking. No UI tests, hardware-key focus/delivery tests, physical haptic checks, or multi-size screenshots performed.
+TEST STATUS: New XCUITests authored, not yet run. YAML parsed locally. Simulator selection requires both a standard and a Max/Plus iPhone; if runner lacks either it fails explicitly.
 
-KNOWN ISSUES: Keypad template not yet reachable through a playable game; actual hardware focus and keyboard delivery not tested. Physical haptics and navigation interaction unverified. Result feedback is available but not connected to games. Records placeholders, gameplay absent, LiveContainer unverified. See KNOWN_ISSUES.md.
+KNOWN ISSUES: Test-only harness is DEBUG-only; real keypad remains unconnected to a playable game. Physical haptic feel, hardware key focus/delivery and LiveContainer are unverified. Screenshot attachments require inspection. No games implemented. See KNOWN_ISSUES.md.
 
-CURRENT BLOCKERS: Local Windows lacks Xcode/simulator; GitHub Actions can run automated tests. Visual and hardware-device checks require an appropriate environment.
+CURRENT BLOCKERS: Local Windows lacks Xcode/simulator; GitHub Actions needed. Physical hardware and haptic validation require device.
 
-NEXT EXACT TASK: Continue milestone 8 with bounded 8D: add feasible simulator UI tests and screenshot capture for catalog/preparation/navigation and keypad interaction at multiple available iPhone sizes using CI. Ensure a test-only harness does not create fake gameplay in the product. Inspect screenshots and test results if accessible. Test hardware keyboard and physical haptics where possible or explicitly document limitations. Do not start milestone 9 until milestone 8 acceptance criteria are met.
+NEXT EXACT TASK: Inspect CI for UI-test source commit. Fix build, selection or UI-test failures. On success, inspect retained screenshots from both xcresult bundles if tools permit; record exact devices and results, and document physical hardware limitations. Continue milestone 8 until acceptance criteria met; do not begin milestone 9 in same session.
 
-NEXT TASK ACCEPTANCE CRITERIA: Navigation/keypad interaction and edge cases tested; usable layouts on different iPhone sizes where feasible; hardware key support and haptic settings validated to the extent environment permits, with unverified physical behavior explicit. Overall milestone 8 remains in progress until criteria are met.
+NEXT TASK ACCEPTANCE CRITERIA: Catalog navigation and keypad interaction tested; layouts reviewed on different iPhone sizes where feasible; hardware and haptics validated to environment limits and unverified physical behavior explicit.
 
-IMPORTANT CONTEXT: Read HANDOFF then ROADMAP and verify GitHub main/build. Full brief in docs/MASTER_BRIEF.md. One milestone or bounded subtask per session. Public repository approved. Never claim LiveContainer compatibility without physical verification.
+IMPORTANT CONTEXT: Read HANDOFF then ROADMAP, verify GitHub main/build. Full brief in docs/MASTER_BRIEF.md. One milestone or bounded subtask per session. Public repo approved. Never claim LiveContainer compatibility without physical verification.

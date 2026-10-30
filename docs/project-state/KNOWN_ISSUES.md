@@ -19,3 +19,5 @@
 
 - 8C keyboard routing and haptic settings passed CI run 41091082669. The keypad is not in a reachable playable screen, so real iOS hardware-key focus, haptic feel and accessibility remain unverified. Haptic result feedback is available but not connected to games.
 
+
+- 8D XCUITests and two-size CI workflow are newly authored and awaiting execution. Screenshots have not been reviewed; physical hardware-key focus and haptic behavior remain unverified.
