@@ -9,7 +9,7 @@ FILES CREATED OR MODIFIED: MindSprint/MindSprintApp.swift, MindSprint/Screens/Ga
 
 LATEST COMMIT: Inspect GitHub main for UI-test source commit. Local Git history not synchronized due to ownership mismatch.
 
-BUILD STATUS: New UI tests and two-simulator workflow await CI. Last passing run 41091082669 at source 68af9c3; twelve unit tests and unsigned device build passed.
+BUILD STATUS: UI validation run https://github.com/zekromy123456789/MindSprint/actions/runs/41092465371 is in progress at source c33438207bd591067407d2835146a3cffc4095f8; first simulator step was running at checkpoint. Last passing run 41091082669 at source 68af9c3; twelve unit tests and unsigned device build passed.
 
 TEST STATUS: New XCUITests authored, not yet run. YAML parsed locally. Simulator selection requires both a standard and a Max/Plus iPhone; if runner lacks either it fails explicitly.
 
@@ -17,8 +17,9 @@ KNOWN ISSUES: Test-only harness is DEBUG-only; real keypad remains unconnected t
 
 CURRENT BLOCKERS: Local Windows lacks Xcode/simulator; GitHub Actions needed. Physical hardware and haptic validation require device.
 
-NEXT EXACT TASK: Inspect CI for UI-test source commit. Fix build, selection or UI-test failures. On success, inspect retained screenshots from both xcresult bundles if tools permit; record exact devices and results, and document physical hardware limitations. Continue milestone 8 until acceptance criteria met; do not begin milestone 9 in same session.
+NEXT EXACT TASK: Inspect run 41092465371 for source c33438207bd591067407d2835146a3cffc4095f8. Fix build, selection or UI-test failures. On success, inspect retained screenshots from both xcresult bundles if tools permit; record exact devices and results, and document physical hardware limitations. Continue milestone 8 until acceptance criteria met; do not begin milestone 9 in same session.
 
 NEXT TASK ACCEPTANCE CRITERIA: Catalog navigation and keypad interaction tested; layouts reviewed on different iPhone sizes where feasible; hardware and haptics validated to environment limits and unverified physical behavior explicit.
 
 IMPORTANT CONTEXT: Read HANDOFF then ROADMAP, verify GitHub main/build. Full brief in docs/MASTER_BRIEF.md. One milestone or bounded subtask per session. Public repo approved. Never claim LiveContainer compatibility without physical verification.
+
