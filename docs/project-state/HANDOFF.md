@@ -1,24 +1,24 @@
 PROJECT: MindSprint
 
 CURRENT MILESTONE: 3 — Research Arithmetic and Arithmetic Pro (IN PROGRESS)
-CURRENT SUBTASK: Further investigate question generators, distributions and untested input/timing edge cases.
+CURRENT SUBTASK: Investigate generator rules and remaining input/timing edge cases; public script access remains limited.
 
-LAST COMPLETED WORK: On 2026-10-30, observed two sessions each at https://openquant.co/math-game, including one timeout per mode. Both accepted correct input automatically with +1 per tested answer; wrong 999 and Enter did not advance in sampled cases. Arithmetic included negative subtraction and exact integer division; Pro included compound expressions and precedence. Result screens showed score and last question with solution. Detailed examples and uncertainties recorded in docs/OPENQUANT_GAME_MECHANICS.md. Web inspection could not access publicly loaded JS bundle; no restrictions bypassed.
+LAST COMPLETED WORK: On 2026-10-30, additional direct tests showed Arithmetic `0528` for `66 * 8` and pasted `88.0` for `85 + 3` did not advance, but canonical integer strings did. Pro `031` and `31.0` for `(8 * 3) + 6 + 1` did not advance, but `31` did; `16 - (4 + 3) * (14 + 1) = -89` was accepted. Hiding the Arithmetic timer did not pause the sampled session. These suggest, but do not prove, string-sensitive validation. Public page script name identified; browser asset export excludes scripts and web retrieval failed. Documented optional user-side DevTools route for obtaining public bundle; avoid credentials and network captures.
 
-FILES CREATED OR MODIFIED: docs/OPENQUANT_GAME_MECHANICS.md and docs/project-state/RESEARCH_STATE.md, ROADMAP.md, HANDOFF.md, PROJECT_STATE.md, KNOWN_ISSUES.md.
+FILES CREATED OR MODIFIED: docs/OPENQUANT_GAME_MECHANICS.md, project-state HANDOFF.md, PROJECT_STATE.md, RESEARCH_STATE.md and KNOWN_ISSUES.md.
 
-LATEST COMMIT: Inspect GitHub main for checkpoint. Local Git repository is not synchronized with remote due to ownership mismatch. Last tested app source 9a11f27bccf50b649539bbc9a7c9844cd7e387ef.
+LATEST COMMIT: Inspect GitHub main for checkpoint. Local Git history is not synchronized to GitHub due to ownership mismatch. Last tested app source 9a11f27bccf50b649539bbc9a7c9844cd7e387ef.
 
-BUILD STATUS: Run 41080417640 passed device build and IPA checks; artifact expires 2027-01-28. Documentation-only changes; no new build needed.
+BUILD STATUS: GitHub Actions run 41080417640 passed device build and IPA checks; artifact expires 2027-01-28. Documentation-only changes; no new build needed.
 
-TEST STATUS: One XCTest passed in run 41080417640. Research examples were directly checked against site responses; no automated gameplay tests yet.
+TEST STATUS: One XCTest passed in run 41080417640. Direct gameplay observations recorded with concrete cases; no automated gameplay tests yet.
 
-KNOWN ISSUES: Generator ranges and distributions, full Pro grammar, wrong/malformed input edge cases, timer/background and race behavior remain unverified. No games implemented; no physical LiveContainer verification. See KNOWN_ISSUES.md.
+KNOWN ISSUES: Generator ranges, operator weights, full Pro grammar, zero and other input edge cases, background/expiry behavior remain unverified. No games implemented; no physical LiveContainer verification. See KNOWN_ISSUES.md.
 
-CURRENT BLOCKERS: Public JavaScript bundle URL was inaccessible through web inspection tool. Anonymous gameplay worked; investigate further with supported browser tools and respect access controls.
+CURRENT BLOCKERS: Public JavaScript bundle could not be read via available web tool; browser asset exporter does not support scripts. Anonymous gameplay works. User can optionally provide public page JavaScript from DevTools Sources (not private credentials or HAR files); continue productive direct research independently.
 
-NEXT EXACT TASK: Continue milestone 3 only. Examine additional Arithmetic and Pro question samples, negatives/zero/decimals and input edge cases, timer/expiry behavior, and investigate public implementation only if legitimately accessible. Establish supported generator details or document legitimate limitations. Update detailed specs and evidence with examples; mark milestone complete only when its acceptance criteria are met. Do not start milestone 4 in the same session.
+NEXT EXACT TASK: Continue milestone 3 only. If public bundle supplied, inspect independently and record evidence without copying implementation; otherwise collect further game samples and test remaining practical edge cases, document legitimate limits. Finalize both detailed evidence-labelled specs, ranges where known, timing, scoring, progression and examples; mark complete only when acceptance criteria are met. Do not start milestone 4 in same session.
 
-NEXT TASK ACCEPTANCE CRITERIA: Detailed specs for both games covering generation, ranges, scoring, timing, answers, progression, difficulty, end conditions and edge cases, with verified and inferred rules distinguished, mathematical test examples and explicit remaining uncertainties.
+NEXT TASK ACCEPTANCE CRITERIA: Detailed specs for both games covering generation, ranges, scoring, timing, answers, progression, difficulty, end conditions and edge cases, with verified and inferred rules distinguished, mathematical examples and explicit remaining uncertainties.
 
 IMPORTANT CONTEXT: Read this file first on continuation, then ROADMAP.md, verify actual repository and build. Full requirements in docs/MASTER_BRIEF.md. One milestone or bounded subtask per session. User approved public repository; all eight games mandatory. Never claim LiveContainer compatibility without physical verification.
