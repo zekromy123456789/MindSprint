@@ -1,0 +1,44 @@
+name: MindSprint
+options:
+  bundleIdPrefix: com.mindsprint
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1"
+targets:
+  MindSprint:
+    type: application
+    platform: iOS
+    sources:
+      - MindSprint
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mindsprint.app
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: MindSprint
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        CODE_SIGNING_ALLOWED: NO
+  MindSprintTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - MindSprintTests
+    dependencies:
+      - target: MindSprint
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mindsprint.app.tests
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGNING_ALLOWED: NO
+schemes:
+  MindSprint:
+    build:
+      targets:
+        MindSprint: all
+        MindSprintTests: [test]
+    test:
+      targets:
+        - MindSprintTests

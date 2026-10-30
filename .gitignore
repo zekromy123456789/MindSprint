@@ -1,0 +1,21 @@
+# Xcode and Swift
+.DS_Store
+.build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.ipa
+*.dSYM
+*.dSYM.zip
+*.xcarchive/
+.build-cache/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Generated project
+MindSprint.xcodeproj/
+artifacts/
+__pycache__/

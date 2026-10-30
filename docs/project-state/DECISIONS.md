@@ -1,0 +1,11 @@
+# Decisions
+
+- 2026-10-30: Preserve the user's full brief in `docs/MASTER_BRIEF.md`; it defines requirements and detailed milestone acceptance criteria.
+- 2026-10-30: Use a private repository by default. The connected account is `zekromy123456789`; no existing MindSprint repository was found in the accessible installations. No repository creation operation is exposed by the available GitHub connector, and GitHub CLI is unavailable. Do not assume a remote exists.
+- 2026-10-30: Use native Swift/SwiftUI and an offline architecture as required. Persistence technology and game mechanics remain to be decided in their respective milestones.
+- 2026-10-30: Classic rules must be evidence-labelled; no mechanics are verified yet. Independent implementation and original visual design are required.
+- 2026-10-30: Target iOS 17 initially, use XcodeGen as the project source and use a GitHub-hosted macOS runner. This supports modern SwiftUI and SwiftData if selected later, while leaving persistence choice open. The workflow and toolchain compatibility require an actual CI run; XcodeGen is installed via Homebrew and is not pinned, a reproducibility risk to resolve after the first build.
+
+- 2026-10-30: The user created zekromy123456789/MindSprint. GitHub reports it is public and empty; wait for private visibility before uploading, unless the user explicitly changes the privacy requirement.
+
+- 2026-10-30: User explicitly approved keeping the MindSprint repository public, superseding the initial private-by-default preference.
