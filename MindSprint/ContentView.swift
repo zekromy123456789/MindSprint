@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("hapticsEnabled") private var hapticsEnabled = true
+    @AppStorage("keypressHapticsEnabled") private var keypressHapticsEnabled = true
+
     var body: some View {
         TabView {
             NavigationStack { GamesHomeView() }
@@ -12,10 +15,13 @@ struct ContentView: View {
             .tabItem { Label("Records", systemImage: "chart.bar") }
             NavigationStack {
                 List {
+                    Section("Feedback") {
+                        Toggle("Haptics", isOn: $hapticsEnabled)
+                        Toggle("Keypress haptics", isOn: $keypressHapticsEnabled)
+                            .disabled(!hapticsEnabled)
+                    }
                     Section("MindSprint") {
                         LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Development")
-                        Text("Settings will be available as the games are added.")
-                            .foregroundStyle(.secondary)
                     }
                 }
                 .navigationTitle("Settings")

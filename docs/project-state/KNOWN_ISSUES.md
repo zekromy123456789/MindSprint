@@ -16,3 +16,5 @@
 
 - 8B catalog and navigation plus reusable active/results templates compile in CI run 41089968056; navigation interaction and visual layout remain unverified. Games are disabled; records and settings are placeholders. Numeric template composes keypad but is not connected to real gameplay.
 
+
+- 8C keyboard routing and haptic settings are newly authored and await CI. The keypad is not in a reachable playable screen, so real iOS hardware-key focus, haptic feel and accessibility remain unverified. Haptic result feedback is available but not connected to games.
