@@ -52,13 +52,28 @@ Source: user-supplied publicly delivered `math-game-3c79ba5d0d428fde.js`, SHA-25
 
 ## Sequence
 
-- **VERIFIED — DIRECT OBSERVATION:** Menu label “Sequence Game”; selection shows 0 points, initially 120 seconds, a visible 3 during entry, Back and Play Again. No initial rules text was visible.
-- **UNVERIFIED:** Patterns, answer format, timing semantics, scoring, ambiguity and progression. Investigate in milestone 4.
+Source: [OpenQuant game room](https://openquant.co/math-game), direct unsigned-in play on 2026-10-30, and the user-supplied public script fingerprinted in the Arithmetic section. Source observations describe that snapshot, which may change.
+
+- **VERIFIED — DIRECT OBSERVATION:** The mode starts with a countdown and 120-second display. `6, 19, 32, 45, ?` accepted `58` and advanced from 0 to 1 point; `1, 8, 27, 64, ?` accepted `125` and advanced to 2. Entering `0` and pressing Enter on the first prompt did not advance or change score. Play Again reset the score and timer; `9, 16, 25, 36, ?` accepted `49` in the replay.
+- **VERIFIED — PUBLIC IMPLEMENTATION:** A uniformly chosen family (arithmetic, geometric, quadratic, special) generates five integers. An independent random direction reverses the five terms half the time; the last term of the resulting order is hidden. Reversal does not guarantee numerically decreasing values for every quadratic.
+  - Arithmetic: initial term 5–22 and positive step 2–22, inclusive; generate five successive terms.
+  - Geometric: initial term 5–22 and multiplier 2–9, inclusive; generate five successive terms.
+  - Quadratic: independent integer coefficients a, b, c each −8 through 8; evaluate a*n² + b*n + c for n=1…5. Zero coefficients and negative values are possible.
+  - Special: uniformly choose squares, cubes, or triangular numbers, with starting index 1–5; produce five consecutive terms.
+- **VERIFIED — PUBLIC IMPLEMENTATION:** The hidden answer is converted to a string. An exact match on numeric-field change adds one point, clears input and advances; a nonmatch does not advance or deduct points. Three-second countdown precedes 120 seconds, using wall-clock time and roughly one-second updates; the result shows score and the last sequence/answer. There is no source-visible adaptive difficulty or skip in this mode. Timer background/clock-change and answer-expiry races have not been tested.
+- **INDEPENDENT CHECK:** Exhaustively enumerating the stated finite parameter sets and both directions yielded 10,621 distinct four-term prefixes and no prefix with more than one fifth value within these generator families. This does not prove uniqueness among all conceivable mathematical rules. Example test vectors: 5, 7, 9, 11 → 13; 5, 10, 20, 40 → 80; 1, 4, 9, 16 → 25; 1, 3, 6, 10 → 15; reversed 25, 16, 9, 4 → 1.
+- **UNVERIFIED:** Actual expiry transition and last-question UI in live Sequence play, invalid-format variations, timing races, and behavior under OS backgrounding. Do not infer a device-monotonic clock from the reference's wall clock.
 
 ## Optiver 80 in 8
 
-- **VERIFIED — DIRECT OBSERVATION:** Selection shows 0 points, initially 480 seconds, a visible 3 during entry, Back and Play Again. No initial rules text was visible.
-- **UNVERIFIED:** Question count and types, input, timing semantics, scoring, stopping rules and progression. Do not infer these from the name. Investigate in milestone 4.
+Source: same site and script snapshot; direct unsigned-in samples on 2026-10-30. The game shown by OpenQuant should not be assumed to match an actual employer assessment.
+
+- **VERIFIED — DIRECT OBSERVATION:** An initial countdown is followed by a display of Question 1 / 80, 480 seconds, an equation with one missing component, and four tappable choices. `? / 29 = −4.8` accepted `−139.2`, awarded +1, and advanced. Choosing `140` for `? − 59 = 27` advanced and changed score from 1 to −1 (−2). Replay reset question number, score and timer; `95.75 − 56.16 = ?` accepted `39.59` and earned +1.
+- **VERIFIED — PUBLIC IMPLEMENTATION:** At start, 80 questions are generated in advance. Each selects addition, subtraction, multiplication or division and hides first operand, second operand or result, with each operation and position chosen uniformly by the code. There are four shuffled string choices, one designated correct; every choice immediately advances, adding +1 if it exactly equals the designated answer or −2 otherwise. The session finishes at 80 answered or after 480 elapsed seconds following a three-second countdown. A wall-clock interval drives time display/status; answer-at-expiry and rapid-tap races are unverified.
+- **VERIFIED — PUBLIC IMPLEMENTATION:** Number type is selected independently from an array containing two integer entries and one decimal entry (nominal 2/3 integer, 1/3 decimal). Addition/subtraction use the first type for both operands: integers 2–99 inclusive or decimal values sampled from 0.1 up to 99 and rounded/displayed to two decimals. Multiplication/division use independently selected types: integers 2–99, or values sampled from −5 up to 5 and rounded/displayed to one decimal. Division constructs the dividend as a product so the intended quotient is a sampled factor; precision depends on operand types. Floating-point rounding and formatting need independent compatibility tests.
+- **VERIFIED — PUBLIC IMPLEMENTATION:** Distractors use offsets according to the hidden value's display precision: integer offsets include one small positive, one larger positive, and one small negative; decimal choices use analogous offsets at one or two decimal places, then shuffle. Result view displays score and all 80 generated question rows, treating an unanswered row's missing correctness flag as false; no live full-session/timeout result was checked.
+- **STRONGLY INFERRED FROM PUBLIC IMPLEMENTATION:** Decimal sampling can round a divisor to zero. A division question can therefore display an invalid zero-divisor equation while retaining a designated answer; this defect was not reproduced live. Avoid generating invalid divisions in MindSprint and document this fidelity deviation. Potential rounding, duplicate choices and negative-zero cases need targeted testing before implementation.
+- **UNVERIFIED:** Full run through all 80 questions, expiry/results in live play, score floor, overlapping rapid taps, rounding edge cases and background timing. No assumption that the reference has a numeric keypad or accepts free-text input.
 
 ## Memory
 

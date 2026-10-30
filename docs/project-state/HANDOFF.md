@@ -1,24 +1,24 @@
 PROJECT: MindSprint
 
-CURRENT MILESTONE: 4 — Research Sequence and Optiver 80 in 8 (NOT STARTED)
-CURRENT SUBTASK: Investigate both games' original mechanics and document evidence.
+CURRENT MILESTONE: 5 — Research Memory and Risk (NOT STARTED)
+CURRENT SUBTASK: Investigate stimulus, decision and recall mechanics, controls, timing and scoring.
 
-LAST COMPLETED WORK: Milestone 3: examined user-supplied public game script math-game-3c79ba5d0d428fde.js (SHA-256 1a4b0c3c95ffb3bc6cdcd9de393a1cefe52530969185646be86d33850a919b51), compared it with direct play and recorded Arithmetic generation, scoring, matching and timing plus Pro fixed-pool behavior and an out-of-range selection defect. Independently evaluated all 2,881 Pro expressions using exact rational arithmetic (normalizing Unicode minus): all stored answers matched. Source and proprietary question list not copied into repository. Some edge cases and exact independent Pro distribution remain unresolved.
+LAST COMPLETED WORK: Milestone 4 researched Sequence and Optiver using direct play in two sessions per mode and the user-supplied public script snapshot (SHA-256 1a4b0c3c95ffb3bc6cdcd9de393a1cefe52530969185646be86d33850a919b51). Recorded generator families, timer, scoring, four-choice Optiver controls and known uncertainty in docs/OPENQUANT_GAME_MECHANICS.md. Independently enumerated Sequence parameters/directions: 10,621 distinct four-term prefixes, no conflicting fifth terms within stated families. Source inspection suggests Optiver can generate a zero divisor; not reproduced live. No original code copied.
 
-FILES CREATED OR MODIFIED: docs/OPENQUANT_GAME_MECHANICS.md and docs/project-state/RESEARCH_STATE.md, ROADMAP.md, HANDOFF.md, PROJECT_STATE.md and KNOWN_ISSUES.md.
+FILES CREATED OR MODIFIED: docs/OPENQUANT_GAME_MECHANICS.md and docs/project-state/RESEARCH_STATE.md, ROADMAP.md, HANDOFF.md, PROJECT_STATE.md, KNOWN_ISSUES.md.
 
 LATEST COMMIT: Inspect GitHub main for checkpoint. Last tested app source 9a11f27bccf50b649539bbc9a7c9844cd7e387ef. Local Git history not synchronized with remote due to ownership mismatch.
 
-BUILD STATUS: GitHub Actions run 41080417640 passed device build and IPA checks; artifact expires 2027-01-28. Documentation-only milestone; no new build required.
+BUILD STATUS: GitHub Actions run 41080417640 passed device build and IPA checks; artifact expires 2027-01-28. Documentation-only work; no new build needed.
 
-TEST STATUS: Existing one XCTest passed in run 41080417640. Research validation evaluated 2,881 Pro stored answers; zero discrepancies. The source index edge case follows from code inspection but was not reproduced in live play.
+TEST STATUS: One XCTest passed in run 41080417640. Sequence generator parameter enumeration found no conflicting fifth answers within reference families. Live samples checked score changes and replay. No full 80-question or timeout Optiver run was performed.
 
-KNOWN ISSUES: No games implemented. Pro's protected fixed question pool cannot be copied; exact independent distribution is unresolved. Some timing and input edge cases remain untested. LiveContainer physical-device compatibility unverified. See KNOWN_ISSUES.md.
+KNOWN ISSUES: No games implemented. Sequence timing races and Optiver zero divisor/rounding/rapid-tap risks need implementation tests. Arithmetic Pro fixed source pool cannot be copied; exact independent distribution unresolved. No physical LiveContainer verification. See KNOWN_ISSUES.md.
 
-CURRENT BLOCKERS: None identified for milestone 4. The supplied reference JS may be at C:/Users/danie/Downloads/math-game-3c79ba5d0d428fde.js on this machine; it is not in the repository. If unavailable later, use direct observation or legitimately obtainable public evidence and document limits.
+CURRENT BLOCKERS: None identified for milestone 5. Supplied public JS may be at C:/Users/danie/Downloads/math-game-3c79ba5d0d428fde.js (not in repo); verify fingerprint and do not copy proprietary source.
 
-NEXT EXACT TASK: Research Sequence and Optiver 80 in 8 only, following docs/OPENQUANT_GAME_MECHANICS.md and MASTER_BRIEF.md: play multiple sessions where feasible, inspect the supplied public bundle if available, document generation, timing, answer handling, scoring and progression with evidence labels and explicit uncertainties. Record examples and update checkpoint. Stop after milestone 4 or a bounded subtask.
+NEXT EXACT TASK: Research Memory and Risk only, using direct play and supplied public implementation where available. Document stimulus, interaction, generation, timings, rounds, scoring, transitions, results, uncertainty and safe independently authored implementation requirements. Stop after milestone 5 or bounded subtask.
 
-NEXT TASK ACCEPTANCE CRITERIA: Detailed specifications of both games, verified versus inferred rules clearly distinguished, uncertainties and implementation requirements documented.
+NEXT TASK ACCEPTANCE CRITERIA: Research specifications and required controls for Memory and Risk, with unverified rules clearly flagged and evidence recorded.
 
-IMPORTANT CONTEXT: Read this file first, then ROADMAP.md, verify repository and build state. Full requirements in docs/MASTER_BRIEF.md. One milestone or bounded subtask per session. User approved public repository; independently implement rather than copy proprietary source or question lists. Never claim LiveContainer compatibility without physical verification.
+IMPORTANT CONTEXT: Read HANDOFF then ROADMAP; verify actual repository and build state. Full brief in docs/MASTER_BRIEF.md. One milestone or bounded subtask per session. User approved public repository; never copy proprietary code or question lists. Never claim LiveContainer compatibility without physical verification.
