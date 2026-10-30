@@ -1,6 +1,6 @@
 # Known issues and limitations
 
-- The app is a minimal scaffold with no gameplay. Eight reference game entry screens have been inventoried, but gameplay, question generation, scoring and timing are mostly unverified. The reference's initial displayed instructions are not independent evidence that behavior matches them.
-- GitHub Actions run 41080417640 passed simulator test and unsigned arm64 device build, ZIP validation and IPA upload. The artifact expires 2027-01-28. An unsigned IPA and archive checks do not establish installation or LiveContainer compatibility; no physical-device test has been performed.
-- Git status and commit locally are blocked by Git's dubious-ownership check: workspace and `.git` have different Windows owners. Remote changes use the GitHub connector; local and remote Git histories are not synchronized.
+- No games implemented. Arithmetic and Arithmetic Pro have limited direct gameplay samples and timeout observations; exact generators, distributions and many edge cases remain unknown. Public JS bundle could not be read through the web inspection tool. Other modes have only entry-screen inventory.
+- GitHub Actions run 41080417640 passed simulator test and unsigned arm64 device build, ZIP validation and IPA upload. The artifact expires 2027-01-28. IPA checks do not establish installation or LiveContainer compatibility; no physical-device test has been performed.
+- Local Git status and commit are blocked by a Windows ownership mismatch. GitHub connector updates remote; local and remote Git histories are not synchronized.
 - Local Windows environment lacks Xcode and iOS SDK. CI installs an unpinned XcodeGen version; runner or dependency changes can affect reproducibility.

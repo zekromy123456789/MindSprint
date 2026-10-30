@@ -10,13 +10,26 @@ Observation date: 2026-10-30. Source for every entry: [OpenQuant Game Room](http
 
 ## Arithmetic
 
-- **VERIFIED — DIRECT OBSERVATION:** Menu label “Arithmetic Game”; selection opens a screen showing 0 points, a timer initially displaying 120 seconds, a visible 3 during entry, Back and Play Again. No rules text was visible in the initial screen.
-- **UNVERIFIED:** Objective details, operation and number distributions, answer input, timing semantics, scoring, progression, penalties and end conditions. Investigate in milestone 3.
+Observations on 2026-10-30, unsigned-in at the shared source above. Two sessions sampled; first was allowed to expire. These are examples, not established generation bounds.
+
+- **VERIFIED — DIRECT OBSERVATION:** Starting/replaying shows a countdown including 3, then a question and focused numeric input; timer starts at 120 seconds and counts down. Play Again resets the observed score to 0 and timer to 120.
+- **VERIFIED — DIRECT OBSERVATION:** Sampled `230 / 5 = 46`, `96 + 98 = 194`, `9 * 92 = 828`, `67 + 7 = 74`, `10 - 4 = 6`, `539 / 7 = 77`, `78 - 97 = -19`, `30 - 43 = -13`. Answers were accepted, score increased by one per answer, input cleared and a new question appeared without Enter. Thus addition, subtraction, multiplication, exact division and negative answers occur in these samples; this does not establish distributions or limits.
+- **VERIFIED — DIRECT OBSERVATION:** With `96 + 98` active, typing `999` and pressing Enter did not change the question or score. Replacing it with `194` immediately advanced and increased score. No separate incorrect count or penalty was visible in that case. Do not infer behavior for all malformed entries.
+- **VERIFIED — DIRECT OBSERVATION:** At 0 seconds, the first run displayed “You Scored” with 5 points and “Your Last Question” showing the unsolved `16 + 96 = 112`, together with Play Again and Back. The timer display offers a hide control; its behavior was not tested.
+- **UNVERIFIED:** Exact random generator, operator weights, complete number and answer ranges, adaptive difficulty, leading zeros, decimals, zero, overflow, exact matching rules, timer accuracy or background handling, rapid input/expiry races, skips, and whether incorrect entries have hidden consequences. No complete rule has been established from the limited samples.
 
 ## Arithmetic Pro
 
-- **VERIFIED — DIRECT OBSERVATION:** Menu label “Arithmetic Pro”; selection shows 0 points, initially 120 seconds, a visible 3 during entry, Back and Play Again. No initial rules text was visible.
-- **UNVERIFIED:** Game-specific generation, answer formats, timer semantics, scoring, penalties and progression. Do not assume it is only harder Arithmetic. Investigate in milestone 3.
+Observations on 2026-10-30, unsigned-in at the shared source above. Two sessions sampled; first was allowed to expire.
+
+- **VERIFIED — DIRECT OBSERVATION:** Selection and Play Again start with score 0, a visible countdown, and a timer initially showing 120 seconds; a focused numeric input is provided. Correct answers immediately advance and add one point in the tested cases.
+- **VERIFIED — DIRECT OBSERVATION:** Sampled accepted expressions include `2 * (16 + 3) = 38`, `(12 + 1) * (5 + 3) = 104`, `(6 - 2) * (7 + 2) + 3 = 39`, `(30 + 5) * 5 = 175`, `2 + 9 * (14 - 6) = 74`, `(85 + 7) * 5 = 460`, `2 * (104 + 1) = 210`, `5 + 7 * 4 = 33`, and replay `10 + 9 * 2 = 28`. These illustrate compound expressions and normal multiplication precedence, not a complete grammar or distribution.
+- **VERIFIED — DIRECT OBSERVATION:** Entering `999` and pressing Enter for `(12 + 1) * (5 + 3)` did not change the score or question; replacing it with `104` advanced. At 0 seconds the results showed 8 points and the last unanswered question `5 * (39 + 1) = 200`, plus Play Again and Back.
+- **UNVERIFIED:** Full expression templates, operand ranges and distributions, division, negative or decimal results, input edge cases, scoring beyond samples, adaptive progression, precise countdown and background semantics, simultaneous input and expiry behavior. Further research is needed; Pro cannot be treated as simply larger arithmetic.
+
+### Research limitations and next pass
+
+Public page assets were identified, but the web inspection tool could not access the page's JavaScript bundle. No access control was bypassed. More direct sessions and, where legitimately accessible, inspection of publicly delivered assets are needed to determine generators and edge cases. Treat unresolved behavior as unverified rather than exact Classic Mode rules.
 
 ## Sequence
 
@@ -51,3 +64,4 @@ Observation date: 2026-10-30. Source for every entry: [OpenQuant Game Room](http
 ## Repeatable investigation method
 
 For each assigned pair in milestones 3–6: start unsigned-in; record date, URL, screen state, on-screen instructions and whether access is restricted. Play multiple sessions when possible, recording prompts, inputs, correct and incorrect feedback, score changes, clock readings, and end conditions; compare repeated samples rather than generalizing from one example. Note backgrounding, invalid inputs and edge cases when feasible. Distinguish displayed rules from behavior observed in play and from public implementation evidence. Record source references and exact uncertainty, not unsupported claims. Where publicly delivered implementation can be inspected legitimately, use it as evidence without copying proprietary code or bypassing access controls. Stop if authentication or anti-bot restrictions prevent access; request user-provided recordings or sources only if necessary. Generate independent code later.
+
