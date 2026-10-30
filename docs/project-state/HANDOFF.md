@@ -1,24 +1,24 @@
 PROJECT: MindSprint
 
-CURRENT MILESTONE: 8 — Core UI and input system (NOT STARTED)
-CURRENT SUBTASK: Implement core navigation, design and input in bounded testable pieces; split as needed.
+CURRENT MILESTONE: 8 — Core UI and input system (IN PROGRESS)
+CURRENT SUBTASK: 8A — Validate standalone numeric input model and keypad in CI.
 
-LAST COMPLETED WORK: Milestone 7 introduced UI-independent game IDs and difficulty configuration, game-rules protocol, score policy, session lifecycle, injectable ContinuousClock monotonic time and deterministic SplitMix64 RNG. Five new XCTest cases cover seeded output, expiry, lifecycle, scoring and overflow. GitHub Actions run 41086929248 at source commit 3c64e43bf73ec9d796e78f162bb8b93bd6198fe6 passed six total tests, device build, arm64/ZIP checks and IPA upload.
+LAST COMPLETED WORK: Authored NumericInput value model and standalone SwiftUI NumericKeypad. It supports digits, configurable sign and decimal controls, backspace, clear, a digit limit, incomplete/empty rejection and a submission lock until reset. Leading zeroes are preserved; no numeric conversion is done, so game validators must enforce their own numeric bounds. Four XCTest cases cover editing, decimal/sign rules, length bounds and duplicate submission. Not integrated into app screens yet; hardware keyboard, haptics, navigation and layouts remain.
 
-FILES CREATED OR MODIFIED: MindSprint/Engine/GameModels.swift, GameSession.swift, SeededRandomNumberGenerator.swift; MindSprintTests/GameEngineTests.swift; docs/project-state/ROADMAP.md, HANDOFF.md, PROJECT_STATE.md, DECISIONS.md, KNOWN_ISSUES.md.
+FILES CREATED OR MODIFIED: MindSprint/Input/NumericInput.swift, NumericKeypad.swift; MindSprintTests/NumericInputTests.swift; docs/project-state/ROADMAP.md, HANDOFF.md, PROJECT_STATE.md, DECISIONS.md and KNOWN_ISSUES.md.
 
-LATEST COMMIT: Inspect GitHub main for checkpoint; last tested source commit 3c64e43bf73ec9d796e78f162bb8b93bd6198fe6. Local Git history is not synchronized to GitHub due to ownership mismatch.
+LATEST COMMIT: Inspect GitHub main for input source commit and checkpoint. Local Git history not synchronized due to ownership mismatch.
 
-BUILD STATUS: Passed run https://github.com/zekromy123456789/MindSprint/actions/runs/41086929248; unsigned arm64 IPA artifact https://github.com/zekromy123456789/MindSprint/actions/runs/41086929248/artifacts/12993300058 expires 2027-01-28. This remains a scaffold without playable games.
+BUILD STATUS: New input code and tests await CI. Last passing run 41086929248, source commit 3c64e43bf73ec9d796e78f162bb8b93bd6198fe6.
 
-TEST STATUS: Six XCTest tests passed, zero failures (five engine plus one existing smoke test).
+TEST STATUS: Four new XCTest cases authored; results pending CI. Previous six tests passed in run 41086929248. Keypad visual behavior and device size have not been tested.
 
-KNOWN ISSUES: No gameplay. Session callers must refresh on background return; per-question duplicate input prevention and progression are game-specific and not implemented. Reference discrepancies and risks remain in mechanics report. Physical LiveContainer compatibility unverified. XcodeGen unpinned. Local Git ownership mismatch persists.
+KNOWN ISSUES: Standalone component is not yet wired to a game or visible screen; hardware keys and haptics not implemented. Caller must reset after each accepted or rejected submission and coordinate timer/transition state. Digit limit bounds length but is not a numeric overflow validator. No games playable; physical LiveContainer compatibility unverified.
 
-CURRENT BLOCKERS: None identified for milestone 8; local Windows lacks Xcode, use GitHub Actions.
+CURRENT BLOCKERS: Local Windows lacks Xcode; GitHub Actions required. Git ownership mismatch persists locally.
 
-NEXT EXACT TASK: Begin milestone 8 only. Inspect scaffold and requirements in MASTER_BRIEF.md section 18 and keypad details in section 9. Build design/navigation, preparation, gameplay/results templates, persistent numeric keypad with sign/decimal/backspace/clear and hardware input, haptic manager. Split into independently testable subtasks if necessary; do not claim games are playable. Run appropriate tests and CI, update checkpoint and stop.
+NEXT EXACT TASK: Inspect CI run for input source commit; fix any failures. Once passing, mark 8A complete and choose 8B: integrate design/navigation and preparation/game/results templates plus visible keypad, hardware input and haptics as bounded work. Preserve the broader milestone IN PROGRESS until all its criteria are satisfied. Stop after the current subtask and checkpoint.
 
-NEXT TASK ACCEPTANCE CRITERIA: App builds, navigation works, keypad functional with tested edge cases and hardware keyboard support, core UI usable across iPhone sizes, haptics available. Document unverified visual/device checks.
+NEXT TASK ACCEPTANCE CRITERIA: 8A compiles, numeric input tests pass, standalone keypad exists, known integration/visual limitations documented. Milestone 8 ultimately requires functional navigation, keypad edge cases and hardware support, haptics and usable layouts.
 
-IMPORTANT CONTEXT: Read HANDOFF then ROADMAP, verify GitHub main/build. Full brief in docs/MASTER_BRIEF.md. One milestone or bounded subtask per session. User approved public repository. No runtime web dependency; use independently written code. Never claim LiveContainer compatibility without physical verification.
+IMPORTANT CONTEXT: Read HANDOFF then ROADMAP, verify actual GitHub main/build. Full brief in docs/MASTER_BRIEF.md. One milestone or bounded subtask per session. Public repository approved. Do not claim LiveContainer compatibility without physical verification.

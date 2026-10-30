@@ -12,7 +12,7 @@ The definitive tasks and acceptance criteria for each milestone are in [MASTER_B
 | 5 | COMPLETED | Research Memory and Risk. |
 | 6 | COMPLETED | Research Flexibility and Letter Speed; consolidate all eight specifications. |
 | 7 | COMPLETED | Testable shared game engine, clock, scoring and seeded randomness. |
-| 8 | NOT STARTED | Core navigation, design, keypad, hardware keyboard and haptics. |
+| 8 | IN PROGRESS | Core navigation, design, keypad, hardware keyboard and haptics. |
 | 9 | NOT STARTED | Complete and test Arithmetic. |
 | 10 | NOT STARTED | Complete and test Arithmetic Pro. |
 | 11 | NOT STARTED | Complete and test Sequence. |
@@ -24,6 +24,7 @@ The definitive tasks and acceptance criteria for each milestone are in [MASTER_B
 | 17 | NOT STARTED | Offline history, personal records, statistics, migrations and tests. |
 | 18 | NOT STARTED | Settings, backups, accessibility and polish; split if necessary. |
 | 19 | NOT STARTED | Full QA, release IPA, installation instructions and limitations; split if necessary. |
+
 
 
 

@@ -12,3 +12,5 @@
 
 - 2026-10-30: Shared sessions use an injected ContinuousClock-based monotonic source including sleep, with an explicit refresh before scoring and on background return. Rules own question generation, validation and progression instead of forcing heterogeneous games into one question model. Seeded SplitMix64 supports reproducible tests; built-in bounded random selection is not promised stable across Swift versions. CI run 41086929248 passed six tests and the device build.
 
+
+- 2026-10-30: Numeric input stores a bounded digit string to preserve leading zeros and avoid implicit floating-point parsing. Submit locks edits and repeat submissions until the caller resets after resolution. Per-game numeric validation, question transitions and timing remain the caller's responsibility. The reusable keypad is not yet connected to screens or hardware keyboard input.

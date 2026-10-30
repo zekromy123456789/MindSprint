@@ -10,3 +10,5 @@
 
 - Shared engine primitives passed CI run 41086929248. Callers must refresh a session when the app resumes; per-question duplicate submission protection and game-specific progression are not yet implemented.
 
+
+- Milestone 8A numeric input and standalone keypad are newly authored and await CI; they are not integrated into any screen. No hardware keyboard, haptics or device layout validation yet. Digit limit does not validate numeric conversion overflow; game validators must do so.
