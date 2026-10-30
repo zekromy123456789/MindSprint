@@ -13,3 +13,5 @@
 
 - Milestone 8A numeric input and standalone keypad passed CI run 41088538679; they are not integrated into any screen. No hardware keyboard, haptics or device layout validation yet. Digit limit does not validate numeric conversion overflow; game validators must do so.
 
+
+- 8B catalog and navigation plus reusable active/results templates await CI and visual validation. Games are disabled; records and settings are placeholders. Numeric template composes keypad but is not connected to real gameplay.
