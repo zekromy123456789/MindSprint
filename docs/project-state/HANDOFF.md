@@ -1,24 +1,24 @@
 PROJECT: MindSprint
 
-CURRENT MILESTONE: 2 — OpenQuant discovery and game inventory (NOT STARTED)
-CURRENT SUBTASK: Inventory all eight games and establish a repeatable investigation method.
+CURRENT MILESTONE: 3 — Research Arithmetic and Arithmetic Pro (NOT STARTED)
+CURRENT SUBTASK: Investigate both original games in depth and record evidence-labelled specifications.
 
-LAST COMPLETED WORK: Milestone 1 completed. GitHub Actions run 41080417640 at source commit 9a11f27bccf50b649539bbc9a7c9844cd7e387ef generated the Xcode project, passed one simulator XCTest, compiled an unsigned iOS device app using Xcode 16.4, verified arm64 and ZIP integrity and uploaded the IPA and logs. Run: https://github.com/zekromy123456789/MindSprint/actions/runs/41080417640. Artifact: https://github.com/zekromy123456789/MindSprint/actions/runs/41080417640/artifacts/12988823914 (expires 2027-01-28).
+LAST COMPLETED WORK: Milestone 2 inventoried all eight unsigned-in entry screens at https://openquant.co/math-game on 2026-10-30. Menu selection and initial screens were observed; Memory, Risk, Flexibility and Letter Speed display introductory rules. Recorded stated rules separately from experimentally verified gameplay, unknowns and a repeatable investigation method in docs/OPENQUANT_GAME_MECHANICS.md and RESEARCH_STATE.md. No full games were played during inventory.
 
-FILES CREATED OR MODIFIED: README.md and project-state HANDOFF.md, PROJECT_STATE.md, ROADMAP.md, KNOWN_ISSUES.md updated to reflect verified CI results.
+FILES CREATED OR MODIFIED: docs/OPENQUANT_GAME_MECHANICS.md, docs/project-state/RESEARCH_STATE.md, ROADMAP.md, HANDOFF.md, PROJECT_STATE.md and KNOWN_ISSUES.md.
 
-LATEST COMMIT: Consult GitHub main for checkpoint commit; last tested source commit is 9a11f27bccf50b649539bbc9a7c9844cd7e387ef. Local Git repository is not synchronized with GitHub due to ownership mismatch.
+LATEST COMMIT: Inspect GitHub main for this checkpoint. Local Git repository is not synchronized to remote history due to Windows ownership mismatch. Last tested source commit 9a11f27bccf50b649539bbc9a7c9844cd7e387ef.
 
-BUILD STATUS: Passed on GitHub Actions run 41080417640 (simulator test build and unsigned physical-device build); archive contains Payload/MindSprint.app/MindSprint and Info.plist, ZIP check passed, executable verified arm64. This is a minimal scaffold, not a complete game or proof of installability.
+BUILD STATUS: GitHub Actions run 41080417640 passed device build and IPA checks; artifact expires 2027-01-28. Documentation-only changes in this milestone; no new build needed.
 
-TEST STATUS: One XCTest passed, zero failures in run 41080417640. No gameplay tests exist yet.
+TEST STATUS: One XCTest passed in run 41080417640. Inventory validated by visiting each mode; no gameplay behavior verified beyond entry screens and displayed rules.
 
-KNOWN ISSUES: No gameplay or verified reference mechanics. LiveContainer compatibility is not verified on a physical device. XcodeGen is not pinned; local Git ownership mismatch remains. See KNOWN_ISSUES.md.
+KNOWN ISSUES: No games implemented; most mechanics and any actual gameplay behavior remain unverified. No LiveContainer physical-device verification. XcodeGen unpinned; local Git ownership mismatch. See KNOWN_ISSUES.md.
 
-CURRENT BLOCKERS: None for milestone 2 identified. Local Windows lacks Xcode; CI is available.
+CURRENT BLOCKERS: None observed for anonymous entry. Actual game play and later screens may have additional restrictions; do not bypass access controls.
 
-NEXT EXACT TASK: Begin milestone 2 only. Inspect https://openquant.co/math-game with accessible browser tools, inventory all eight games, navigation, access requirements, accessible instructions and research blockers. Create docs/OPENQUANT_GAME_MECHANICS.md with evidence-labelled inventory and unknowns, and update RESEARCH_STATE.md. Establish a repeatable method; do not claim mechanics are verified without evidence or perform the deeper milestone 3–6 investigations as a substitute for inventory.
+NEXT EXACT TASK: Investigate Arithmetic and Arithmetic Pro only. Observe multiple sessions and question types, ranges, input and submission behavior, timing, scoring, errors, progression and end conditions. Distinguish directly observed behavior, public implementation, inference and unknowns; record mathematical test examples and evidence in docs/OPENQUANT_GAME_MECHANICS.md, update research state and checkpoint. Stop after milestone 3 or a bounded subtask.
 
-NEXT TASK ACCEPTANCE CRITERIA: All eight games inventoried; access, research method and blockers recorded; no unsupported exact-mechanics claims. Update checkpoint and commit, then stop.
+NEXT TASK ACCEPTANCE CRITERIA: Detailed specifications for both games with verified and inferred rules distinguished and mathematical test examples recorded; document any legitimate research limitations.
 
-IMPORTANT CONTEXT: Read this file first on continuation, then ROADMAP.md, verify actual repository and build status. Full requirements are in docs/MASTER_BRIEF.md. Work on one numbered milestone or bounded subtask per session. User approved public repository. All eight games are mandatory. Never claim LiveContainer compatibility without physical verification.
+IMPORTANT CONTEXT: Read this file first on continuation, then ROADMAP.md, verify repository and build status. Full requirements are in docs/MASTER_BRIEF.md. One numbered milestone or bounded subtask per session. User approved public repository. All eight games are mandatory; no assumption that Pro is merely harder Arithmetic. Never claim LiveContainer compatibility without physical verification.
