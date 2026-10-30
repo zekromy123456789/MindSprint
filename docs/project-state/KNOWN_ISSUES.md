@@ -11,10 +11,11 @@
 - Shared engine primitives passed CI run 41086929248. Callers must refresh a session when the app resumes; per-question duplicate submission protection and game-specific progression are not yet implemented.
 
 
-- Milestone 8A numeric input and standalone keypad passed CI run 41088538679; they are not integrated into any screen. No hardware keyboard, haptics or device layout validation yet. Digit limit does not validate numeric conversion overflow; game validators must do so.
+- Milestone 8A numeric input and standalone keypad passed CI run 41088538679; they are not integrated into any screen. Hardware key routing and haptic settings now compile, but delivery and physical feedback have not been tested; device layout validation is also pending. Digit limit does not validate numeric conversion overflow; game validators must do so.
 
 
 - 8B catalog and navigation plus reusable active/results templates compile in CI run 41089968056; navigation interaction and visual layout remain unverified. Games are disabled; records and settings are placeholders. Numeric template composes keypad but is not connected to real gameplay.
 
 
-- 8C keyboard routing and haptic settings are newly authored and await CI. The keypad is not in a reachable playable screen, so real iOS hardware-key focus, haptic feel and accessibility remain unverified. Haptic result feedback is available but not connected to games.
+- 8C keyboard routing and haptic settings passed CI run 41091082669. The keypad is not in a reachable playable screen, so real iOS hardware-key focus, haptic feel and accessibility remain unverified. Haptic result feedback is available but not connected to games.
+
