@@ -1,24 +1,24 @@
 PROJECT: MindSprint
 
 CURRENT MILESTONE: 1 — Minimal native app + build pipeline (IN PROGRESS)
-CURRENT SUBTASK: Run and validate the first macOS build, tests and unsigned device IPA; diagnose failures.
+CURRENT SUBTASK: Check corrected CI run and validate the unsigned device IPA; fix any remaining failures.
 
-LAST COMPLETED WORK: User explicitly approved public repository. Uploaded the local project and workflow to github.com/zekromy123456789/MindSprint main through GitHub connector, source commit 9d0372e4fae6fcb474c1bc7a0a012aae9d65cee4. No workflow run appeared after Git-data API branch update. The connector exposes no workflow dispatch and Windows computer use stopped because the browser URL could not be determined confidently.
+LAST COMPLETED WORK: Initial CI run 41079574187 passed one XCTest on an iPhone simulator and built the unsigned arm64 device app with Xcode 16.4, but packaging failed: lipo -verify_arch was invoked with its arguments in the wrong order. Corrected this in commit 9a11f27bccf50b649539bbc9a7c9844cd7e387ef. A new run 41080417640 started and was still testing when checkpointed.
 
-FILES CREATED OR MODIFIED: README.md, docs/project-state/HANDOFF.md, PROJECT_STATE.md, KNOWN_ISSUES.md and DECISIONS.md updated; prior app, workflow and master brief uploaded. Inspect main for current files.
+FILES CREATED OR MODIFIED: .github/workflows/ios.yml, docs/project-state/HANDOFF.md, PROJECT_STATE.md and KNOWN_ISSUES.md. Source is on GitHub main; local Git repository is not synchronized to remote history.
 
-LATEST COMMIT: Source commit 9d0372e4fae6fcb474c1bc7a0a012aae9d65cee4; inspect GitHub main for the subsequent checkpoint commit. Local Git status and commits fail due to mismatched Windows ownership; local repository is not synchronized to remote history.
+LATEST COMMIT: Workflow fix 9a11f27bccf50b649539bbc9a7c9844cd7e387ef; inspect main for subsequent checkpoint commit.
 
-BUILD STATUS: Not run. No Actions runs found after upload. Windows lacks Xcode and iOS SDK. Start the existing manually triggered workflow through GitHub or an available dispatch tool, then inspect the run.
+BUILD STATUS: Device app compiled successfully in run 41079574187; overall run failed before packaging. Corrected run https://github.com/zekromy123456789/MindSprint/actions/runs/41080417640 is in progress; inspect current status and logs.
 
-TEST STATUS: No XCTest run. Earlier local YAML parsing and Python simulator-selector checks passed; these do not validate XcodeGen or the workflow.
+TEST STATUS: One XCTest passed in run 41079574187. Corrected run tests were still in progress at checkpoint.
 
-KNOWN ISSUES: See KNOWN_ISSUES.md. No games, IPA or verified LiveContainer compatibility. XcodeGen installation is unpinned.
+KNOWN ISSUES: No IPA verified or LiveContainer physical-device verification; no games implemented. Local Git ownership mismatch prevents ordinary local Git operations. XcodeGen is not pinned. See KNOWN_ISSUES.md.
 
-CURRENT BLOCKERS: No available workflow-dispatch connector; browser UI automation stopped due to inability to verify Windows browser URL. User can run the iOS build workflow manually from the Actions tab if automation remains unavailable. Local Git ownership mismatch prevents ordinary local Git operations.
+CURRENT BLOCKERS: None established for GitHub Actions; wait for current run. Windows lacks Xcode and iOS SDK.
 
-NEXT EXACT TASK: Check GitHub main and Actions runs. Start iOS build workflow if no run exists, using supported tools or user action; inspect test and build logs, fix failures and verify the device IPA artifact. Update checkpoint and remote. Do not start milestone 2 until milestone 1 acceptance is met.
+NEXT EXACT TASK: Inspect run 41080417640. If failed, inspect logs, fix and rerun. If passed, verify IPA and logs artifact availability plus arm64 and archive validation in logs; update milestone 1 status and checkpoint. Do not start milestone 2 in the same session after milestone 1 completion.
 
-NEXT TASK ACCEPTANCE CRITERIA: Reproducible minimal native app and workflow; successful build and tests if CI is available; unsigned device IPA structure and arm64 architecture validated if built; limitations accurately documented. No game implementation.
+NEXT TASK ACCEPTANCE CRITERIA: Reproducible minimal app and workflow; build and simulator tests pass; unsigned device IPA structure and arm64 validated and artifact uploaded; limitations accurately documented. No game implementation.
 
-IMPORTANT CONTEXT: Read this file first on continuation, then ROADMAP.md, verify actual repository and build status. Full requirements and acceptance criteria are in docs/MASTER_BRIEF.md. Work on one numbered milestone or bounded subtask per session, update checkpoint, commit/push if possible, then stop. User explicitly approved public visibility. All eight games are mandatory; mechanics are unresearched and must be evidence-labelled. Never claim LiveContainer compatibility without physical verification.
+IMPORTANT CONTEXT: Read this file first on continuation, then ROADMAP.md, verify repository and build status. Full requirements are in docs/MASTER_BRIEF.md. Work on one numbered milestone or bounded subtask per session. User approved public repository. All eight games are mandatory and mechanics are unresearched. Never claim LiveContainer compatibility without physical verification.
