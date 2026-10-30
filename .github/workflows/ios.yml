@@ -44,7 +44,7 @@ jobs:
           mkdir -p artifacts/Payload
           ditto "$APP" artifacts/Payload/MindSprint.app
           lipo -archs artifacts/Payload/MindSprint.app/MindSprint | tee artifacts/logs/architectures.txt
-          lipo -verify_arch arm64 artifacts/Payload/MindSprint.app/MindSprint
+          lipo artifacts/Payload/MindSprint.app/MindSprint -verify_arch arm64
           (cd artifacts && ditto -c -k --keepParent Payload MindSprint-unsigned.ipa)
           unzip -t artifacts/MindSprint-unsigned.ipa | tee artifacts/logs/ipa-validation.txt
           unzip -l artifacts/MindSprint-unsigned.ipa | tee -a artifacts/logs/ipa-validation.txt
@@ -65,3 +65,5 @@ jobs:
             artifacts/logs
             artifacts/TestResults.xcresult
           if-no-files-found: warn
+
+
