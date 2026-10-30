@@ -9,7 +9,7 @@ The definitive tasks and acceptance criteria for each milestone are in [MASTER_B
 | 2 | COMPLETED | Inventory all eight reference games, access and research method; document evidence and blockers. |
 | 3 | COMPLETED | Research Arithmetic and Arithmetic Pro; distinguish evidence and uncertainty. |
 | 4 | COMPLETED | Research Sequence and Optiver 80 in 8. |
-| 5 | NOT STARTED | Research Memory and Risk. |
+| 5 | COMPLETED | Research Memory and Risk. |
 | 6 | NOT STARTED | Research Flexibility and Letter Speed; consolidate all eight specifications. |
 | 7 | NOT STARTED | Testable shared game engine, clock, scoring and seeded randomness. |
 | 8 | NOT STARTED | Core navigation, design, keypad, hardware keyboard and haptics. |
@@ -24,6 +24,7 @@ The definitive tasks and acceptance criteria for each milestone are in [MASTER_B
 | 17 | NOT STARTED | Offline history, personal records, statistics, migrations and tests. |
 | 18 | NOT STARTED | Settings, backups, accessibility and polish; split if necessary. |
 | 19 | NOT STARTED | Full QA, release IPA, installation instructions and limitations; split if necessary. |
+
 
 
 
