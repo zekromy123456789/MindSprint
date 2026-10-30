@@ -7,7 +7,7 @@ The definitive tasks and acceptance criteria for each milestone are in [MASTER_B
 | 0 | COMPLETED | Repository access assessed or blocker recorded; checkpoint files and next task exist. |
 | 1 | COMPLETED | Minimal SwiftUI app, reproducible project, CI, tests and unsigned device IPA; verify build and archive when possible. |
 | 2 | COMPLETED | Inventory all eight reference games, access and research method; document evidence and blockers. |
-| 3 | IN PROGRESS | Research Arithmetic and Arithmetic Pro; distinguish evidence and uncertainty. |
+| 3 | COMPLETED | Research Arithmetic and Arithmetic Pro; distinguish evidence and uncertainty. |
 | 4 | NOT STARTED | Research Sequence and Optiver 80 in 8. |
 | 5 | NOT STARTED | Research Memory and Risk. |
 | 6 | NOT STARTED | Research Flexibility and Letter Speed; consolidate all eight specifications. |
@@ -24,6 +24,7 @@ The definitive tasks and acceptance criteria for each milestone are in [MASTER_B
 | 17 | NOT STARTED | Offline history, personal records, statistics, migrations and tests. |
 | 18 | NOT STARTED | Settings, backups, accessibility and polish; split if necessary. |
 | 19 | NOT STARTED | Full QA, release IPA, installation instructions and limitations; split if necessary. |
+
 
 
 
