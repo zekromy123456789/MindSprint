@@ -1,6 +1,6 @@
 # OpenQuant game mechanics — discovery inventory
 
-Observation date: 2026-10-30. Source for every entry: [OpenQuant Game Room](https://openquant.co/math-game), visited in an unsigned-in browser. This is an inventory, not a complete mechanics specification. The evidence label VERIFIED — DIRECT OBSERVATION below means the screen or instruction was observed; it does **not** mean the described behavior has been experimentally verified. No original code or artwork is copied into MindSprint.
+Observation date: 2026-10-30. Source for every entry: [OpenQuant Game Room](https://openquant.co/math-game), visited in an unsigned-in browser. This report combines initial inventory, sampled gameplay and public implementation research; it is not a claim that every edge case is verified. The evidence label VERIFIED — DIRECT OBSERVATION below means the screen or instruction was observed; it does **not** mean the described behavior has been experimentally verified. No original code or artwork is copied into MindSprint.
 
 ## Shared navigation and access
 
@@ -98,13 +98,26 @@ Evidence: same source snapshot and unsigned-in direct play on 2026-10-30.
 
 ## Flexibility
 
-- **VERIFIED — DIRECT OBSERVATION:** Initial screen displays 60 seconds and Start Game. Its rules ask whether the left card's meaning matches the right card's text color, with right/left arrows for equal/not equal and stated +1/−1 scoring.
-- **UNVERIFIED:** Actual stimulus generation, display colors, touch input, timer behavior, scoring and progression. Investigate in milestone 6.
+Evidence: [OpenQuant Game Room](https://openquant.co/math-game), unsigned-in play on 2026-10-30 and user-supplied public script snapshot fingerprinted in the Arithmetic section.
+
+- **VERIFIED — DIRECT OBSERVATION:** The rule compares the meaning of the left word to the color of the right word. In one prompt both words read “black” but the right word was blue: No earned +1. A following prompt had left word “red” and the right word displayed in black; Yes reduced the score by 1 and advanced. At 0 seconds the results showed the total and replay/back controls.
+- **VERIFIED — PUBLIC IMPLEMENTATION:** Two cards each display one of blue, black, red in a separately selected text color. The left word, left color and right word are uniform independent choices; the right color is chosen from the three colors plus an extra copy of the left word's color. Therefore equal and unequal answers have nominal probability 1/2 each. The right word and left text color are distractors.
+- **VERIFIED — PUBLIC IMPLEMENTATION:** Touch/click No or left arrow means unequal; Yes or right arrow means equal. A correct response adds one, an incorrect response subtracts one; both generate another prompt. Three-second countdown precedes 60 seconds of play, using wall-clock time and roughly one-second status updates. The result reports the score; no score floor, adaptive difficulty, or skip is present in the inspected path.
+- **UNVERIFIED:** Rapid simultaneous taps, exact expiry races, background/clock-change behavior and accessibility on physical devices. Use high-contrast, accessible two-choice controls without a keypad, while preserving the intended color comparison.
 
 ## Letter Speed
 
-- **VERIFIED — DIRECT OBSERVATION:** Initial screen shows Round 1 of 10 and Start Game. Its rules describe choosing the highest- or lowest-valued option among four within 30 seconds. Row values are described as absolute differences of alphabet positions for paired letters or the position of a single letter; correct answers are said to earn remaining seconds as points.
-- **UNVERIFIED:** Actual letter distributions, tie handling, prompt selection, incorrect and timeout behavior, rounding and progression. Investigate in milestone 6.
+Evidence: same site and supplied script snapshot, inspected 2026-10-30.
+
+- **VERIFIED — DIRECT OBSERVATION:** The screen describes four options with two columns of letters, and asks for highest or lowest total. The initial round displayed a 30-second clock and four letter grids; selecting an option advanced to round 2. Letting round 2 expire advanced to round 3 with no score increase in that sample. No full ten-round result was observed.
+- **VERIFIED — PUBLIC IMPLEMENTATION:** Ten rounds; an initial three-second countdown precedes round 1. Each round generates four choices, each having ten rows of two letter positions. Letters are uniformly chosen from A–Z; the first position is blank with probability 15%; the second is blank with probability 15% only when the first is nonblank, so each generated row contains at least one letter. Values use alphabet positions A=1 to Z=26: paired letters contribute absolute position difference, single letters contribute their position. For example A/G contributes 6; X alone contributes 24; A/G plus X totals 30.
+- **VERIFIED — PUBLIC IMPLEMENTATION:** Each round asks for highest value with nominal probability 75%, lowest with 25%. If the target extreme is tied, the implementation regenerates the question until it is unique. Selecting the correct option awards `max(0, 30 − floor(elapsed seconds))`; incorrect or timeout yields zero and advances. A fresh 30-second period begins per round; the tenth answer or timeout finishes. The result lists each question, selection, correct option and points, with a total out of 300. An option is selected by clicking/tapping its grid; no text entry is required.
+- **STRONGLY INFERRED FROM PUBLIC IMPLEMENTATION:** The timer display may briefly show the previous round's remaining value immediately after answering because its displayed duration is not reset in the answer handler until the next interval tick. This is not proof of a scoring-clock error. Callback timing, answer-at-timeout races, and rapid duplicate selections remain unverified; avoid stale display and duplicated scoring in an independent implementation and record any deviation.
+- **UNVERIFIED:** Full live ten-round results, actual correct-choice time scoring in play, layout on small screens, background/clock-change handling and accessibility. Use four comfortably selectable options and preserve the actual two-column calculation rather than replacing the game with typing.
+
+## Consolidated evidence and implementation gaps
+
+All eight games have initial specifications based on dated live observations and/or the supplied public snapshot. Mechanics and uncertainty are detailed in each section. Reference defects inferred from source include Arithmetic Pro's out-of-range pool index, Optiver's possible zero divisor, Risk's green probability fall-through, and Memory's possible premature Submit. These require explicit fidelity decisions and tests; they have not all been reproduced live. Pro's proprietary fixed question pool must not be copied, leaving exact independent distribution unresolved. Full-session outcomes are not observed for every mode; timing, backgrounding, simultaneous inputs, device ergonomics and LiveContainer compatibility need later testing. No gameplay has been implemented yet. Original source and artwork are not included in this project.
 
 ## Repeatable investigation method
 
