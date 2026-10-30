@@ -1,24 +1,24 @@
 PROJECT: MindSprint
 
-CURRENT MILESTONE: 7 — Shared game engine (NOT STARTED)
-CURRENT SUBTASK: Design and implement minimal testable shared engine with deterministic randomness and controllable monotonic time; split into bounded subtasks if needed.
+CURRENT MILESTONE: 7 — Shared game engine (IN PROGRESS)
+CURRENT SUBTASK: Validate shared engine in GitHub Actions, fix build/test issues, assess integration readiness.
 
-LAST COMPLETED WORK: Milestone 6 researched Flexibility and Letter Speed through unsigned-in play and supplied public script SHA-256 1a4b0c3c95ffb3bc6cdcd9de393a1cefe52530969185646be86d33850a919b51. Documented two-card color comparison, +1/-1 scoring and balanced answer generation; Letter Speed ten-round 4-option calculation, timing and scoring. All eight modes now have initial evidence-labelled specs and consolidated gaps in docs/OPENQUANT_GAME_MECHANICS.md. No source code copied.
+LAST COMPLETED WORK: Authored UI-independent game identifiers, configuration/difficulty, a generic game-rules protocol, score policy, session lifecycle, injected continuous monotonic clock, expiry-on-input and seeded SplitMix64 generator. Added five deterministic XCTest cases for random sequence, deadline, lifecycle, scoring and overflow. No game implemented. These changes have not yet been compiled or tested on macOS.
 
-FILES CREATED OR MODIFIED: docs/OPENQUANT_GAME_MECHANICS.md and docs/project-state/RESEARCH_STATE.md, ROADMAP.md, HANDOFF.md, PROJECT_STATE.md, KNOWN_ISSUES.md.
+FILES CREATED OR MODIFIED: MindSprint/Engine/GameModels.swift, GameSession.swift, SeededRandomNumberGenerator.swift; MindSprintTests/GameEngineTests.swift; docs/project-state/ROADMAP.md, HANDOFF.md, PROJECT_STATE.md, DECISIONS.md and KNOWN_ISSUES.md.
 
-LATEST COMMIT: Inspect GitHub main for checkpoint. Last tested app source 9a11f27bccf50b649539bbc9a7c9844cd7e387ef. Local Git history not synchronized due to ownership mismatch.
+LATEST COMMIT: Inspect GitHub main for the engine commit and subsequent checkpoint. Local Git history is not synchronized with remote due to ownership mismatch.
 
-BUILD STATUS: GitHub Actions run 41080417640 passed device build and IPA checks; artifact expires 2027-01-28. Documentation-only work; no new build needed.
+BUILD STATUS: Previous passing run 41080417640 at source 9a11f27. Engine CI run pending; inspect GitHub Actions for current source commit and do not claim a passing build before it completes.
 
-TEST STATUS: One XCTest passed in run 41080417640. Live Flexibility samples confirmed correct/incorrect score and timeout screen. Letter Speed option selection and timeout advanced rounds; no full ten-round or correct time-score sample observed. Source-based mechanics and inferred limitations are labelled.
+TEST STATUS: Five new XCTest cases authored but not yet run. The prior scaffold smoke test passed in run 41080417640.
 
-KNOWN ISSUES: No games implemented. Reference source defects and untested timing/input/device edge cases are in KNOWN_ISSUES.md and mechanics report. Arithmetic Pro fixed source pool cannot be copied; exact independent distribution unresolved. LiveContainer physical-device compatibility unverified.
+KNOWN ISSUES: Session needs caller to refresh on background return; game-specific duplicate input handling and question progression remain to be implemented. No gameplay; reference discrepancies and risks remain in mechanics report. Physical LiveContainer compatibility unverified. CI is needed to check compilation.
 
-CURRENT BLOCKERS: None identified for milestone 7. Local Windows lacks Swift and Xcode; use GitHub Actions for build/test. GitHub connector supports remote commits; local Git ownership mismatch remains.
+CURRENT BLOCKERS: Local Windows lacks Swift and Xcode; use GitHub Actions. Local Git ownership mismatch; remote connector commits used.
 
-NEXT EXACT TASK: Begin milestone 7 only. Inspect existing SwiftUI scaffold, project.yml, tests, CI and mechanics report. Design minimal UI-independent session state, difficulty/configuration, scoring, controllable monotonic clock, seeded random interface and transitions without forcing unrelated games into a single question model. Implement and add meaningful deterministic tests; run CI and inspect results. Split into bounded subtasks if necessary; update checkpoint and stop without starting milestone 8.
+NEXT EXACT TASK: Inspect CI run for the engine source commit. If failure, review logs, fix and rerun. Once tests and build pass, review engine's ability to support games, document the tested behavior and limitations, mark milestone 7 complete if acceptance criteria met, update checkpoint and stop. Do not start milestone 8 during this session.
 
-NEXT TASK ACCEPTANCE CRITERIA: Shared infrastructure compiles; deterministic unit tests pass; no unnecessary UI coupling; next game can use it without engine rewrite. Document build or CI blockers honestly.
+NEXT TASK ACCEPTANCE CRITERIA: Shared infrastructure compiles; deterministic unit tests pass; no unnecessary UI coupling; next game can use it without engine rewrite.
 
-IMPORTANT CONTEXT: Read HANDOFF then ROADMAP, verify actual repository and build. Full requirements in docs/MASTER_BRIEF.md. One milestone or bounded subtask per session. User approved public repository; independent implementations only. Use monotonic time even though reference uses wall clock; avoid copying original source/question lists. Never claim LiveContainer compatibility without physical verification.
+IMPORTANT CONTEXT: Read HANDOFF then ROADMAP and verify GitHub main/build. Full brief in docs/MASTER_BRIEF.md. One numbered milestone or bounded subtask per session. User approved public repository. Use monotonic timing and independent code. Never claim LiveContainer compatibility without physical verification.

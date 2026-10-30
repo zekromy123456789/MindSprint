@@ -9,3 +9,5 @@
 - 2026-10-30: The user created zekromy123456789/MindSprint. GitHub reports it is public and empty; wait for private visibility before uploading, unless the user explicitly changes the privacy requirement.
 
 - 2026-10-30: User explicitly approved keeping the MindSprint repository public, superseding the initial private-by-default preference.
+
+- 2026-10-30: Shared sessions use an injected ContinuousClock-based monotonic source including sleep, with an explicit refresh before scoring and on background return. Rules own question generation, validation and progression instead of forcing heterogeneous games into one question model. Seeded SplitMix64 supports reproducible tests; built-in bounded random selection is not promised stable across Swift versions. CI validation is pending.
