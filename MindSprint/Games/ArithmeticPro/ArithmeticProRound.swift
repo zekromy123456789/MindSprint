@@ -19,13 +19,13 @@ struct ArithmeticProRound {
     private(set) var lastQuestion: ArithmeticProQuestion?
     private(set) var questionID = 0
 
-    init(clock: any SessionClock = MonotonicSessionClock(),
+    init(difficulty: Difficulty = .normal, clock: any SessionClock = MonotonicSessionClock(),
          seed: UInt64 = UInt64.random(in: .min ... .max)) {
         self.clock = clock
-        generator = ArithmeticProGenerator()
+        generator = ArithmeticProGenerator(difficulty: difficulty)
         random = SeededRandomNumberGenerator(seed: seed)
         session = GameSession(configuration: SessionConfiguration(
-            game: .arithmeticPro, difficulty: .normal, duration: Self.roundDuration), clock: clock)
+            game: .arithmeticPro, difficulty: difficulty, duration: Self.roundDuration), clock: clock)
     }
 
     var score: Int { session.score }

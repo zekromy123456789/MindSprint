@@ -37,13 +37,29 @@ struct ArithmeticProQuestion: Equatable {
 }
 
 struct ArithmeticProGenerator {
+    static let difficulties: [Difficulty] = [.easy, .normal, .hard, .expert]
+    let difficulty: Difficulty
+
+    init(difficulty: Difficulty = .normal) {
+        precondition(Self.difficulties.contains(difficulty))
+        self.difficulty = difficulty
+    }
+
     // A small, original selection of expression shapes and operands. All division
     // is exact and nonzero; these distributions are not claimed to match Pro.
     func next<R: RandomNumberGenerator>(using random: inout R) -> ArithmeticProQuestion {
-        let a = Int.random(in: 2...20, using: &random)
-        let b = Int.random(in: 2...12, using: &random)
-        let c = Int.random(in: 2...20, using: &random)
-        let d = Int.random(in: 2...12, using: &random)
+        let limits: (Int, Int)
+        switch difficulty {
+        case .easy: limits = (10, 5)
+        case .normal: limits = (20, 12)
+        case .hard: limits = (35, 15)
+        case .expert: limits = (60, 20)
+        case .classic: preconditionFailure("Pro has no reference-equivalent Classic level")
+        }
+        let a = Int.random(in: 2...limits.0, using: &random)
+        let b = Int.random(in: 2...limits.1, using: &random)
+        let c = Int.random(in: 2...limits.0, using: &random)
+        let d = Int.random(in: 2...limits.1, using: &random)
         let n: (Int) -> ProExpression = { .number($0) }
         let expression: ProExpression
         switch Int.random(in: 0...4, using: &random) {

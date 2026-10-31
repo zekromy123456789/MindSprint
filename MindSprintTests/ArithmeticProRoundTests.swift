@@ -6,6 +6,17 @@ private final class ProRoundTestClock: SessionClock {
 }
 
 final class ArithmeticProRoundTests: XCTestCase {
+    func testSelectedDifficultyDrivesRoundAndReplaySetup() {
+        let clock = ProRoundTestClock()
+        var round = ArithmeticProRound(difficulty: .hard, clock: clock, seed: 17)
+        var random = SeededRandomNumberGenerator(seed: 17)
+        let expected = ArithmeticProGenerator(difficulty: .hard).next(using: &random)
+        round.start()
+        clock.now = 3
+        round.refresh()
+        XCTAssertEqual(round.question, expected)
+    }
+
     func testCountdownAndCorrectAnswersAdvanceOnlyOnce() {
         let clock = ProRoundTestClock()
         var round = ArithmeticProRound(clock: clock, seed: 7)

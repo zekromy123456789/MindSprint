@@ -64,6 +64,7 @@ struct GamesHomeView: View {
 struct GamePreparationView: View {
     let game: GameDescriptor
     @State private var difficulty: Difficulty = .classic
+    @State private var proDifficulty: Difficulty = .normal
 
     var body: some View {
         ScrollView {
@@ -96,8 +97,14 @@ struct GamePreparationView: View {
                         Text("Original questions").font(.headline)
                         Text("These independently created expressions have a different mix from the reference game. Solve as many as you can in two minutes.")
                             .foregroundStyle(.secondary)
+                        Picker("Difficulty", selection: $proDifficulty) {
+                            ForEach(ArithmeticProGenerator.difficulties, id: \.self) { level in
+                                Text(level.rawValue.capitalized).tag(level)
+                            }
+                        }
+                        .accessibilityIdentifier("pro-difficulty")
                     }
-                    NavigationLink("Start", destination: ArithmeticProGameView())
+                    NavigationLink("Start", destination: ArithmeticProGameView(difficulty: proDifficulty))
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("start-pro")
                 } else {

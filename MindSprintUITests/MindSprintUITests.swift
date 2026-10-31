@@ -80,11 +80,14 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertTrue(app.buttons["game-arithmeticPro"].waitForExistence(timeout: 15))
         app.buttons["game-arithmeticPro"].tap()
         XCTAssertTrue(app.staticTexts["Original questions"].waitForExistence(timeout: 5))
+        app.buttons["pro-difficulty"].tap()
+        app.buttons["Hard"].tap()
         app.buttons["start-pro"].tap()
         XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
         app.buttons["Start test round"].tap()
         let question = app.staticTexts["pro-question"]
         XCTAssertTrue(question.waitForExistence(timeout: 20))
+        XCTAssertEqual(app.staticTexts["pro-level"].label, "Hard")
         guard let answerText = question.value as? String, let answer = Int(answerText) else {
             XCTFail("Test answer is unavailable"); return
         }

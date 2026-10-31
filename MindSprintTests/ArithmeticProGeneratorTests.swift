@@ -46,22 +46,43 @@ final class ArithmeticProGeneratorTests: XCTestCase {
         var seen = Set<String>()
         var negative = false
         var division = false
-        for seed in 0..<20 {
-            var random = SeededRandomNumberGenerator(seed: UInt64(seed))
-            for _ in 0..<200 {
-                let q = ArithmeticProGenerator().next(using: &random)
-                var parser = ProTextEvaluator(q.prompt)
-                XCTAssertEqual(try parser.evaluate(), q.answer, q.prompt)
-                XCTAssertTrue(q.accepts(String(q.answer)))
-                XCTAssertFalse(q.accepts(String(q.answer) + ".0"))
-                seen.insert(q.prompt)
-                negative = negative || q.answer < 0
-                division = division || q.prompt.contains("÷")
+        for difficulty in ArithmeticProGenerator.difficulties {
+            for seed in 0..<10 {
+                var random = SeededRandomNumberGenerator(seed: UInt64(seed))
+                for _ in 0..<100 {
+                    let q = ArithmeticProGenerator(difficulty: difficulty).next(using: &random)
+                    var parser = ProTextEvaluator(q.prompt)
+                    XCTAssertEqual(try parser.evaluate(), q.answer, q.prompt)
+                    XCTAssertTrue(q.accepts(String(q.answer)))
+                    XCTAssertFalse(q.accepts(String(q.answer) + ".0"))
+                    XCTAssertLessThan(abs(q.answer), 100_000_000)
+                    seen.insert(q.prompt)
+                    negative = negative || q.answer < 0
+                    division = division || q.prompt.contains("÷")
+                }
             }
         }
         XCTAssertTrue(negative)
         XCTAssertTrue(division)
         XCTAssertGreaterThan(seen.count, 100)
+    }
+
+    func testDifficultyChangesOperandBounds() {
+        let maxima: [Difficulty: Int] = [.easy: 10, .normal: 20, .hard: 35, .expert: 60]
+        var uniqueSequences = Set<String>()
+        for difficulty in ArithmeticProGenerator.difficulties {
+            var random = SeededRandomNumberGenerator(seed: 481)
+            var prompts: [String] = []
+            for _ in 0..<150 {
+                let question = ArithmeticProGenerator(difficulty: difficulty).next(using: &random)
+                let numbers = question.prompt.split { !$0.isNumber }.compactMap { Int($0) }
+                XCTAssertFalse(numbers.isEmpty)
+                XCTAssertTrue(numbers.allSatisfy { (2...maxima[difficulty]!).contains($0) })
+                prompts.append(question.prompt)
+            }
+            uniqueSequences.insert(prompts.joined(separator: ";"))
+        }
+        XCTAssertEqual(uniqueSequences.count, 4)
     }
 
     func testSeededGenerationRepeatsAndCanonicalZeroIsRequired() {

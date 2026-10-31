@@ -10,23 +10,25 @@ private final class ArithmeticProUITestClock: SessionClock {
 #endif
 
 struct ArithmeticProGameView: View {
+    let difficulty: Difficulty
     @State private var round: ArithmeticProRound
     @State private var input = NumericInput(allowsNegative: true, allowsDecimal: false, maxDigits: 8)
     @State private var showTimer = true
     @Environment(\.scenePhase) private var scenePhase
     private let tick = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
-    init() {
-        _round = State(initialValue: Self.makeRound())
+    init(difficulty: Difficulty) {
+        self.difficulty = difficulty
+        _round = State(initialValue: Self.makeRound(difficulty))
     }
 
-    private static func makeRound() -> ArithmeticProRound {
+    private static func makeRound(_ difficulty: Difficulty) -> ArithmeticProRound {
         #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("--ui-test-pro") {
-            return ArithmeticProRound(clock: ArithmeticProUITestClock.shared, seed: 42)
+            return ArithmeticProRound(difficulty: difficulty, clock: ArithmeticProUITestClock.shared, seed: 42)
         }
         #endif
-        return ArithmeticProRound()
+        return ArithmeticProRound(difficulty: difficulty)
     }
 
     var body: some View {
@@ -51,6 +53,9 @@ struct ArithmeticProGameView: View {
                 if let question = round.question {
                     ActiveGameLayout(score: "Score: \(round.score)", time: showTimer ? formattedTime : nil) {
                         VStack(spacing: 14) {
+                            Text(difficulty.rawValue.capitalized)
+                                .font(.footnote).foregroundStyle(.secondary)
+                                .accessibilityIdentifier("pro-level")
                             Button(showTimer ? "Hide timer" : "Show timer") { showTimer.toggle() }
                                 .font(.footnote)
                             #if DEBUG
@@ -136,7 +141,7 @@ struct ArithmeticProGameView: View {
 
     private func replay() {
         input.reset()
-        var next = Self.makeRound()
+        var next = Self.makeRound(difficulty)
         next.start()
         round = next
     }
