@@ -36,6 +36,8 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertTrue(app.buttons["game-arithmetic"].waitForExistence(timeout: 15))
         app.buttons["game-arithmetic"].tap()
         app.buttons["start-arithmetic"].tap()
+        XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        app.buttons["Start test round"].tap()
         let first = app.staticTexts["arithmetic-first"]
         XCTAssertTrue(first.waitForExistence(timeout: 10))
         app.buttons["Hide timer"].tap()
@@ -62,10 +64,12 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["arithmetic-last-question"].exists)
         capture("arithmetic-results")
         app.buttons["Play again"].tap()
-        if !app.staticTexts["arithmetic-first"].waitForExistence(timeout: 5),
+        if !app.buttons["Start test round"].waitForExistence(timeout: 5),
            app.buttons["Play again"].exists {
             app.buttons["Play again"].tap()
         }
+        XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        app.buttons["Start test round"].tap()
         XCTAssertTrue(app.staticTexts["arithmetic-first"].waitForExistence(timeout: 10))
     }
 
@@ -77,6 +81,8 @@ final class MindSprintUITests: XCTestCase {
         app.buttons["game-arithmeticPro"].tap()
         XCTAssertTrue(app.staticTexts["Original questions"].waitForExistence(timeout: 5))
         app.buttons["start-pro"].tap()
+        XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        app.buttons["Start test round"].tap()
         let question = app.staticTexts["pro-question"]
         XCTAssertTrue(question.waitForExistence(timeout: 20))
         guard let answerText = question.value as? String, let answer = Int(answerText) else {
@@ -96,6 +102,8 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["pro-last-question"].exists)
         capture("pro-results")
         app.buttons["Play again"].tap()
+        XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        app.buttons["Start test round"].tap()
         XCTAssertTrue(app.staticTexts["pro-question"].waitForExistence(timeout: 15))
     }
 

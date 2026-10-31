@@ -4,9 +4,8 @@ import SwiftUI
 // Speeds up the complete-round UI test without changing release gameplay.
 private final class ArithmeticUITestClock: SessionClock {
     static let shared = ArithmeticUITestClock()
-    private let base = MonotonicSessionClock()
     var offset: TimeInterval = 0
-    var now: TimeInterval { base.now + offset }
+    var now: TimeInterval { offset }
 }
 #endif
 
@@ -41,6 +40,14 @@ struct ArithmeticGameView: View {
                     Text("\(max(1, Int(ceil(round.countdownRemaining))))")
                         .font(.system(size: 64, weight: .bold, design: .rounded))
                         .accessibilityIdentifier("arithmetic-countdown")
+                    #if DEBUG
+                    if ProcessInfo.processInfo.arguments.contains("--ui-test-arithmetic-fast") {
+                        Button("Start test round") {
+                            ArithmeticUITestClock.shared.offset += ArithmeticRound.countdownDuration
+                            round.refresh()
+                        }
+                    }
+                    #endif
                 }
             case .active:
                 if let question = round.question {
@@ -98,7 +105,12 @@ struct ArithmeticGameView: View {
         .toolbar(.hidden, for: .tabBar)
         .onAppear { round.start() }
         .onDisappear { round.abandon() }
-        .onReceive(tick) { _ in round.refresh() }
+        .onReceive(tick) { _ in
+            #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("--ui-test-arithmetic-fast") { return }
+            #endif
+            round.refresh()
+        }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { round.refresh() }
         }
