@@ -17,4 +17,6 @@
 
 - 2026-10-30: Numeric keypad shares a testable action mapping for touch and iOS 17 hardware keys. Key presses are gated by input availability and submission lock. Haptic settings persist via AppStorage; UIKit feedback is optional and prepared for low latency. Keyboard focus, delivery and physical feedback require device verification.
 
-- 2026-10-30: After simulator UI automation found no keyboard focus, 8E uses a UIKit first-responder receiver with an empty custom input view to forward hardware actions without the standard keyboard; this is a candidate pending CI and visual/device verification. Arithmetic custom difficulty ranges are independent product choices, not reference claims; Classic uses documented ranges.
+- 2026-10-30: After simulator UI automation found no keyboard focus, 8E uses a UIKit first-responder receiver with an empty custom input view to forward hardware actions without the standard keyboard; simulator keyboard delivery and six default light-mode screenshots passed in run 41165821335; physical keyboard, VoiceOver and haptics remain unverified. Arithmetic custom difficulty ranges are independent product choices, not reference claims; Classic uses documented ranges.
+
+- 2026-10-30: Arithmetic custom difficulty ranges are Easy operands 2...20 and small factors 2...5, Normal 2...50 and 2...10, Hard 2...199 and 2...15, Expert 2...999 and 2...25. Division is constructed from a nonzero divisor and integer quotient. Classic auto-advance must be integrated separately from the keypad explicit-submit behavior.

@@ -1,24 +1,24 @@
 PROJECT: MindSprint
 
-CURRENT MILESTONE: 8 — Core UI and input system (IN PROGRESS); 9A Arithmetic generator prepared in parallel at user request.
-CURRENT SUBTASK: 8E — Fix and validate hardware keyboard delivery and haptic preference tests; validate prepared 9A generator in the same CI run.
+CURRENT MILESTONE: 9 — Arithmetic (IN PROGRESS). Milestone 8 core UI and input is COMPLETED to simulator verification limits.
+CURRENT SUBTASK: 9B — Arithmetic session, gameplay UI and results integration (NOT STARTED). 9A generator and tests are complete.
 
-LAST COMPLETED WORK: Run 41165187444 exposed two failures: XCUITest could not type because no element had keyboard focus, and the haptics switch value did not change after a center tap. Replaced SwiftUI focus-only route with a UIKit first-responder field using an empty custom input view, forwarding key actions to the keypad; changed the switch test to tap the switch control and wait for value change. These fixes are not yet validated and may require further work. In parallel, authored an independent Arithmetic generator plus four deterministic tests for Classic ranges/math, repeatability, canonical answers and division across difficulties. No game UI or session integration yet.
+LAST COMPLETED WORK: Repaired keyboard focus using a UIKit first-responder receiver and an empty custom input view; corrected the haptic preference UI test. Simulator keyboard events exercised sign, digits, decimal, delete and Return; the preference toggle persisted across relaunch. Implemented independent Arithmetic generation, canonical answer validation, Classic reference ranges and documented custom difficulties. No game is playable yet.
 
-FILES CREATED OR MODIFIED: MindSprint/Input/HardwareKeyReceiver.swift and NumericKeypad.swift, MindSprintUITests/MindSprintUITests.swift, MindSprint/Games/Arithmetic/ArithmeticGenerator.swift, MindSprintTests/ArithmeticGeneratorTests.swift; project-state HANDOFF.md, PROJECT_STATE.md, KNOWN_ISSUES.md and DECISIONS.md.
+FILES CREATED OR MODIFIED: MindSprint/Input/HardwareKeyReceiver.swift and NumericKeypad.swift; MindSprintUITests/MindSprintUITests.swift; MindSprint/Games/Arithmetic/ArithmeticGenerator.swift; MindSprintTests/ArithmeticGeneratorTests.swift; project-state documents.
 
-LATEST COMMIT: Inspect GitHub main for source commit. Local Git history not synchronized due to ownership mismatch.
+LATEST COMMIT: Source commit 3b6e8ec1b14298f4fe142e6e928190ece82a59ef; inspect GitHub main for the subsequent documentation checkpoint. Local Git history is not synchronized due to ownership mismatch.
 
-BUILD STATUS: CI for these changes pending. Last passing run 41092465371. Run 41165187444 failed the new keyboard and haptic UI tests; device build did not run.
+BUILD STATUS: GitHub Actions run 41165821335 passed the simulator checks and unsigned arm64 device app/IPA archive checks: https://github.com/zekromy123456789/MindSprint/actions/runs/41165821335 . IPA artifact 13028573185 expires 2027-01-29. A successful unsigned build does not establish device installation or LiveContainer compatibility.
 
-TEST STATUS: New Arithmetic generator tests and keyboard/haptic fixes unverified. Earlier 12 unit plus two UI tests on both simulator sizes passed; the later UI run failed two tests.
+TEST STATUS: 16 unit tests passed, including four Arithmetic tests. Four UI tests passed on each of iPhone 17 Pro and Pro Max simulators. Six captured default light-mode screenshots (catalog, preparation and DEBUG keypad on each size) were reviewed with no observed clipping, overlapping controls or software-keyboard intrusion. The keyboard test synthesizes events in a simulator; it does not prove a physical keyboard works. Generator tests do not directly test statistical distribution.
 
-KNOWN ISSUES: First-responder custom-input approach must be tested for keyboard delivery, no software keyboard intrusion, focus lifecycle and accessibility. Haptic toggle test fix and physical haptic feel unverified. Arithmetic generator has not been built or tested; gameplay not integrated. See KNOWN_ISSUES.md.
+KNOWN ISSUES: Actual hardware keyboard, haptic feel, VoiceOver and LiveContainer are unverified. Other display modes, accessibility text sizes and actual game layouts are not fully reviewed. Arithmetic generation is not integrated into gameplay. See KNOWN_ISSUES.md.
 
-CURRENT BLOCKERS: Local Windows lacks Xcode/simulator; GitHub Actions required. Physical haptic verification needs device.
+CURRENT BLOCKERS: Local Windows lacks Xcode and the iOS simulator; use GitHub Actions. Physical checks require a device.
 
-NEXT EXACT TASK: Inspect CI for current source. Fix any compile/UI/test failures and rerun as needed. Review DEBUG keypad screenshots to check that empty custom input view did not cover content. Only mark milestone 8 complete after keyboard delivery and settings checks pass to environment limits. If 9A tests pass, record it as completed and set next subtask 9B to Arithmetic session/UI/results integration; if not, fix generator failures first. Stop after these two bounded steps; user asked for the equivalent of two continues in the originating turn.
+NEXT EXACT TASK: Implement 9B Arithmetic gameplay and integrate the tested generator with configuration, start/replay, session, keypad and results. Classic requires a three-second countdown, 120-second monotonic session and automatic advance with +1 score only when the canonical answer matches; incorrect input is ignored. The existing keypad locks on explicit Submit, so integrate answer-change checking without changing Classic semantics. Refresh the deadline before processing input and handle duplicate/rapid input, background return and exit safely. Support configured difficulties. Do not claim persisted personal bests before real persistence exists. Add meaningful state/timing tests and an end-to-end UI test; split into bounded steps if needed.
 
-NEXT TASK ACCEPTANCE CRITERIA: 8E keyboard actions and preference persistence validated on simulators, layout/screenshots sound; physical limitations explicit. 9A deterministic Arithmetic generation mathematically correct with Classic ranges and tested difficulty configurations. No claim of playable Arithmetic until 9B.
+NEXT TASK ACCEPTANCE CRITERIA: Verified Arithmetic flow and timing follow the documented specification, with reproducible tests and simulator/device build evidence. Keep milestone 9 in progress until its full acceptance criteria are met.
 
-IMPORTANT CONTEXT: Read HANDOFF then ROADMAP; verify main and build. Full brief in docs/MASTER_BRIEF.md. User approved public repo. Use independently written code; Classic auto-advances on correct canonical answer, unlike current explicit Submit keypad, and that must be resolved in 9B. Never claim LiveContainer compatibility without physical verification.
+IMPORTANT CONTEXT: Read HANDOFF then ROADMAP and verify main/build. Full requirements and acceptance criteria are in docs/MASTER_BRIEF.md; source findings are in docs/OPENQUANT_GAME_MECHANICS.md. User approved public repository. Independently implement reference mechanics; do not copy protected question pools. Never claim LiveContainer compatibility without physical verification.
