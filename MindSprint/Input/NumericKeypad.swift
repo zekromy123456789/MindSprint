@@ -3,6 +3,8 @@ import SwiftUI
 struct NumericKeypad: View {
     @Binding var input: NumericInput
     var isEnabled = true
+    var automatic = false
+    var onInputChanged: (String) -> Void = { _ in }
     let onSubmit: (String) -> Void
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     @AppStorage("keypressHapticsEnabled") private var keypressHapticsEnabled = true
@@ -27,11 +29,13 @@ struct NumericKeypad: View {
                 key("0", label: "0", action: .digit(0))
                 key(".", label: "Decimal point", available: input.allowsDecimal, action: .decimal)
             }
-            Button { perform(.submit) } label: {
-                Text("Submit").font(.headline).frame(maxWidth: .infinity, minHeight: 56)
+            if !automatic {
+                Button { perform(.submit) } label: {
+                    Text("Submit").font(.headline).frame(maxWidth: .infinity, minHeight: 56)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(!isEnabled || input.isSubmitted)
             }
-            .buttonStyle(.borderedProminent)
-            .disabled(!isEnabled || input.isSubmitted)
         }
         .disabled(!isEnabled || input.isSubmitted)
         .background {
@@ -44,8 +48,10 @@ struct NumericKeypad: View {
 
     private func perform(_ action: NumericInputAction) {
         guard isEnabled, !input.isSubmitted else { return }
+        if automatic, case .submit = action { return }
         HapticFeedback.shared.keypress(enabled: hapticsEnabled && keypressHapticsEnabled)
         if let value = input.apply(action) { onSubmit(value) }
+        if automatic { onInputChanged(input.text) }
     }
 
     private func key(_ title: String, label: String, available: Bool = true, action: NumericInputAction) -> some View {

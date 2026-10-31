@@ -63,6 +63,7 @@ struct GamesHomeView: View {
 
 struct GamePreparationView: View {
     let game: GameDescriptor
+    @State private var difficulty: Difficulty = .classic
 
     var body: some View {
         ScrollView {
@@ -76,16 +77,31 @@ struct GamePreparationView: View {
                     Text("How to play").font(.headline)
                     Text(game.rule).foregroundStyle(.secondary)
                 }
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Classic").font(.headline)
-                    Text("This game is in development. Rules and options will be confirmed before it becomes available.")
-                        .foregroundStyle(.secondary)
+                if game.id == .arithmetic {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Difficulty").font(.headline)
+                        Picker("Difficulty", selection: $difficulty) {
+                            ForEach(Difficulty.allCases, id: \.self) { level in
+                                Text(level.rawValue.capitalized).tag(level)
+                            }
+                        }
+                        Text("Solve as many as you can in two minutes. Correct answers advance automatically.")
+                            .foregroundStyle(.secondary)
+                    }
+                    NavigationLink("Start", destination: ArithmeticGameView(difficulty: difficulty))
+                        .buttonStyle(.borderedProminent)
+                        .accessibilityIdentifier("start-arithmetic")
+                } else {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Classic").font(.headline)
+                        Text("This game is in development. Rules and options will be confirmed before it becomes available.")
+                            .foregroundStyle(.secondary)
+                    }
+                    Button("Coming soon") { }
+                        .buttonStyle(.borderedProminent)
+                        .frame(maxWidth: .infinity)
+                        .disabled(true)
                 }
-                Button("Coming soon") { }
-                    .buttonStyle(.borderedProminent)
-                    .frame(maxWidth: .infinity)
-                    .disabled(true)
-                Text("No personal best yet").font(.footnote).foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(20)

@@ -10,7 +10,7 @@ struct ActiveGameLayout<Question: View, Controls: View>: View {
     var body: some View {
         VStack(spacing: 16) {
             HStack {
-                Text(score).font(.headline)
+                Text(score).font(.headline).accessibilityIdentifier("game-score")
                 Spacer()
                 if let time { Text(time).font(.headline.monospacedDigit()) }
             }

@@ -20,13 +20,44 @@ final class MindSprintUITests: XCTestCase {
         capture("catalog")
         arithmetic.tap()
         XCTAssertTrue(app.staticTexts["How to play"].waitForExistence(timeout: 5))
-        XCTAssertFalse(app.buttons["Coming soon"].isEnabled)
+        XCTAssertTrue(app.buttons["start-arithmetic"].isEnabled)
         capture("preparation")
         app.navigationBars.buttons.firstMatch.tap()
         app.tabBars.buttons["Settings"].tap()
         XCTAssertTrue(app.switches["Haptics"].waitForExistence(timeout: 5))
         app.tabBars.buttons["Records"].tap()
         XCTAssertTrue(app.staticTexts["No records yet"].waitForExistence(timeout: 5))
+    }
+
+    func testArithmeticRoundAndReplay() {
+        let app = XCUIApplication()
+        app.launchArguments.append("--ui-test-arithmetic-fast")
+        app.launch()
+        XCTAssertTrue(app.buttons["game-arithmetic"].waitForExistence(timeout: 15))
+        app.buttons["game-arithmetic"].tap()
+        app.buttons["start-arithmetic"].tap()
+        let first = app.staticTexts["arithmetic-first"]
+        XCTAssertTrue(first.waitForExistence(timeout: 10))
+        let left = Int(first.label)!
+        let right = Int(app.staticTexts["arithmetic-second"].label)!
+        let operation = app.staticTexts["arithmetic-operation"].label
+        let answer: Int
+        switch operation {
+        case "+": answer = left + right
+        case "−": answer = left - right
+        case "×": answer = left * right
+        case "÷": answer = left / right
+        default: XCTFail("Unexpected operation: \(operation)"); return
+        }
+        if answer < 0 { app.buttons["Change sign"].tap() }
+        for digit in String(abs(answer)) { app.buttons[String(digit)].tap() }
+        XCTAssertTrue(app.staticTexts["Score: 1"].waitForExistence(timeout: 5))
+        capture("arithmetic-active")
+        XCTAssertTrue(app.staticTexts["Session complete"].waitForExistence(timeout: 40))
+        XCTAssertEqual(app.staticTexts["arithmetic-final-score"].label, "1")
+        capture("arithmetic-results")
+        app.buttons["Play again"].tap()
+        XCTAssertTrue(first.waitForExistence(timeout: 10))
     }
 
     func testKeypadEditingSubmissionAndReset() {
