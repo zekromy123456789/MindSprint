@@ -2,9 +2,11 @@ import SwiftUI
 
 #if DEBUG
 // Speeds up the complete-round UI test without changing release gameplay.
-private struct ArithmeticUITestClock: SessionClock {
+private final class ArithmeticUITestClock: SessionClock {
+    static let shared = ArithmeticUITestClock()
     private let base = MonotonicSessionClock()
-    var now: TimeInterval { base.now * 4 }
+    var offset: TimeInterval = 0
+    var now: TimeInterval { base.now + offset }
 }
 #endif
 
@@ -24,7 +26,7 @@ struct ArithmeticGameView: View {
     private static func makeRound(_ difficulty: Difficulty) -> ArithmeticRound {
         #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("--ui-test-arithmetic-fast") {
-            return ArithmeticRound(difficulty: difficulty, clock: ArithmeticUITestClock(), seed: 42)
+            return ArithmeticRound(difficulty: difficulty, clock: ArithmeticUITestClock.shared, seed: 42)
         }
         #endif
         return ArithmeticRound(difficulty: difficulty)
@@ -46,6 +48,15 @@ struct ArithmeticGameView: View {
                         VStack(spacing: 14) {
                             Button(showTimer ? "Hide timer" : "Show timer") { showTimer.toggle() }
                                 .font(.footnote)
+                            #if DEBUG
+                            if ProcessInfo.processInfo.arguments.contains("--ui-test-arithmetic-fast") {
+                                Button("Finish test round") {
+                                    ArithmeticUITestClock.shared.offset += ArithmeticRound.roundDuration
+                                    round.refresh()
+                                }
+                                .font(.footnote)
+                            }
+                            #endif
                             HStack(spacing: 8) {
                                 Text("\(question.first)").accessibilityIdentifier("arithmetic-first")
                                 Text(question.operation.symbol).accessibilityIdentifier("arithmetic-operation")

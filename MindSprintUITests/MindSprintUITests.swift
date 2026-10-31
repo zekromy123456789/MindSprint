@@ -56,7 +56,8 @@ final class MindSprintUITests: XCTestCase {
         for digit in String(abs(answer)) { app.buttons[String(digit)].tap() }
         XCTAssertTrue(app.staticTexts["Score: 1"].waitForExistence(timeout: 5))
         capture("arithmetic-active")
-        XCTAssertTrue(app.staticTexts["Session complete"].waitForExistence(timeout: 40))
+        app.buttons["Finish test round"].tap()
+        XCTAssertTrue(app.staticTexts["Session complete"].waitForExistence(timeout: 10))
         XCTAssertEqual(app.staticTexts["arithmetic-final-score"].label, "1")
         XCTAssertTrue(app.staticTexts["arithmetic-last-question"].exists)
         capture("arithmetic-results")
