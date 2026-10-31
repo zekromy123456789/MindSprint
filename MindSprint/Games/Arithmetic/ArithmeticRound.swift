@@ -16,6 +16,7 @@ struct ArithmeticRound {
     private var countdownEndsAt: TimeInterval?
     private(set) var phase: ArithmeticRoundPhase = .ready
     private(set) var question: ArithmeticQuestion?
+    private(set) var lastQuestion: ArithmeticQuestion?
     private(set) var questionID = 0
 
     init(difficulty: Difficulty, clock: any SessionClock = MonotonicSessionClock(),
@@ -51,6 +52,7 @@ struct ArithmeticRound {
             session.refresh()
             if session.phase == .completed {
                 phase = .completed
+                lastQuestion = question
                 question = nil
             }
         }

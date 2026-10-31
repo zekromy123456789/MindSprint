@@ -38,12 +38,14 @@ final class ArithmeticRoundTests: XCTestCase {
         XCTAssertEqual(round.phase, .active)
         XCTAssertEqual(round.remaining, 23, accuracy: 0.0001)
         let id = round.questionID
+        let lastQuestion = round.question
         let answer = String(round.question!.answer)
         clock.now = 123
         XCTAssertFalse(round.accept(answer, forQuestion: id))
         XCTAssertEqual(round.phase, .completed)
         XCTAssertEqual(round.score, 0)
         XCTAssertNil(round.question)
+        XCTAssertEqual(round.lastQuestion, lastQuestion)
     }
 
     func testRoundCanExpireWhileAppIsInactiveAndCannotRestart() {

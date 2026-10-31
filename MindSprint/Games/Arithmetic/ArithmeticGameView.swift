@@ -12,6 +12,7 @@ struct ArithmeticGameView: View {
     let difficulty: Difficulty
     @State private var round: ArithmeticRound
     @State private var input = NumericInput(allowsNegative: true, allowsDecimal: false, maxDigits: 8)
+    @State private var showTimer = true
     @Environment(\.scenePhase) private var scenePhase
     private let tick = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
@@ -41,8 +42,10 @@ struct ArithmeticGameView: View {
                 }
             case .active:
                 if let question = round.question {
-                    ActiveGameLayout(score: "Score: \(round.score)", time: formattedTime) {
+                    ActiveGameLayout(score: "Score: \(round.score)", time: showTimer ? formattedTime : nil) {
                         VStack(spacing: 14) {
+                            Button(showTimer ? "Hide timer" : "Show timer") { showTimer.toggle() }
+                                .font(.footnote)
                             HStack(spacing: 8) {
                                 Text("\(question.first)").accessibilityIdentifier("arithmetic-first")
                                 Text(question.operation.symbol).accessibilityIdentifier("arithmetic-operation")
@@ -64,6 +67,14 @@ struct ArithmeticGameView: View {
                     Text("\(round.score)").font(.largeTitle.bold()).monospacedDigit()
                         .accessibilityIdentifier("arithmetic-final-score")
                     Text("Correct answers").foregroundStyle(.secondary)
+                    if let last = round.lastQuestion {
+                        VStack(spacing: 5) {
+                            Text("Last question").font(.headline)
+                            Text("\(last.first) \(last.operation.symbol) \(last.second) = \(last.answer)")
+                                .font(.title3.monospacedDigit())
+                                .accessibilityIdentifier("arithmetic-last-question")
+                        }
+                    }
                     Button("Play again", action: replay).buttonStyle(.borderedProminent)
                 }
             case .abandoned:

@@ -38,6 +38,9 @@ final class MindSprintUITests: XCTestCase {
         app.buttons["start-arithmetic"].tap()
         let first = app.staticTexts["arithmetic-first"]
         XCTAssertTrue(first.waitForExistence(timeout: 10))
+        app.buttons["Hide timer"].tap()
+        XCTAssertTrue(app.buttons["Show timer"].exists)
+        app.buttons["Show timer"].tap()
         let left = Int(first.label)!
         let right = Int(app.staticTexts["arithmetic-second"].label)!
         let operation = app.staticTexts["arithmetic-operation"].label
@@ -55,6 +58,7 @@ final class MindSprintUITests: XCTestCase {
         capture("arithmetic-active")
         XCTAssertTrue(app.staticTexts["Session complete"].waitForExistence(timeout: 40))
         XCTAssertEqual(app.staticTexts["arithmetic-final-score"].label, "1")
+        XCTAssertTrue(app.staticTexts["arithmetic-last-question"].exists)
         capture("arithmetic-results")
         app.buttons["Play again"].tap()
         if !app.staticTexts["arithmetic-first"].waitForExistence(timeout: 5),
