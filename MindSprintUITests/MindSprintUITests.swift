@@ -69,6 +69,36 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["arithmetic-first"].waitForExistence(timeout: 10))
     }
 
+    func testArithmeticProRoundAndReplay() {
+        let app = XCUIApplication()
+        app.launchArguments.append("--ui-test-pro")
+        app.launch()
+        XCTAssertTrue(app.buttons["game-arithmeticPro"].waitForExistence(timeout: 15))
+        app.buttons["game-arithmeticPro"].tap()
+        XCTAssertTrue(app.staticTexts["Original questions"].waitForExistence(timeout: 5))
+        app.buttons["start-pro"].tap()
+        let question = app.staticTexts["pro-question"]
+        XCTAssertTrue(question.waitForExistence(timeout: 20))
+        guard let answerText = question.value as? String, let answer = Int(answerText) else {
+            XCTFail("Test answer is unavailable"); return
+        }
+        let wrong = answer == 9 ? "8" : "9"
+        app.buttons[wrong].tap()
+        XCTAssertTrue(app.staticTexts["Score: 0"].exists)
+        app.buttons["Clear answer"].tap()
+        if answer < 0 { app.buttons["Change sign"].tap() }
+        for digit in String(abs(answer)) { app.buttons[String(digit)].tap() }
+        XCTAssertTrue(app.staticTexts["Score: 1"].waitForExistence(timeout: 5))
+        capture("pro-active")
+        app.buttons["Finish test round"].tap()
+        XCTAssertTrue(app.staticTexts["Session complete"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["pro-final-score"].label, "1")
+        XCTAssertTrue(app.staticTexts["pro-last-question"].exists)
+        capture("pro-results")
+        app.buttons["Play again"].tap()
+        XCTAssertTrue(app.staticTexts["pro-question"].waitForExistence(timeout: 15))
+    }
+
     func testKeypadEditingSubmissionAndReset() {
         let app = XCUIApplication()
         app.launchArguments.append("--ui-test-keypad")

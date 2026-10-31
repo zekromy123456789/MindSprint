@@ -91,6 +91,15 @@ struct GamePreparationView: View {
                     NavigationLink("Start", destination: ArithmeticGameView(difficulty: difficulty))
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("start-arithmetic")
+                } else if game.id == .arithmeticPro {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Original questions").font(.headline)
+                        Text("These independently created expressions have a different mix from the reference game. Solve as many as you can in two minutes.")
+                            .foregroundStyle(.secondary)
+                    }
+                    NavigationLink("Start", destination: ArithmeticProGameView())
+                        .buttonStyle(.borderedProminent)
+                        .accessibilityIdentifier("start-pro")
                 } else {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Classic").font(.headline)
