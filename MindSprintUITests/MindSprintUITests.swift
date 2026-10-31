@@ -49,4 +49,34 @@ final class MindSprintUITests: XCTestCase {
         app.buttons["Delete last character"].tap()
         XCTAssertEqual(app.staticTexts["input-value"].label, "Empty")
     }
+    func testHardwareKeyEntryAndSubmission() {
+        let app = XCUIApplication()
+        app.launchArguments.append("--ui-test-keypad")
+        app.launch()
+        XCTAssertTrue(app.buttons["Submit"].waitForExistence(timeout: 15))
+        app.typeText("-12.34")
+        app.typeText(XCUIKeyboardKey.delete.rawValue)
+        XCTAssertEqual(app.staticTexts["input-value"].label, "-12.3")
+        app.typeText(XCUIKeyboardKey.return.rawValue)
+        XCTAssertEqual(app.staticTexts["submitted-value"].label, "-12.3")
+        XCTAssertFalse(app.buttons["Submit"].isEnabled)
+    }
+
+    func testHapticPreferencePersists() {
+        let app = XCUIApplication()
+        app.launch()
+        app.tabBars.buttons["Settings"].tap()
+        let haptics = app.switches["Haptics"]
+        XCTAssertTrue(haptics.waitForExistence(timeout: 10))
+        let original = haptics.value as? String
+        haptics.tap()
+        let changed = haptics.value as? String
+        XCTAssertNotEqual(original, changed)
+        app.terminate()
+        app.launch()
+        app.tabBars.buttons["Settings"].tap()
+        XCTAssertEqual(app.switches["Haptics"].value as? String, changed)
+        app.switches["Haptics"].tap()
+    }
+
 }

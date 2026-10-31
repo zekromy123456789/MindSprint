@@ -1,24 +1,24 @@
 PROJECT: MindSprint
 
 CURRENT MILESTONE: 8 — Core UI and input system (IN PROGRESS)
-CURRENT SUBTASK: 8E — Verify hardware key delivery/focus in simulator where feasible; document physical haptic limits.
+CURRENT SUBTASK: 8E — Verify simulator hardware key delivery and haptic preference persistence.
 
-LAST COMPLETED WORK: 8D verified GitHub Actions run 41092465371 at source c334382. Twelve unit tests and two UI tests on each of iPhone 17 Pro and Pro Max passed; unsigned arm64 device build and IPA upload passed. Retrieved the test artifact and visually reviewed six screenshots (catalog, preparation, DEBUG keypad on each size): no clipping or overlapping controls observed in captured default light-mode screens. Dark mode, larger accessibility text, uncaptured screens, physical keyboard focus and haptic feel remain unverified. No game is playable.
+LAST COMPLETED WORK: Added XCUITests to send digits, sign, decimal, delete and Return through the keypad test harness, and to toggle/relaunch haptic settings. Tests are authored, not yet validated; actual physical haptic feel and connected keyboard remain unverified. Earlier 8D run 41092465371 passed 12 unit tests and two UI tests on each of two simulator sizes, and six screenshots were visually reviewed.
 
-FILES CREATED OR MODIFIED: docs/project-state/HANDOFF.md, PROJECT_STATE.md, ROADMAP.md and KNOWN_ISSUES.md; downloaded ZIP removed. Screenshot review copies remain locally in ignored artifacts/ui-review/ and in GitHub run 41092465371 result-bundle artifact, expiring 2027-01-28.
+FILES CREATED OR MODIFIED: MindSprintUITests/MindSprintUITests.swift, project-state HANDOFF.md and PROJECT_STATE.md.
 
-LATEST COMMIT: Inspect GitHub main for checkpoint. Last tested source c33438207bd591067407d2835146a3cffc4095f8. Local Git history not synchronized due to ownership mismatch.
+LATEST COMMIT: Inspect GitHub main for source commit. Local Git history not synchronized due to ownership mismatch.
 
-BUILD STATUS: Passed run https://github.com/zekromy123456789/MindSprint/actions/runs/41092465371; unsigned arm64 IPA uploaded. Device installation and LiveContainer compatibility unverified.
+BUILD STATUS: New UI test run pending. Last passing run 41092465371; unsigned arm64 device build and IPA passed.
 
-TEST STATUS: Twelve unit tests and two UI tests on each of iPhone 17 Pro/Pro Max passed. Reviewed six captured screenshots; actual hardware key delivery, physical haptics and full gameplay remain unverified.
+TEST STATUS: New keyboard/haptic preference XCUITests not yet run. Prior twelve unit and two UI tests on each of two simulators passed.
 
-KNOWN ISSUES: Keypad template remains DEBUG-harness only until Arithmetic integrates it. Keyboard event delivery/focus and physical haptics unverified; no game playable. Reference discrepancies and UI accessibility gaps remain in KNOWN_ISSUES.md and mechanics report.
+KNOWN ISSUES: Actual physical keyboard and haptic feel unverified; no game playable. The simulator automation may not be capable of sending keys without a focused text element; diagnose actual test results rather than assume support.
 
-CURRENT BLOCKERS: Local Windows lacks Xcode/simulator; GitHub Actions can run tests. Physical haptic feel requires device.
+CURRENT BLOCKERS: Local Windows lacks Xcode; use GitHub Actions. Physical haptic validation requires a device.
 
-NEXT EXACT TASK: Continue milestone 8 only. Add a focused simulator UI test for keypad keyboard input (digits, minus, decimal, backspace and Enter) through the existing DEBUG harness, validate focus and submission locking; investigate and fix any failures. Verify haptic preference toggles in UI tests where possible and document inability to verify physical vibration. Test/review other device appearances where feasible. Once acceptance criteria are met, checkpoint milestone 8 complete; do not begin milestone 9 in same session.
+NEXT EXACT TASK: Inspect CI for the new UI tests. Fix failures where feasible; record if automation cannot inject hardware keys. Validate preference toggles and preserve physical limits. Once milestone 8 is supported by evidence, complete checkpoint and proceed to milestone 9 only if user explicitly requested the equivalent of two continues in this turn; otherwise stop. Implement Arithmetic engine in a bounded subtask and validate it.
 
-NEXT TASK ACCEPTANCE CRITERIA: Hardware key delivery and keypad interactions validated where feasible; haptic settings verified, physical limits explicit; navigation and layouts tested and reviewed on different iPhone sizes.
+NEXT TASK ACCEPTANCE CRITERIA: Keypad input and navigation tested; hardware key routing and haptic settings validated where feasible; layouts reviewed on two screen sizes, physical limits explicit.
 
-IMPORTANT CONTEXT: Read HANDOFF then ROADMAP, verify GitHub main/build. Full brief in docs/MASTER_BRIEF.md. One milestone or bounded subtask per session. User approved public repo. Independent code only. Never claim LiveContainer compatibility without physical verification.
+IMPORTANT CONTEXT: Read HANDOFF then ROADMAP; verify main and build. User requested two continuation steps in this turn only. Full brief in docs/MASTER_BRIEF.md; public repository approved. Never claim LiveContainer compatibility without physical verification.
