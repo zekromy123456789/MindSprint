@@ -110,6 +110,39 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["pro-question"].waitForExistence(timeout: 15))
     }
 
+    func testSequenceRoundAndReplay() {
+        let app = XCUIApplication()
+        app.launchArguments.append("--ui-test-sequence")
+        app.launch()
+        XCTAssertTrue(app.buttons["game-sequence"].waitForExistence(timeout: 15))
+        app.buttons["game-sequence"].tap()
+        app.buttons["start-sequence"].tap()
+        XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        app.buttons["Start test round"].tap()
+        let question = app.staticTexts["sequence-question"]
+        XCTAssertTrue(question.waitForExistence(timeout: 15))
+        guard let value = question.value as? String, let answer = Int(value) else {
+            XCTFail("Test answer is unavailable"); return
+        }
+        let wrong = answer == 9 ? "8" : "9"
+        app.buttons[wrong].tap()
+        XCTAssertTrue(app.staticTexts["Score: 0"].exists)
+        app.buttons["Clear answer"].tap()
+        if answer < 0 { app.buttons["Change sign"].tap() }
+        for digit in String(abs(answer)) { app.buttons[String(digit)].tap() }
+        XCTAssertTrue(app.staticTexts["Score: 1"].waitForExistence(timeout: 5))
+        capture("sequence-active")
+        app.buttons["Finish test round"].tap()
+        XCTAssertTrue(app.staticTexts["Session complete"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["sequence-final-score"].label, "1")
+        XCTAssertTrue(app.staticTexts["sequence-last-question"].exists)
+        capture("sequence-results")
+        app.buttons["Play again"].tap()
+        XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        app.buttons["Start test round"].tap()
+        XCTAssertTrue(app.staticTexts["sequence-question"].waitForExistence(timeout: 15))
+    }
+
     func testKeypadEditingSubmissionAndReset() {
         let app = XCUIApplication()
         app.launchArguments.append("--ui-test-keypad")

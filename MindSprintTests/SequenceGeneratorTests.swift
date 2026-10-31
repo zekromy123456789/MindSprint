@@ -80,4 +80,38 @@ final class SequenceGeneratorTests: XCTestCase {
         }
         XCTAssertEqual(families.count, 4)
     }
+
+    func testEveryClassicPrefixHasOnlyOneGeneratedAnswer() {
+        var answers: [[Int]: Int] = [:]
+        var conflicts = 0
+        func check(_ terms: [Int]) {
+            for values in [terms, Array(terms.reversed())] {
+                let prefix = Array(values.prefix(4))
+                if let previous = answers[prefix], previous != values[4] { conflicts += 1 }
+                answers[prefix] = values[4]
+            }
+        }
+        for initial in 5...22 {
+            for step in 2...22 { check((0..<5).map { initial + $0 * step }) }
+            for ratio in 2...9 {
+                var term = initial
+                var values: [Int] = []
+                for _ in 0..<5 { values.append(term); term *= ratio }
+                check(values)
+            }
+        }
+        for a in -8...8 {
+            for b in -8...8 {
+                for c in -8...8 { check((1...5).map { a * $0 * $0 + b * $0 + c }) }
+            }
+        }
+        for start in 1...5 {
+            let indices = Array(start..<(start + 5))
+            check(indices.map { $0 * $0 })
+            check(indices.map { $0 * $0 * $0 })
+            check(indices.map { $0 * ($0 + 1) / 2 })
+        }
+        XCTAssertEqual(conflicts, 0)
+        XCTAssertEqual(answers.count, 10_621)
+    }
 }

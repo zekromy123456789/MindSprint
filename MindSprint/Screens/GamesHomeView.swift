@@ -107,6 +107,15 @@ struct GamePreparationView: View {
                     NavigationLink("Start", destination: ArithmeticProGameView(difficulty: proDifficulty))
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("start-pro")
+                } else if game.id == .sequence {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Classic").font(.headline)
+                        Text("Find each missing number. Correct answers advance automatically; you have two minutes.")
+                            .foregroundStyle(.secondary)
+                    }
+                    NavigationLink("Start", destination: SequenceGameView())
+                        .buttonStyle(.borderedProminent)
+                        .accessibilityIdentifier("start-sequence")
                 } else {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Classic").font(.headline)
