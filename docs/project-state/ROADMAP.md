@@ -13,7 +13,7 @@ The definitive tasks and acceptance criteria for each milestone are in [MASTER_B
 | 6 | COMPLETED | Research Flexibility and Letter Speed; consolidate all eight specifications. |
 | 7 | COMPLETED | Testable shared game engine, clock, scoring and seeded randomness. |
 | 8 | COMPLETED | Core navigation, design, keypad, hardware keyboard and haptics. |
-| 9 | IN PROGRESS | Complete and test Arithmetic. |
+| 9 | COMPLETED | Complete and test Arithmetic. |
 | 10 | NOT STARTED | Complete and test Arithmetic Pro. |
 | 11 | NOT STARTED | Complete and test Sequence. |
 | 12 | NOT STARTED | Complete and test Optiver 80 in 8. |
