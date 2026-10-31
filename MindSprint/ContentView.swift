@@ -9,7 +9,7 @@ struct ContentView: View {
             NavigationStack { GamesHomeView() }
                 .tabItem { Label("Games", systemImage: "square.grid.2x2") }
             NavigationStack {
-                ContentUnavailableView("No records yet", systemImage: "chart.line.uptrend.xyaxis", description: Text("Your results will appear here once games are available."))
+                ContentUnavailableView("No records yet", systemImage: "chart.line.uptrend.xyaxis", description: Text("Saved results will appear here when records are available."))
                     .navigationTitle("Records")
             }
             .tabItem { Label("Records", systemImage: "chart.bar") }

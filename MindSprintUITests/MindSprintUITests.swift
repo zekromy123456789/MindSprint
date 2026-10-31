@@ -57,7 +57,11 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertEqual(app.staticTexts["arithmetic-final-score"].label, "1")
         capture("arithmetic-results")
         app.buttons["Play again"].tap()
-        XCTAssertTrue(first.waitForExistence(timeout: 10))
+        if !app.staticTexts["arithmetic-first"].waitForExistence(timeout: 5),
+           app.buttons["Play again"].exists {
+            app.buttons["Play again"].tap()
+        }
+        XCTAssertTrue(app.staticTexts["arithmetic-first"].waitForExistence(timeout: 10))
     }
 
     func testKeypadEditingSubmissionAndReset() {

@@ -94,7 +94,8 @@ struct ArithmeticGameView: View {
 
     private func replay() {
         input.reset()
-        round = Self.makeRound(difficulty)
-        round.start()
+        var next = Self.makeRound(difficulty)
+        next.start()
+        round = next
     }
 }
