@@ -20,3 +20,5 @@
 - 2026-10-30: After simulator UI automation found no keyboard focus, 8E uses a UIKit first-responder receiver with an empty custom input view to forward hardware actions without the standard keyboard; simulator keyboard delivery and six default light-mode screenshots passed in run 41165821335; physical keyboard, VoiceOver and haptics remain unverified. Arithmetic custom difficulty ranges are independent product choices, not reference claims; Classic uses documented ranges.
 
 - 2026-10-30: Arithmetic custom difficulty ranges are Easy operands 2...20 and small factors 2...5, Normal 2...50 and 2...10, Hard 2...199 and 2...15, Expert 2...999 and 2...25. Division is constructed from a nonzero divisor and integer quotient. Classic auto-advance must be integrated separately from the keypad explicit-submit behavior.
+
+- 2026-10-31: Arithmetic Pro uses independently authored expression templates with operands 2...20 and 2...12, including constructed exact division. This is a custom approximation; the protected reference pool and its distribution are not reproduced. Generator and independent prompt-evaluation tests await CI.
