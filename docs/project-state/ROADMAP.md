@@ -14,7 +14,7 @@ The definitive tasks and acceptance criteria for each milestone are in [MASTER_B
 | 7 | COMPLETED | Testable shared game engine, clock, scoring and seeded randomness. |
 | 8 | COMPLETED | Core navigation, design, keypad, hardware keyboard and haptics. |
 | 9 | COMPLETED | Complete and test Arithmetic. |
-| 10 | IN PROGRESS | Complete and test Arithmetic Pro. |
+| 10 | COMPLETED | Complete and test Arithmetic Pro. |
 | 11 | IN PROGRESS | Complete and test Sequence. |
 | 12 | NOT STARTED | Complete and test Optiver 80 in 8. |
 | 13 | NOT STARTED | Complete and test Memory. |

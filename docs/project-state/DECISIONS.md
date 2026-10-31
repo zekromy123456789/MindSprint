@@ -23,4 +23,6 @@
 
 - 2026-10-31: Arithmetic Pro uses independently authored expression templates with operands 2...20 and 2...12, including constructed exact division. This is a custom approximation; the protected reference pool and its distribution are not reproduced. Generator and independent prompt-evaluation tests passed in CI run 41173426893.
 
-- 2026-10-31: Pro offers independently chosen Easy main 2...10/factor 2...5, Normal 2...20/2...12 (the original custom level), Hard 2...35/2...15, and Expert 2...60/2...20. The same five expression shapes are used across levels. No level is called Classic because the protected reference distribution is not reproduced. These changes await CI.
+- 2026-10-31: Pro offers independently chosen Easy main 2...10/factor 2...5, Normal 2...20/2...12 (the original custom level), Hard 2...35/2...15, and Expert 2...60/2...20. The same five expression shapes are used across levels. No level is called Classic because the protected reference distribution is not reproduced. These changes passed CI run 41216164324.
+
+- 2026-10-31: Sequence Classic generation independently implements the four documented families and random reversal; negative and zero values remain valid. Generator tests cover family rules and deterministic seeds; gameplay is a separate step.
