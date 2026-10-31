@@ -34,8 +34,15 @@ struct GameSession {
 
     @discardableResult
     mutating func start() -> Bool {
+        start(at: clock.now)
+    }
+
+    // Allows a delayed refresh to preserve a countdown's actual end time.
+    @discardableResult
+    mutating func start(at time: TimeInterval) -> Bool {
         guard phase == .ready else { return false }
-        startedAt = clock.now
+        guard time.isFinite, time <= clock.now else { return false }
+        startedAt = time
         phase = .active
         return true
     }

@@ -1,6 +1,6 @@
 # Known issues and limitations
 
-- No game is playable. Arithmetic generation and canonical answer validation passed tests, but its session, UI, scoring and results are not integrated. The generator tests do not directly check statistical distribution.
+- No game is playable. Arithmetic generation and canonical answer validation passed tests, but its round logic and tests await CI; the UI and results are not integrated. The generator tests do not directly check statistical distribution.
 - Run 41165821335 passed 16 unit tests and four UI tests on each of iPhone 17 Pro and Pro Max simulators. It verifies synthesized keyboard events and haptic preference persistence, not actual physical keyboard behavior or haptic feel. VoiceOver and real-device focus lifecycle are unverified. Six default light-mode screenshots showed no clipping, overlapping controls or software-keyboard intrusion; other modes, accessibility text sizes and actual game layouts need review.
 - The unsigned arm64 app and IPA archive passed CI checks in run 41165821335. Installation and LiveContainer compatibility have not been verified on a device. Artifact 13028573185 expires 2027-01-29.
 - Game-specific progression, per-question duplicate submission protection and background/expiry races still need integration and testing. Shared sessions require refresh when the app resumes. Numeric input's digit limit does not itself validate conversion overflow; game validators must do so. Haptic result feedback is not connected to games. Records and settings are incomplete.
