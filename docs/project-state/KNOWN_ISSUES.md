@@ -14,11 +14,12 @@
 - Milestone 8A numeric input and standalone keypad passed CI run 41088538679; they are not integrated into any screen. Hardware key routing and haptic settings now compile, but delivery and physical feedback have not been tested; device layout validation is also pending. Digit limit does not validate numeric conversion overflow; game validators must do so.
 
 
-- 8B catalog and navigation plus reusable active/results templates compile in CI run 41089968056; navigation interaction and visual layout remain unverified. Games are disabled; records and settings are placeholders. Numeric template composes keypad but is not connected to real gameplay.
+- 8B catalog and navigation plus reusable active/results templates compile; catalog navigation and preparation were tested and captured on two simulator sizes in run 41092465371. Actual active/results layouts remain unverified until game integration. Games are disabled; records and settings are placeholders. Numeric template composes keypad but is not connected to real gameplay.
 
 
 - 8C keyboard routing and haptic settings passed CI run 41091082669. The keypad is not in a reachable playable screen, so real iOS hardware-key focus, haptic feel and accessibility remain unverified. Haptic result feedback is available but not connected to games.
 
 
-- 8D run 41092465371 passed 12 unit tests and two UI tests on each of iPhone 17 Pro and Pro Max. Screenshot attachments were retained but the GitHub artifact-download connector returned an internal error, so images have not been reviewed. Physical hardware-key focus and haptic behavior remain unverified.
+- 8D run 41092465371 passed 12 unit tests and two UI tests on each of iPhone 17 Pro and Pro Max. Screenshot attachments were retrieved and six captures (catalog, preparation and DEBUG keypad for both sizes) reviewed; no clipping or overlap was observed in captured default light-mode screens. Dark mode, large accessibility text and uncaptured screens remain unreviewed. Physical hardware-key focus and haptic behavior remain unverified.
+
 
