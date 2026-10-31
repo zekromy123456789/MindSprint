@@ -6,7 +6,6 @@ struct NumericKeypad: View {
     let onSubmit: (String) -> Void
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     @AppStorage("keypressHapticsEnabled") private var keypressHapticsEnabled = true
-    @FocusState private var keyboardFocused: Bool
 
     private let rows = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 
@@ -35,26 +34,12 @@ struct NumericKeypad: View {
             .disabled(!isEnabled || input.isSubmitted)
         }
         .disabled(!isEnabled || input.isSubmitted)
-        .focusable()
-        .focused($keyboardFocused)
-        .onAppear {
-            keyboardFocused = true
-            HapticFeedback.shared.prepare()
+        .background {
+            HardwareKeyReceiver(isActive: isEnabled && !input.isSubmitted, onAction: perform)
+                .frame(width: 1, height: 1)
+                .opacity(0.01)
         }
-        .onChange(of: isEnabled) { _, enabled in
-            if enabled { keyboardFocused = true }
-        }
-        .onKeyPress(phases: .down) { press in
-            guard isEnabled, !input.isSubmitted, press.modifiers.isEmpty else { return .ignored }
-            let action: NumericInputAction?
-            if press.key == .return { action = .submit }
-            else if press.key == .delete { action = .backspace }
-            else if press.key == .escape { action = .clear }
-            else { action = NumericInputAction.character(press.characters) }
-            guard let action else { return .ignored }
-            perform(action)
-            return .handled
-        }
+        .onAppear { HapticFeedback.shared.prepare() }
     }
 
     private func perform(_ action: NumericInputAction) {

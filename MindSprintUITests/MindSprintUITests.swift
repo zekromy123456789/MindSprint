@@ -69,14 +69,16 @@ final class MindSprintUITests: XCTestCase {
         let haptics = app.switches["Haptics"]
         XCTAssertTrue(haptics.waitForExistence(timeout: 10))
         let original = haptics.value as? String
-        haptics.tap()
+        haptics.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5)).tap()
+        let changedPredicate = NSPredicate { _, _ in (haptics.value as? String) != original }
+        expectation(for: changedPredicate, evaluatedWith: haptics)
+        waitForExpectations(timeout: 5)
         let changed = haptics.value as? String
-        XCTAssertNotEqual(original, changed)
         app.terminate()
         app.launch()
         app.tabBars.buttons["Settings"].tap()
         XCTAssertEqual(app.switches["Haptics"].value as? String, changed)
-        app.switches["Haptics"].tap()
+        app.switches["Haptics"].coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5)).tap()
     }
 
 }

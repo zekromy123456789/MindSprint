@@ -16,3 +16,5 @@
 - 2026-10-30: Numeric input stores a bounded digit string to preserve leading zeros and avoid implicit floating-point parsing. Submit locks edits and repeat submissions until the caller resets after resolution. Per-game numeric validation, question transitions and timing remain the caller's responsibility. The reusable keypad is not yet connected to screens or hardware keyboard input.
 
 - 2026-10-30: Numeric keypad shares a testable action mapping for touch and iOS 17 hardware keys. Key presses are gated by input availability and submission lock. Haptic settings persist via AppStorage; UIKit feedback is optional and prepared for low latency. Keyboard focus, delivery and physical feedback require device verification.
+
+- 2026-10-30: After simulator UI automation found no keyboard focus, 8E uses a UIKit first-responder receiver with an empty custom input view to forward hardware actions without the standard keyboard; this is a candidate pending CI and visual/device verification. Arithmetic custom difficulty ranges are independent product choices, not reference claims; Classic uses documented ranges.

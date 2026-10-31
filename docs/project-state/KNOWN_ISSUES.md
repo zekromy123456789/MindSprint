@@ -23,3 +23,5 @@
 - 8D run 41092465371 passed 12 unit tests and two UI tests on each of iPhone 17 Pro and Pro Max. Screenshot attachments were retrieved and six captures (catalog, preparation and DEBUG keypad for both sizes) reviewed; no clipping or overlap was observed in captured default light-mode screens. Dark mode, large accessibility text and uncaptured screens remain unreviewed. Physical hardware-key focus and haptic behavior remain unverified.
 
 
+
+- Run 41165187444 failed keyboard typing (no keyboard focus) and haptic switch state test. Candidate responder and test fixes await CI; ensure empty input view does not displace keypad, and real device/VoiceOver behavior is checked. Arithmetic generator 9A is authored but not yet compiled or integrated.
