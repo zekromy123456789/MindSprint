@@ -23,12 +23,22 @@ final class MemoryRoundTests: XCTestCase {
         round.refresh()
         XCTAssertNil(round.visibleDigit)
         clock.now = 4
+        round.refresh()
         XCTAssertEqual(round.visibleDigit, round.digits[0])
+        clock.now = 5
+        round.refresh()
+        XCTAssertEqual(round.visibleIndex, 1)
+        XCTAssertEqual(round.visibleDigit, round.digits[1])
+        clock.now = 6
+        round.refresh()
+        XCTAssertEqual(round.visibleIndex, 2)
+        XCTAssertEqual(round.visibleDigit, round.digits[2])
         clock.now = 6.99
         XCTAssertFalse(round.submit(answer, forQuestion: token))
         clock.now = 7
         round.refresh()
         XCTAssertEqual(round.phase, .recall)
+        XCTAssertNil(round.visibleIndex)
         XCTAssertTrue(round.submit(answer, forQuestion: token))
         XCTAssertEqual(round.score, 1)
         XCTAssertEqual(round.length, 4)
@@ -87,6 +97,7 @@ final class MemoryRoundTests: XCTestCase {
         round.resume()
         XCTAssertNil(round.visibleDigit)
         clock.now = 201
+        round.refresh()
         XCTAssertEqual(round.visibleDigit, round.digits[0])
         clock.now = 204
         round.refresh()

@@ -44,6 +44,7 @@ struct MemoryRound {
     private(set) var digits: [Int] = []
     private(set) var questionID = 0
     private(set) var isSuspended = false
+    private(set) var visibleIndex: Int?
 
     init(clock: any SessionClock = MonotonicSessionClock(),
          seed: UInt64 = UInt64.random(in: .min ... .max)) {
@@ -56,7 +57,7 @@ struct MemoryRound {
         return max(0, end - clock.now)
     }
 
-    var visibleIndex: Int? {
+    private func currentVisibleIndex() -> Int? {
         guard phase == .presenting, !isSuspended, let start = presentationStartedAt else { return nil }
         let elapsed = clock.now - start - Self.leadIn
         guard elapsed >= 0 else { return nil }
@@ -80,9 +81,13 @@ struct MemoryRound {
             presentationStartedAt = clock.now
             phase = .presenting
         }
-        if phase == .presenting, let start = presentationStartedAt,
-           clock.now - start >= Self.leadIn + Double(digits.count) * Self.digitDuration {
-            phase = .recall
+        if phase == .presenting, let start = presentationStartedAt {
+            if clock.now - start >= Self.leadIn + Double(digits.count) * Self.digitDuration {
+                visibleIndex = nil
+                phase = .recall
+            } else {
+                visibleIndex = currentVisibleIndex()
+            }
         }
     }
 
@@ -96,11 +101,13 @@ struct MemoryRound {
             attempt = 1
             newQuestion()
             presentationStartedAt = clock.now
+            visibleIndex = nil
             phase = .presenting
         } else if attempt == 1 {
             attempt = 2
             newQuestion()
             presentationStartedAt = clock.now
+            visibleIndex = nil
             phase = .presenting
         } else if let next = MemoryStage(rawValue: stage.rawValue + 1) {
             stage = next
@@ -117,13 +124,14 @@ struct MemoryRound {
     mutating func suspend() {
         guard phase != .completed, phase != .abandoned else { return }
         isSuspended = true
+        visibleIndex = nil
     }
 
     mutating func resume() {
         guard isSuspended else { return }
         isSuspended = false
         if phase == .countdown { countdownEndsAt = clock.now + Self.countdownDuration }
-        if phase == .presenting { presentationStartedAt = clock.now }
+        if phase == .presenting { presentationStartedAt = clock.now; visibleIndex = nil }
     }
 
     mutating func abandon() {
