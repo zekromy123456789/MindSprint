@@ -1,6 +1,6 @@
 # Known issues and limitations
 
-- Letter Speed generator and timed round passed CI in run 41340021945. The new gameplay UI, result review and replay await CI and visual/accessibility verification. Tied target regeneration is capped at 128 attempts with a deterministic legal fallback. Delayed timer callbacks advance only one expired round and start a fresh clock; actual background behavior needs QA.
+- Letter Speed generator and timed round passed CI in run 41340021945. The first UI test run 41343951538 could not identify grid controls as buttons; explicit button accessibility traits were added and require CI verification. Gameplay, result review, replay and visual/accessibility checks remain pending. Tied target regeneration is capped at 128 attempts with a deterministic legal fallback. Delayed timer callbacks advance only one expired round and start a fresh clock; actual background behavior needs QA.
 
 - Flexibility passed simulator playthroughs, but actual arrow-key delivery, VoiceOver color descriptions, Dynamic Type, dark-mode contrast and all color combinations require device/accessibility QA.
 
