@@ -170,7 +170,8 @@ struct GamePreparationView: View {
                         .accessibilityIdentifier("start-flexibility")
                 } else if game.id == .letterSpeed {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("10 rounds · 30 seconds each").font(.headline)
+                        Text("Classic").font(.headline)
+                        Text("10 rounds · 30 seconds each").font(.subheadline)
                         Text("A = 1 through Z = 26. For two letters, take the difference between their values; for one letter, use its value. Add the ten rows and choose the highest or lowest total. Faster correct answers earn more points.")
                             .foregroundStyle(.secondary)
                     }
