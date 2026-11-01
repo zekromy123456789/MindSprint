@@ -27,4 +27,6 @@
 
 - 2026-10-31: Sequence Classic generation independently implements the four documented families and random reversal; negative and zero values remain valid. Generator tests cover family rules and deterministic seeds; gameplay is a separate step.
 
-- 2026-10-31: Sequence Classic is unchanged. Custom Easy samples arithmetic/special families; Normal arithmetic/geometric/special; Hard geometric/quadratic/special; Expert quadratic only. Each uses the same verified Classic parameter bounds and both directions, so each generated domain is a subset of the exhaustively checked Classic domain. These are custom family mixes, not reference difficulty settings. CI pending.
+- 2026-10-31: Sequence Classic is unchanged. Custom Easy samples arithmetic/special families; Normal arithmetic/geometric/special; Hard geometric/quadratic/special; Expert quadratic only. Each uses the same verified Classic parameter bounds and both directions, so each generated domain is a subset of the exhaustively checked Classic domain. These are custom family mixes, not reference difficulty settings. The Sequence level changes passed CI run 41262800653.
+
+- 2026-11-01: Optiver uses exact integer hundredths for generated arithmetic, avoids zero divisors and ambiguous zero-factor hidden positions, and uses original distinct choice offsets and concise decimal formatting. Exact reference rounding and distractor distribution remain unverified; do not call these equivalent. Generator and round passed CI run 41262800653; UI is not yet integrated.

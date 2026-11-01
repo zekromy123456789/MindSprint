@@ -2,11 +2,11 @@
 
 - Project: MindSprint
 - Repository: https://github.com/zekromy123456789/MindSprint (public, approved by user).
-- Last completed milestone: 10 — Arithmetic Pro, verified to simulator limits; question distribution is independently generated and differs from the reference.
-- Current milestones: 11 — Sequence (custom difficulty CI pending); 12 — Optiver (generator and round authored, CI pending).
-- Next subtask: 11C — Sequence difficulty awaits CI; 12A/12B — Optiver generator and round await CI; no UI.
-- Overall status: Arithmetic, Arithmetic Pro and Sequence Classic are playable in simulator. Records are not saved.
-- Last passing build: GitHub Actions run 41217634479, source commit fd32a2840eb6b4769b14135d7d976124016a883b.
+- Last completed milestone: 11 — Sequence, verified to simulator limits. Its custom levels select subsets of Classic's pattern families.
+- Current milestone: 12 — Optiver 80 in 8 (in progress); question generator and round engine passed CI, no gameplay UI.
+- Next subtask: 12C — Optiver choice-based gameplay screen, results and end-to-end verification.
+- Overall status: Arithmetic, Arithmetic Pro and Sequence are playable in simulator. Optiver is not yet playable. Records are not saved.
+- Last passing build: GitHub Actions run 41262800653, source commit b3a05acb87efec2246b8a9e79a767d49133531d4.
 - Known issues: see KNOWN_ISSUES.md.
 - Current limitations: local Windows lacks Xcode/simulator; real-device gameplay, keyboard, haptics and LiveContainer remain unverified.
-- Next required action: verify Sequence difficulty and Optiver generator/round in CI.
+- Next required action: integrate and verify Optiver UI and results, clearly explaining independently chosen rounding/distractors.
