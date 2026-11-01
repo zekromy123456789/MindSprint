@@ -2,11 +2,11 @@
 
 - Project: MindSprint
 - Repository: https://github.com/zekromy123456789/MindSprint (public, approved by user).
-- Last completed milestone: 14 — Risk, verified to simulator limits; reference green-to-red probability fall-through is deliberately preserved.
-- Current milestone: 15 — Flexibility (in progress); engine and UI authored, CI pending.
-- Next subtask: 15A/15B — Flexibility engine and UI await CI.
-- Overall status: Arithmetic, Arithmetic Pro, Sequence, Optiver, Memory and Risk are playable in simulator. Flexibility is authored but not yet verified. Records are not saved.
-- Last passing build: GitHub Actions run 41331629289 attempt 2, source commit dc327d6a2023b89820b187d35556fe0174f912e9.
+- Last completed milestone: 15 — Flexibility, verified to simulator limits.
+- Next milestone: 16 — Letter Speed (not started).
+- Next subtask: 16A — Letter Speed stimulus generation and scoring rules with deterministic tests.
+- Overall status: Seven games are playable in simulator; Letter Speed and persistent records are not yet available.
+- Last passing build: GitHub Actions run 41338024921, source commit 126d205d2c993069760f5d98a13fec4e89de8249.
 - Known issues: see KNOWN_ISSUES.md.
 - Current limitations: Windows lacks Xcode/simulator; physical gameplay, keyboard, haptics, VoiceOver and LiveContainer remain unverified.
-- Next required action: verify Flexibility in CI and review screenshots.
+- Next required action: implement and test Letter Speed's documented letter-grid generation and scoring.
