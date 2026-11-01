@@ -312,6 +312,45 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertTrue(prompt.waitForExistence(timeout: 10))
     }
 
+    func testLetterSpeedRoundAndReplay() {
+        let app = XCUIApplication()
+        app.launchArguments.append("--ui-test-letter-speed")
+        app.launch()
+        let game = app.buttons["game-letterSpeed"]
+        for _ in 0..<4 { if game.isHittable { break }; app.swipeUp() }
+        XCTAssertTrue(game.waitForExistence(timeout: 15))
+        game.tap()
+        app.buttons["start-letter-speed"].tap()
+        XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        app.buttons["Start test round"].tap()
+        let prompt = app.staticTexts["letter-prompt"]
+        XCTAssertTrue(prompt.waitForExistence(timeout: 15))
+        XCTAssertEqual(app.staticTexts["letter-progress"].label, "Round 1 / 10")
+        for index in 0..<4 { XCTAssertTrue(app.buttons["letter-choice-\(index)"].exists) }
+        guard let answer = prompt.value as? String, let correct = Int(answer), (0..<4).contains(correct) else {
+            XCTFail("Test answer is unavailable"); return
+        }
+        capture("letter-speed-active")
+        app.buttons["letter-choice-\(correct)"].tap()
+        XCTAssertEqual(app.staticTexts["letter-score"].label, "Score: 30")
+        guard let nextAnswer = prompt.value as? String, let nextCorrect = Int(nextAnswer) else {
+            XCTFail("Next answer is unavailable"); return
+        }
+        app.buttons["letter-choice-\((nextCorrect + 1) % 4)"].tap()
+        XCTAssertEqual(app.staticTexts["letter-score"].label, "Score: 30")
+        for _ in 0..<8 { app.buttons["Expire test question"].tap() }
+        XCTAssertTrue(app.staticTexts["Session complete"].waitForExistence(timeout: 15))
+        XCTAssertEqual(app.staticTexts["letter-final-score"].label, "Score: 30")
+        XCTAssertTrue(app.descendants(matching: .any)["letter-result-0"].exists)
+        capture("letter-speed-results")
+        app.buttons["Play again"].tap()
+        XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        app.buttons["Start test round"].tap()
+        XCTAssertTrue(prompt.waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["letter-progress"].label, "Round 1 / 10")
+        XCTAssertEqual(app.staticTexts["letter-score"].label, "Score: 0")
+    }
+
     func testKeypadEditingSubmissionAndReset() {
         let app = XCUIApplication()
         app.launchArguments.append("--ui-test-keypad")

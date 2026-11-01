@@ -168,6 +168,15 @@ struct GamePreparationView: View {
                     NavigationLink("Start", destination: FlexibilityGameView())
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("start-flexibility")
+                } else if game.id == .letterSpeed {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("10 rounds · 30 seconds each").font(.headline)
+                        Text("A = 1 through Z = 26. For two letters, take the difference between their values; for one letter, use its value. Add the ten rows and choose the highest or lowest total. Faster correct answers earn more points.")
+                            .foregroundStyle(.secondary)
+                    }
+                    NavigationLink("Start", destination: LetterSpeedGameView())
+                        .buttonStyle(.borderedProminent)
+                        .accessibilityIdentifier("start-letter-speed")
                 } else {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Classic").font(.headline)
