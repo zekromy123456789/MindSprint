@@ -18,7 +18,7 @@ The definitive tasks and acceptance criteria for each milestone are in [MASTER_B
 | 11 | COMPLETED | Complete and test Sequence. |
 | 12 | COMPLETED | Complete and test Optiver 80 in 8. |
 | 13 | COMPLETED | Complete and test Memory. |
-| 14 | IN PROGRESS | Complete and test Risk. |
+| 14 | COMPLETED | Complete and test Risk. |
 | 15 | NOT STARTED | Complete and test Flexibility. |
 | 16 | NOT STARTED | Complete and test Letter Speed. |
 | 17 | NOT STARTED | Offline history, personal records, statistics, migrations and tests. |
