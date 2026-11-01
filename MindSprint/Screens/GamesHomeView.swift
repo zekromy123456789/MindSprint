@@ -150,6 +150,15 @@ struct GamePreparationView: View {
                     NavigationLink("Start", destination: MemoryGameView())
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("start-memory")
+                } else if game.id == .risk {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("20 rounds").font(.headline)
+                        Text("Each balloon starts with one unbanked point. Pump to increase it, or collect before it pops.")
+                            .foregroundStyle(.secondary)
+                    }
+                    NavigationLink("Start", destination: RiskGameView())
+                        .buttonStyle(.borderedProminent)
+                        .accessibilityIdentifier("start-risk")
                 } else {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Classic").font(.headline)

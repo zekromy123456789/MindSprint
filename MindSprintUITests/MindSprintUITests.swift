@@ -246,6 +246,36 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Round 1 / 3"].waitForExistence(timeout: 10))
     }
 
+    func testRiskRoundAndReplay() {
+        let app = XCUIApplication()
+        app.launchArguments.append("--ui-test-risk")
+        app.launch()
+        let risk = app.buttons["game-risk"]
+        if !risk.isHittable { app.swipeUp() }
+        XCTAssertTrue(risk.waitForExistence(timeout: 15))
+        risk.tap()
+        app.buttons["start-risk"].tap()
+        XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        app.buttons["Start test round"].tap()
+        XCTAssertTrue(app.staticTexts["risk-progress"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["risk-progress"].label, "Round 1 / 20")
+        XCTAssertEqual(app.staticTexts["risk-unbanked"].label, "Unbanked: 1")
+        capture("risk-active")
+        app.buttons["Pump"].tap()
+        for _ in 0..<20 {
+            if app.staticTexts["Session complete"].exists { break }
+            app.buttons["Collect"].tap()
+        }
+        XCTAssertTrue(app.staticTexts["Session complete"].waitForExistence(timeout: 10))
+        XCTAssertTrue(["19", "21"].contains(app.staticTexts["risk-final-score"].label))
+        capture("risk-results")
+        app.buttons["Play again"].tap()
+        XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        app.buttons["Start test round"].tap()
+        XCTAssertEqual(app.staticTexts["risk-progress"].label, "Round 1 / 20")
+        XCTAssertEqual(app.staticTexts["risk-unbanked"].label, "Unbanked: 1")
+    }
+
     func testKeypadEditingSubmissionAndReset() {
         let app = XCUIApplication()
         app.launchArguments.append("--ui-test-keypad")
