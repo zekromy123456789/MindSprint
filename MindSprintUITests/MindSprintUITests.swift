@@ -276,6 +276,42 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertEqual(app.staticTexts["risk-unbanked"].label, "Unbanked: 1")
     }
 
+    func testFlexibilityRoundAndReplay() {
+        let app = XCUIApplication()
+        app.launchArguments.append("--ui-test-flexibility")
+        app.launch()
+        let game = app.buttons["game-flexibility"]
+        for _ in 0..<3 { if game.isHittable { break }; app.swipeUp() }
+        XCTAssertTrue(game.waitForExistence(timeout: 15))
+        game.tap()
+        app.buttons["start-flexibility"].tap()
+        XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        app.buttons["Start test round"].tap()
+        let prompt = app.staticTexts["flexibility-prompt"]
+        XCTAssertTrue(prompt.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts["flexibility-left-card"].exists)
+        XCTAssertTrue(app.staticTexts["flexibility-right-card"].exists)
+        guard let correct = prompt.value as? String, ["Yes", "No"].contains(correct) else {
+            XCTFail("Test answer is unavailable"); return
+        }
+        app.buttons[correct].tap()
+        XCTAssertTrue(app.staticTexts["Score: 1"].waitForExistence(timeout: 5))
+        guard let next = prompt.value as? String, ["Yes", "No"].contains(next) else {
+            XCTFail("Next test answer is unavailable"); return
+        }
+        app.buttons[next == "Yes" ? "No" : "Yes"].tap()
+        XCTAssertTrue(app.staticTexts["Score: 0"].waitForExistence(timeout: 5))
+        capture("flexibility-active")
+        app.buttons["Finish test round"].tap()
+        XCTAssertTrue(app.staticTexts["Session complete"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["flexibility-final-score"].label, "0")
+        capture("flexibility-results")
+        app.buttons["Play again"].tap()
+        XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        app.buttons["Start test round"].tap()
+        XCTAssertTrue(prompt.waitForExistence(timeout: 10))
+    }
+
     func testKeypadEditingSubmissionAndReset() {
         let app = XCUIApplication()
         app.launchArguments.append("--ui-test-keypad")

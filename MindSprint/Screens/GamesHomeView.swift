@@ -159,6 +159,15 @@ struct GamePreparationView: View {
                     NavigationLink("Start", destination: RiskGameView())
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("start-risk")
+                } else if game.id == .flexibility {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("60 seconds").font(.headline)
+                        Text("Compare the left word's meaning with the right word's ink color. Correct answers earn 1 point; incorrect answers lose 1 point.")
+                            .foregroundStyle(.secondary)
+                    }
+                    NavigationLink("Start", destination: FlexibilityGameView())
+                        .buttonStyle(.borderedProminent)
+                        .accessibilityIdentifier("start-flexibility")
                 } else {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Classic").font(.headline)
