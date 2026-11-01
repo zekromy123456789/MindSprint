@@ -2,11 +2,11 @@
 
 - Project: MindSprint
 - Repository: https://github.com/zekromy123456789/MindSprint (public, approved by user).
-- Last completed milestone: 12 — Optiver 80 in 8, verified to simulator limits with documented safety and fixed-point deviations.
-- Current milestone: 13 — Memory (in progress); initial engine/UI passed CI; stronger playback test found a card refresh defect, fix awaits CI.
-- Next subtask: 13A/13B — Memory card-refresh fix awaits CI.
-- Overall status: Arithmetic, Arithmetic Pro, Sequence and Optiver are playable in simulator. Memory passed initial CI; stronger playback test revealed a card-refresh defect, and the fix awaits CI. Records are not saved.
-- Last passing build: GitHub Actions run 41274133561, source commit b8bc412e08f5cae583e9c3f8c8432cf6020a572a.
+- Last completed milestone: 13 — Memory, verified to simulator limits with documented presentation timing and safety differences.
+- Next milestone: 14 — Risk (not started).
+- Next subtask: 14A — Risk round rules, scoring and seeded probability engine.
+- Overall status: Arithmetic, Arithmetic Pro, Sequence, Optiver and Memory are playable in simulator. Records are not saved.
+- Last passing build: GitHub Actions run 41277730498, source commit bf33e0bbf078ef4c565c7e49f8fa5f531df11190.
 - Known issues: see KNOWN_ISSUES.md.
-- Current limitations: local Windows lacks Xcode/simulator; real-device gameplay, keyboard, haptics and LiveContainer remain unverified.
-- Next required action: verify Memory engine and UI in CI, then review screenshots.
+- Current limitations: local Windows lacks Xcode/simulator; physical gameplay, keyboard, haptics, VoiceOver and LiveContainer remain unverified.
+- Next required action: inspect documented Risk mechanics and independently implement/test round and probability behavior, explicitly documenting the source's green-color fall-through decision.
