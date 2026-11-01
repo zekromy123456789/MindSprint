@@ -16,7 +16,7 @@ The definitive tasks and acceptance criteria for each milestone are in [MASTER_B
 | 9 | COMPLETED | Complete and test Arithmetic. |
 | 10 | COMPLETED | Complete and test Arithmetic Pro. |
 | 11 | COMPLETED | Complete and test Sequence. |
-| 12 | IN PROGRESS | Complete and test Optiver 80 in 8. |
+| 12 | COMPLETED | Complete and test Optiver 80 in 8. |
 | 13 | NOT STARTED | Complete and test Memory. |
 | 14 | NOT STARTED | Complete and test Risk. |
 | 15 | NOT STARTED | Complete and test Flexibility. |

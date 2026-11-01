@@ -2,11 +2,11 @@
 
 - Project: MindSprint
 - Repository: https://github.com/zekromy123456789/MindSprint (public, approved by user).
-- Last completed milestone: 11 — Sequence, verified to simulator limits.
-- Current milestone: 12 — Optiver 80 in 8 (in progress); gameplay, results and custom operation levels passed simulator CI. Reference-style precision and distractor range changes await CI; exact binary rounding remains unproven.
-- Next subtask: 12D — Verify reference-style precision and distractor range changes in CI; retain safety deviations.
+- Last completed milestone: 12 — Optiver 80 in 8, verified to simulator limits with documented safety and fixed-point deviations.
+- Next milestone: 13 — Memory (not started).
+- Next subtask: 13A — Memory rules and string-based sequence/round engine with deterministic tests.
 - Overall status: Arithmetic, Arithmetic Pro, Sequence and Optiver are playable in simulator. Records are not saved.
-- Last passing build: GitHub Actions run 41272947659, source commit a929d5e662aebf478f2e2e4955ac3d35cc4a78de.
+- Last passing build: GitHub Actions run 41274133561, source commit b8bc412e08f5cae583e9c3f8c8432cf6020a572a.
 - Known issues: see KNOWN_ISSUES.md.
 - Current limitations: local Windows lacks Xcode/simulator; real-device gameplay, keyboard, haptics and LiveContainer remain unverified.
-- Next required action: verify Optiver fidelity changes in CI, retaining safe zero and ambiguity handling.
+- Next required action: implement the Memory rules engine with playback gating and leading-zero support, then verify it.
