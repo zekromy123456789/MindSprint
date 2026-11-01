@@ -31,4 +31,4 @@
 
 - 2026-11-01: Optiver uses exact integer hundredths for generated arithmetic, avoids zero divisors and ambiguous zero-factor hidden positions, and uses original distinct choice offsets and concise decimal formatting. Exact reference rounding and distractor distribution remain unverified; do not call these equivalent. Generator and round passed CI run 41262800653; UI is not yet integrated.
 
-- 2026-11-01: Optiver Classic retains its full operation mix; custom Easy selects addition/subtraction, Normal addition/subtraction/multiplication, Hard multiplication/division, Expert division only. All use the same independently designed formatting and distractors; these level mixes are custom. UI, results and level tests await CI.
+- 2026-11-01: Optiver Classic retains its full operation mix; custom Easy selects addition/subtraction, Normal addition/subtraction/multiplication, Hard multiplication/division, Expert division only. All use the same independently designed formatting and distractors; these level mixes are custom. UI, results and level tests passed CI run 41272947659; reference-generation fidelity remains an open requirement.

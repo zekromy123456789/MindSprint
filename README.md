@@ -2,7 +2,7 @@
 
 MindSprint is a planned, fully offline native iPhone mental-speed game inspired by OpenQuant's Game Room. The intended release includes eight independently implemented games, fast native input, local records, backups, and an unsigned device IPA for evaluation with LiveContainer.
 
-Arithmetic, a provisional independently generated Arithmetic Pro, and Sequence are playable in simulator. Pro has four custom difficulty levels and a question mix that differs from the reference; Sequence offers Classic and four custom family mixes; five further games, local records and backups are in development.
+Arithmetic, a provisional independently generated Arithmetic Pro, Sequence, and Optiver 80 in 8 are playable in simulator. Pro has four custom difficulty levels and a question mix that differs from the reference; Sequence offers Classic and four custom family mixes; Optiver uses independently designed decimal formatting and distractors; four further games, local records and backups are in development.
 
 ## Resuming work
 
@@ -12,7 +12,7 @@ GitHub repository: https://github.com/zekromy123456789/MindSprint. The user expl
 
 ## Building on macOS
 
-Requirements: Xcode with an iOS simulator runtime, XcodeGen and Python 3. The configured deployment target is iOS 17. Generate the project with `xcodegen generate`; open `MindSprint.xcodeproj` or run `xcodebuild` with the `MindSprint` scheme. The GitHub Actions workflow runs simulator tests and separately builds for `iphoneos` with signing disabled, verifies an arm64 binary and ZIP integrity, and uploads the unsigned IPA and logs. It can also be started manually. GitHub Actions run 41262800653 passed simulator tests, built an unsigned arm64 device app, verified ZIP integrity, and uploaded an IPA. Physical-device installation and LiveContainer compatibility remain unverified. An unsigned IPA is not directly installable as a normally signed application. No signing credentials are included.
+Requirements: Xcode with an iOS simulator runtime, XcodeGen and Python 3. The configured deployment target is iOS 17. Generate the project with `xcodegen generate`; open `MindSprint.xcodeproj` or run `xcodebuild` with the `MindSprint` scheme. The GitHub Actions workflow runs simulator tests and separately builds for `iphoneos` with signing disabled, verifies an arm64 binary and ZIP integrity, and uploads the unsigned IPA and logs. It can also be started manually. GitHub Actions run 41272947659 passed simulator tests, built an unsigned arm64 device app, verified ZIP integrity, and uploaded an IPA. Physical-device installation and LiveContainer compatibility remain unverified. An unsigned IPA is not directly installable as a normally signed application. No signing credentials are included.
 
 The project is generated from `project.yml`; do not edit the generated Xcode project as the source of truth.
 
