@@ -206,15 +206,25 @@ final class MindSprintUITests: XCTestCase {
             XCTAssertTrue(app.staticTexts["Round \(stage) / 3"].waitForExistence(timeout: 10))
             app.buttons["Start round"].tap()
             app.buttons["Start test presentation"].tap()
-            capture(stage == 1 ? "memory-presentation" : "memory-stage-\(stage)")
             if stage == 1 {
-                app.buttons["Finish test presentation"].tap()
+                XCTAssertFalse(app.buttons["Submit"].exists)
+                for index in 0..<3 {
+                    app.buttons["Advance test playback"].tap()
+                    let label = app.staticTexts["memory-digit-\(index)"].label
+                    XCTAssertTrue(label.hasPrefix("Digit \(index + 1): "))
+                    XCTAssertFalse(label.contains("hidden"))
+                    if index == 0 { capture("memory-visible-digit") }
+                    XCTAssertFalse(app.buttons["Submit"].exists)
+                }
+                app.buttons["Advance test playback"].tap()
                 let answer = app.staticTexts["memory-answer"]
                 XCTAssertTrue(answer.waitForExistence(timeout: 10))
                 guard let correct = answer.value as? String else { XCTFail("Test answer is unavailable"); return }
                 for digit in correct { app.buttons[String(digit)].tap() }
                 app.buttons["Submit"].tap()
                 XCTAssertTrue(app.staticTexts["memory-status"].label.contains("4 digits"))
+            } else {
+                capture("memory-stage-\(stage)")
             }
             for _ in 0..<2 {
                 XCTAssertTrue(app.buttons["Finish test presentation"].waitForExistence(timeout: 10))

@@ -73,6 +73,10 @@ struct MemoryGameView: View {
                     }.frame(maxHeight: 260)
                     #if DEBUG
                     if ProcessInfo.processInfo.arguments.contains("--ui-test-memory") {
+                        Button("Advance test playback") {
+                            MemoryUITestClock.shared.now += MemoryRound.digitDuration
+                            round.refresh()
+                        }
                         Button("Finish test presentation") {
                             MemoryUITestClock.shared.now += MemoryRound.leadIn + Double(round.length) * MemoryRound.digitDuration
                             round.refresh()
