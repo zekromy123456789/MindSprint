@@ -1,6 +1,8 @@
 # Known issues and limitations
 
-- Sequence Classic passed tests and sample default light-mode screenshot review on both simulators. Custom difficulty is not yet available. Longest sequences, larger text, dark mode, physical device, VoiceOver and actual background behavior remain unverified.
+- Optiver generator and round are authored but unverified and not connected to UI. They intentionally avoid zero divisors and ambiguous zero-factor questions. Decimal display and distractor offsets are original approximations; exact reference rounding/distribution is unresolved.
+
+- Sequence Classic passed tests and sample default light-mode screenshot review on both simulators. Custom difficulty is authored but awaits CI. Longest sequences, larger text, dark mode, physical device, VoiceOver and actual background behavior remain unverified.
 
 - Arithmetic Pro is playable in simulators with four custom difficulty levels; its independently authored five-template distribution does not reproduce the protected reference pool. UI tests use a frozen DEBUG-only clock. Pro and Arithmetic round and view implementations duplicate behavior.
 - Arithmetic passed end-to-end simulator playthroughs in run 41170294927. A previous large-simulator replay attempt failed; after the replay transition changed, subsequent runs succeeded on the first tap, but the UI test permits one retry and intermittent behavior cannot be ruled out. Earlier active and result screenshots on both sizes showed no obvious clipping; the final-question addition has not been separately visually reviewed. Physical-device gameplay remains unverified. Sequence Classic passed simulator playthroughs but has no additional difficulty options yet; five other games are unavailable. Generator tests do not directly check statistical distribution.
