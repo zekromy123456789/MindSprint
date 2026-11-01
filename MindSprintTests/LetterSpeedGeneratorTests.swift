@@ -63,4 +63,41 @@ final class LetterSpeedGeneratorTests: XCTestCase {
         XCTAssertGreaterThan(nonblankFirst, 0)
         XCTAssertTrue((680...820).contains(highest))
     }
+    func testCustomDomainsAreValidAndRepeatable() {
+        let domains: [(Difficulty, ClosedRange<Int>)] = [
+            (.classic, 1...26), (.easy, 1...6), (.normal, 1...12),
+            (.hard, 8...26), (.expert, 14...26)
+        ]
+        for (difficulty, domain) in domains {
+            var a = SeededRandomNumberGenerator(seed: 551)
+            var b = SeededRandomNumberGenerator(seed: 551)
+            let generator = LetterSpeedGenerator(difficulty: difficulty)
+            for _ in 0..<200 {
+                let question = generator.next(using: &a)
+                XCTAssertEqual(question, generator.next(using: &b))
+                let totals = question.choices.map(\.value)
+                let extreme = question.target == .highest ? totals.max()! : totals.min()!
+                XCTAssertEqual(totals.filter { $0 == extreme }.count, 1)
+                XCTAssertEqual(totals[question.correctIndex], extreme)
+                for choice in question.choices {
+                    XCTAssertEqual(choice.rows.count, 10)
+                    for row in choice.rows {
+                        if let first = row.first { XCTAssertTrue(domain.contains(first)) }
+                        if let second = row.second { XCTAssertTrue(domain.contains(second)) }
+                        XCTAssertTrue(row.first != nil || row.second != nil)
+                    }
+                }
+            }
+        }
+    }
+
+    func testDefaultGeneratorMatchesExplicitClassic() {
+        var a = SeededRandomNumberGenerator(seed: 19)
+        var b = SeededRandomNumberGenerator(seed: 19)
+        for _ in 0..<100 {
+            XCTAssertEqual(LetterSpeedGenerator().next(using: &a),
+                           LetterSpeedGenerator(difficulty: .classic).next(using: &b))
+        }
+    }
+
 }

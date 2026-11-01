@@ -56,6 +56,21 @@ struct LetterQuestion: Equatable {
 }
 
 struct LetterSpeedGenerator {
+    let difficulty: Difficulty
+
+    init(difficulty: Difficulty = .classic) { self.difficulty = difficulty }
+
+    // Custom modes vary the letter domain; they do not claim reference equivalence.
+    var letterRange: ClosedRange<Int> {
+        switch difficulty {
+        case .classic: return 1...26
+        case .easy: return 1...6
+        case .normal: return 1...12
+        case .hard: return 8...26
+        case .expert: return 14...26
+        }
+    }
+
     func next<R: RandomNumberGenerator>(using random: inout R) -> LetterQuestion {
         // Regenerate the entire question on a tied target as in the reference.
         // A bounded fallback prevents repeated tied questions from looping forever.
@@ -67,18 +82,18 @@ struct LetterSpeedGenerator {
                 for _ in 0..<10 {
                     let firstBlank = Int.random(in: 0..<100, using: &random) < 15
                     if firstBlank {
-                        rows.append(LetterRow(first: nil, second: Int.random(in: 1...26, using: &random)))
+                        rows.append(LetterRow(first: nil, second: Int.random(in: letterRange, using: &random)))
                     } else {
-                        let first = Int.random(in: 1...26, using: &random)
+                        let first = Int.random(in: letterRange, using: &random)
                         let secondBlank = Int.random(in: 0..<100, using: &random) < 15
-                        rows.append(LetterRow(first: first, second: secondBlank ? nil : Int.random(in: 1...26, using: &random)))
+                        rows.append(LetterRow(first: first, second: secondBlank ? nil : Int.random(in: letterRange, using: &random)))
                     }
                 }
                 choices.append(LetterChoice(rows: rows))
             }
             if let question = LetterQuestion(target: target, choices: choices) { return question }
         }
-        let choices = (1...4).map { value in
+        let choices = (letterRange.lowerBound..<(letterRange.lowerBound + 4)).map { value in
             LetterChoice(rows: (0..<10).map { _ in LetterRow(first: value, second: nil) })
         }
         return LetterQuestion(target: .highest, choices: choices)!
