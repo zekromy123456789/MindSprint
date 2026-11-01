@@ -24,6 +24,8 @@ final class OptiverGeneratorTests: XCTestCase {
                     XCTAssertEqual(Set(q.choices).count, 4)
                     XCTAssertEqual(Set(q.choices.map(\.text)).count, 4)
                     XCTAssertEqual(q.choices.filter { satisfies(q, using: $0) }, [q.answer])
+                    XCTAssertEqual(q.prompt.filter { $0 == "?" }.count, 1)
+                    XCTAssertFalse(q.solvedPrompt.contains("?"))
                     if op == .division { XCTAssertNotEqual(q.second.hundredths, 0) }
                 }
             }
@@ -40,6 +42,27 @@ final class OptiverGeneratorTests: XCTestCase {
         var second = SeededRandomNumberGenerator(seed: 17)
         for _ in 0..<200 {
             XCTAssertEqual(OptiverGenerator().next(using: &first), OptiverGenerator().next(using: &second))
+        }
+    }
+
+    func testDifficultyOperationsAreDistinctAndValid() {
+        let expected: [Difficulty: Set<ArithmeticOperation>] = [
+            .classic: [.addition, .subtraction, .multiplication, .division],
+            .easy: [.addition, .subtraction],
+            .normal: [.addition, .subtraction, .multiplication],
+            .hard: [.multiplication, .division],
+            .expert: [.division]
+        ]
+        for level in Difficulty.allCases {
+            let generator = OptiverGenerator(difficulty: level)
+            var random = SeededRandomNumberGenerator(seed: 52)
+            var observed = Set<ArithmeticOperation>()
+            for _ in 0..<300 {
+                let q = generator.next(using: &random)
+                observed.insert(q.operation)
+                XCTAssertEqual(q.choices.filter { satisfies(q, using: $0) }, [q.answer])
+            }
+            XCTAssertEqual(observed, expected[level])
         }
     }
 }

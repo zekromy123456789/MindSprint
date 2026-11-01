@@ -4,6 +4,13 @@ import XCTest
 private final class OptiverTestClock: SessionClock { var now: TimeInterval = 0 }
 
 final class OptiverRoundTests: XCTestCase {
+    func testSelectedDifficultyControlsGeneratedQuestions() {
+        var round = OptiverRound(difficulty: .expert, clock: OptiverTestClock(), seed: 31)
+        round.start()
+        XCTAssertEqual(round.questions.count, 80)
+        XCTAssertTrue(round.questions.allSatisfy { $0.operation == .division })
+    }
+
     func testCorrectWrongAndStaleChoice() {
         let clock = OptiverTestClock()
         var round = OptiverRound(clock: clock, seed: 81)

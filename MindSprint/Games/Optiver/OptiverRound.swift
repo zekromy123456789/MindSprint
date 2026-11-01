@@ -8,6 +8,7 @@ struct OptiverRound {
     static let questionCount = 80
 
     private let clock: any SessionClock
+    private let difficulty: Difficulty
     private var random: SeededRandomNumberGenerator
     private var session: GameSession
     private var countdownEndsAt: TimeInterval?
@@ -16,11 +17,12 @@ struct OptiverRound {
     private(set) var responses: [Bool?] = []
     private(set) var index = 0
 
-    init(clock: any SessionClock = MonotonicSessionClock(),
+    init(difficulty: Difficulty = .classic, clock: any SessionClock = MonotonicSessionClock(),
          seed: UInt64 = UInt64.random(in: .min ... .max)) {
         self.clock = clock
+        self.difficulty = difficulty
         random = SeededRandomNumberGenerator(seed: seed)
-        session = GameSession(configuration: SessionConfiguration(game: .optiver, difficulty: .classic,
+        session = GameSession(configuration: SessionConfiguration(game: .optiver, difficulty: difficulty,
                                                                   duration: Self.roundDuration), clock: clock)
     }
 
@@ -37,7 +39,7 @@ struct OptiverRound {
 
     mutating func start() {
         guard phase == .ready else { return }
-        let generator = OptiverGenerator()
+        let generator = OptiverGenerator(difficulty: difficulty)
         var generated: [OptiverQuestion] = []
         for _ in 0..<Self.questionCount { generated.append(generator.next(using: &random)) }
         questions = generated

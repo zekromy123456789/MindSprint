@@ -38,14 +38,39 @@ struct OptiverQuestion: Equatable {
         case .result: return result
         }
     }
+
+    var prompt: String { equation(reveal: false) }
+    var solvedPrompt: String { equation(reveal: true) }
+
+    private func equation(reveal: Bool) -> String {
+        let a = !reveal && hidden == .first ? "?" : first.text
+        let b = !reveal && hidden == .second ? "?" : second.text
+        let c = !reveal && hidden == .result ? "?" : result.text
+        return "\(a) \(operation.symbol) \(b) = \(c)"
+    }
 }
 
 struct OptiverGenerator {
+    let difficulty: Difficulty
+
+    init(difficulty: Difficulty = .classic) { self.difficulty = difficulty }
+
+    // Custom levels select operation subsets; Classic retains the full mix.
+    var operations: [ArithmeticOperation] {
+        switch difficulty {
+        case .classic: return ArithmeticOperation.allCases
+        case .easy: return [.addition, .subtraction]
+        case .normal: return [.addition, .subtraction, .multiplication]
+        case .hard: return [.multiplication, .division]
+        case .expert: return [.division]
+        }
+    }
+
     // Integers occur twice as often as decimals. Decimal addition/subtraction uses
     // hundredths; factors use tenths. Choices are original, deterministic offsets,
     // not a claim of exact reference distractor/rounding distribution.
     func next<R: RandomNumberGenerator>(using random: inout R) -> OptiverQuestion {
-        let op = ArithmeticOperation.allCases.randomElement(using: &random)!
+        let op = operations.randomElement(using: &random)!
         return make(op, hidden: OptiverPosition.allCases.randomElement(using: &random)!, using: &random)
     }
 

@@ -124,6 +124,23 @@ struct GamePreparationView: View {
                     NavigationLink("Start", destination: SequenceGameView(difficulty: difficulty))
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("start-sequence")
+                } else if game.id == .optiver {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("80 questions · 8 minutes").font(.headline)
+                        Text("Choose the missing value. Correct answers earn 1 point; incorrect answers lose 2 points.")
+                        Picker("Difficulty", selection: $difficulty) {
+                            ForEach(Difficulty.allCases, id: \.self) { level in
+                                Text(level.rawValue.capitalized).tag(level)
+                            }
+                        }.accessibilityIdentifier("optiver-difficulty")
+                        Text("Custom levels change the operations you practice.")
+                            .font(.footnote).foregroundStyle(.secondary)
+                        Text("Number formatting and answer choices are independently designed.")
+                            .font(.footnote).foregroundStyle(.secondary)
+                    }
+                    NavigationLink("Start", destination: OptiverGameView(difficulty: difficulty))
+                        .buttonStyle(.borderedProminent)
+                        .accessibilityIdentifier("start-optiver")
                 } else {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Classic").font(.headline)

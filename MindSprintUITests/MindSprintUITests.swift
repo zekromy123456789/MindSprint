@@ -147,6 +147,51 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertEqual(app.staticTexts["sequence-level"].label, "Expert")
     }
 
+    func testOptiverRoundResultsAndReplay() {
+        let app = XCUIApplication()
+        app.launchArguments.append("--ui-test-optiver")
+        app.launch()
+        XCTAssertTrue(app.buttons["game-optiver"].waitForExistence(timeout: 15))
+        app.buttons["game-optiver"].tap()
+        app.buttons["optiver-difficulty"].tap()
+        app.buttons["Easy"].tap()
+        app.buttons["start-optiver"].tap()
+        XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        app.buttons["Start test round"].tap()
+        let question = app.staticTexts["optiver-question"]
+        XCTAssertTrue(question.waitForExistence(timeout: 15))
+        XCTAssertEqual(app.staticTexts["optiver-level"].label, "Easy")
+        guard let value = question.value as? String, let answer = Int(value) else {
+            XCTFail("Test answer is unavailable"); return
+        }
+        let buttons = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "optiver-choice-"))
+        let wrong = buttons.allElementsBoundByIndex.first { $0.identifier != "optiver-choice-\(answer)" }
+        XCTAssertNotNil(wrong)
+        wrong?.tap()
+        XCTAssertTrue(app.staticTexts["Score: -2"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts["optiver-progress"].label, "Question 2 / 80")
+        guard let nextValue = question.value as? String, let nextAnswer = Int(nextValue) else {
+            XCTFail("Next test answer is unavailable"); return
+        }
+        app.buttons["optiver-choice-\(nextAnswer)"].tap()
+        XCTAssertTrue(app.staticTexts["Score: -1"].waitForExistence(timeout: 5))
+        capture("optiver-active")
+        app.buttons["Finish test round"].tap()
+        XCTAssertTrue(app.staticTexts["Session complete"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["optiver-final-score"].label, "Score: -1")
+        XCTAssertEqual(app.staticTexts["optiver-answered"].label, "2 of 80 answered")
+        XCTAssertEqual(app.staticTexts["optiver-result-0"].label, "Incorrect")
+        XCTAssertEqual(app.staticTexts["optiver-result-1"].label, "Correct")
+        XCTAssertEqual(app.staticTexts["optiver-result-2"].label, "Unanswered")
+        capture("optiver-results")
+        app.buttons["Play again"].tap()
+        XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        app.buttons["Start test round"].tap()
+        XCTAssertTrue(app.staticTexts["optiver-progress"].waitForExistence(timeout: 15))
+        XCTAssertEqual(app.staticTexts["optiver-progress"].label, "Question 1 / 80")
+        XCTAssertEqual(app.staticTexts["optiver-level"].label, "Easy")
+    }
+
     func testKeypadEditingSubmissionAndReset() {
         let app = XCUIApplication()
         app.launchArguments.append("--ui-test-keypad")
