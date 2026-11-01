@@ -1,5 +1,7 @@
 # Known issues and limitations
 
+- Letter Speed generator and timed round are authored but await CI and are not integrated into UI. Tied target regeneration is capped at 128 attempts with a deterministic legal fallback. Delayed timer callbacks advance only one expired round and start a fresh clock; actual background behavior needs QA.
+
 - Flexibility passed simulator playthroughs, but actual arrow-key delivery, VoiceOver color descriptions, Dynamic Type, dark-mode contrast and all color combinations require device/accessibility QA.
 
 - Risk Classic intentionally preserves the reference source's green-to-red probability fall-through; it has not been independently confirmed statistically in live play. Hardware arrow routing is implemented but synthetic or physical arrow delivery, haptics, VoiceOver and real-device behavior are unverified.
