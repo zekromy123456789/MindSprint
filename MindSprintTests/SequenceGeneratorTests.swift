@@ -81,6 +81,24 @@ final class SequenceGeneratorTests: XCTestCase {
         XCTAssertEqual(families.count, 4)
     }
 
+    func testDifficultySelectsDocumentedClassicFamilySubsets() {
+        let expected: [Difficulty: Set<SequenceFamily>] = [
+            .classic: [.arithmetic, .geometric, .quadratic, .special],
+            .easy: [.arithmetic, .special],
+            .normal: [.arithmetic, .geometric, .special],
+            .hard: [.geometric, .quadratic, .special],
+            .expert: [.quadratic]
+        ]
+        for difficulty in Difficulty.allCases {
+            let generator = SequenceGenerator(difficulty: difficulty)
+            XCTAssertEqual(Set(generator.families), expected[difficulty])
+            var random = SeededRandomNumberGenerator(seed: 81)
+            var observed = Set<SequenceFamily>()
+            for _ in 0..<300 { observed.insert(generator.next(using: &random).family) }
+            XCTAssertEqual(observed, expected[difficulty])
+        }
+    }
+
     func testEveryClassicPrefixHasOnlyOneGeneratedAnswer() {
         var answers: [[Int]: Int] = [:]
         var conflicts = 0

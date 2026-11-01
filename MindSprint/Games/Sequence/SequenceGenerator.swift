@@ -26,8 +26,23 @@ struct SequenceQuestion: Equatable {
 }
 
 struct SequenceGenerator {
+    let difficulty: Difficulty
+
+    init(difficulty: Difficulty = .classic) { self.difficulty = difficulty }
+
+    // Custom levels select subsets of the verified Classic question domain.
+    var families: [SequenceFamily] {
+        switch difficulty {
+        case .classic: return SequenceFamily.allCases
+        case .easy: return [.arithmetic, .special]
+        case .normal: return [.arithmetic, .geometric, .special]
+        case .hard: return [.geometric, .quadratic, .special]
+        case .expert: return [.quadratic]
+        }
+    }
+
     func next<R: RandomNumberGenerator>(using random: inout R) -> SequenceQuestion {
-        let family = SequenceFamily.allCases.randomElement(using: &random)!
+        let family = families.randomElement(using: &random)!
         return make(family, using: &random)
     }
 

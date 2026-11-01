@@ -10,23 +10,25 @@ private final class SequenceUITestClock: SessionClock {
 #endif
 
 struct SequenceGameView: View {
+    let difficulty: Difficulty
     @State private var round: SequenceRound
     @State private var input = NumericInput(allowsNegative: true, allowsDecimal: false, maxDigits: 8)
     @State private var showTimer = true
     @Environment(\.scenePhase) private var scenePhase
     private let tick = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
-    init() {
-        _round = State(initialValue: Self.makeRound())
+    init(difficulty: Difficulty) {
+        self.difficulty = difficulty
+        _round = State(initialValue: Self.makeRound(difficulty))
     }
 
-    private static func makeRound() -> SequenceRound {
+    private static func makeRound(_ difficulty: Difficulty) -> SequenceRound {
         #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("--ui-test-sequence") {
-            return SequenceRound(clock: SequenceUITestClock.shared, seed: 42)
+            return SequenceRound(difficulty: difficulty, clock: SequenceUITestClock.shared, seed: 42)
         }
         #endif
-        return SequenceRound()
+        return SequenceRound(difficulty: difficulty)
     }
 
     var body: some View {
@@ -51,6 +53,9 @@ struct SequenceGameView: View {
                 if let question = round.question {
                     ActiveGameLayout(score: "Score: \(round.score)", time: showTimer ? formattedTime : nil) {
                         VStack(spacing: 14) {
+                            Text(difficulty.rawValue.capitalized)
+                                .font(.footnote).foregroundStyle(.secondary)
+                                .accessibilityIdentifier("sequence-level")
                             Button(showTimer ? "Hide timer" : "Show timer") { showTimer.toggle() }
                                 .font(.footnote)
                             #if DEBUG
@@ -136,7 +141,7 @@ struct SequenceGameView: View {
 
     private func replay() {
         input.reset()
-        var next = Self.makeRound()
+        var next = Self.makeRound(difficulty)
         next.start()
         round = next
     }

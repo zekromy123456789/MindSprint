@@ -116,11 +116,14 @@ final class MindSprintUITests: XCTestCase {
         app.launch()
         XCTAssertTrue(app.buttons["game-sequence"].waitForExistence(timeout: 15))
         app.buttons["game-sequence"].tap()
+        app.buttons["sequence-difficulty"].tap()
+        app.buttons["Expert"].tap()
         app.buttons["start-sequence"].tap()
         XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
         app.buttons["Start test round"].tap()
         let question = app.staticTexts["sequence-question"]
         XCTAssertTrue(question.waitForExistence(timeout: 15))
+        XCTAssertEqual(app.staticTexts["sequence-level"].label, "Expert")
         guard let value = question.value as? String, let answer = Int(value) else {
             XCTFail("Test answer is unavailable"); return
         }
@@ -141,6 +144,7 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
         app.buttons["Start test round"].tap()
         XCTAssertTrue(app.staticTexts["sequence-question"].waitForExistence(timeout: 15))
+        XCTAssertEqual(app.staticTexts["sequence-level"].label, "Expert")
     }
 
     func testKeypadEditingSubmissionAndReset() {

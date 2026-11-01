@@ -109,11 +109,19 @@ struct GamePreparationView: View {
                         .accessibilityIdentifier("start-pro")
                 } else if game.id == .sequence {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Classic").font(.headline)
+                        Text("Difficulty").font(.headline)
+                        Picker("Difficulty", selection: $difficulty) {
+                            ForEach(Difficulty.allCases, id: \.self) { level in
+                                Text(level.rawValue.capitalized).tag(level)
+                            }
+                        }
+                        .accessibilityIdentifier("sequence-difficulty")
+                        Text("Custom levels change the types of patterns you see.").font(.footnote)
+                            .foregroundStyle(.secondary)
                         Text("Find each missing number. Correct answers advance automatically; you have two minutes.")
                             .foregroundStyle(.secondary)
                     }
-                    NavigationLink("Start", destination: SequenceGameView())
+                    NavigationLink("Start", destination: SequenceGameView(difficulty: difficulty))
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("start-sequence")
                 } else {

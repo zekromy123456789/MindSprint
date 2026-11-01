@@ -19,13 +19,13 @@ struct SequenceRound {
     private(set) var lastQuestion: SequenceQuestion?
     private(set) var questionID = 0
 
-    init(clock: any SessionClock = MonotonicSessionClock(),
+    init(difficulty: Difficulty = .classic, clock: any SessionClock = MonotonicSessionClock(),
          seed: UInt64 = UInt64.random(in: .min ... .max)) {
         self.clock = clock
-        generator = SequenceGenerator()
+        generator = SequenceGenerator(difficulty: difficulty)
         random = SeededRandomNumberGenerator(seed: seed)
         session = GameSession(configuration: SessionConfiguration(
-            game: .sequence, difficulty: .classic, duration: Self.roundDuration), clock: clock)
+            game: .sequence, difficulty: difficulty, duration: Self.roundDuration), clock: clock)
     }
 
     var score: Int { session.score }

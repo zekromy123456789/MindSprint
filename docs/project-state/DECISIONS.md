@@ -26,3 +26,5 @@
 - 2026-10-31: Pro offers independently chosen Easy main 2...10/factor 2...5, Normal 2...20/2...12 (the original custom level), Hard 2...35/2...15, and Expert 2...60/2...20. The same five expression shapes are used across levels. No level is called Classic because the protected reference distribution is not reproduced. These changes passed CI run 41216164324.
 
 - 2026-10-31: Sequence Classic generation independently implements the four documented families and random reversal; negative and zero values remain valid. Generator tests cover family rules and deterministic seeds; gameplay is a separate step.
+
+- 2026-10-31: Sequence Classic is unchanged. Custom Easy samples arithmetic/special families; Normal arithmetic/geometric/special; Hard geometric/quadratic/special; Expert quadratic only. Each uses the same verified Classic parameter bounds and both directions, so each generated domain is a subset of the exhaustively checked Classic domain. These are custom family mixes, not reference difficulty settings. CI pending.

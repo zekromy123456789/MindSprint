@@ -6,6 +6,18 @@ private final class SequenceRoundTestClock: SessionClock {
 }
 
 final class SequenceRoundTests: XCTestCase {
+    func testSelectedDifficultyDrivesRound() {
+        let clock = SequenceRoundTestClock()
+        var round = SequenceRound(difficulty: .expert, clock: clock, seed: 17)
+        var random = SeededRandomNumberGenerator(seed: 17)
+        let expected = SequenceGenerator(difficulty: .expert).next(using: &random)
+        round.start()
+        clock.now = 3
+        round.refresh()
+        XCTAssertEqual(round.question, expected)
+        XCTAssertEqual(round.question?.family, .quadratic)
+    }
+
     func testCountdownAndCorrectAnswersAdvanceOnlyOnce() {
         let clock = SequenceRoundTestClock()
         var round = SequenceRound(clock: clock, seed: 7)
