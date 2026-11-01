@@ -135,7 +135,7 @@ struct GamePreparationView: View {
                         }.accessibilityIdentifier("optiver-difficulty")
                         Text("Custom levels change the operations you practice.")
                             .font(.footnote).foregroundStyle(.secondary)
-                        Text("Number formatting and answer choices are independently designed.")
+                        Text("Questions use reference-style formatting and avoid invalid or ambiguous equations.")
                             .font(.footnote).foregroundStyle(.secondary)
                     }
                     NavigationLink("Start", destination: OptiverGameView(difficulty: difficulty))

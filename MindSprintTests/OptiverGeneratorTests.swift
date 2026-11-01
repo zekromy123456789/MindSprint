@@ -38,11 +38,59 @@ final class OptiverGeneratorTests: XCTestCase {
         XCTAssertEqual(OptiverNumber(hundredths: 125).text, "1.25")
         XCTAssertEqual(OptiverNumber(hundredths: 120).text, "1.2")
         XCTAssertEqual(OptiverNumber(hundredths: -500).text, "−5")
+        XCTAssertEqual(OptiverNumber(hundredths: 120, decimalPlaces: 2).text, "1.20")
+        XCTAssertEqual(OptiverNumber(hundredths: 0, decimalPlaces: 1).text, "0.0")
+        XCTAssertEqual(OptiverNumber(hundredths: -500, decimalPlaces: 2).text, "−5.00")
         var first = SeededRandomNumberGenerator(seed: 17)
         var second = SeededRandomNumberGenerator(seed: 17)
         for _ in 0..<200 {
             XCTAssertEqual(OptiverGenerator().next(using: &first), OptiverGenerator().next(using: &second))
         }
+    }
+
+    func testFixedPrecisionDisplayExamples() {
+        let question = OptiverQuestion(
+            first: OptiverNumber(hundredths: 120, decimalPlaces: 2),
+            operation: .addition,
+            second: OptiverNumber(hundredths: 230, decimalPlaces: 2),
+            result: OptiverNumber(hundredths: 350, decimalPlaces: 2),
+            hidden: .second,
+            choices: [OptiverNumber(hundredths: 230, decimalPlaces: 2)]
+        )
+        XCTAssertEqual(question.prompt, "1.20 + ? = 3.50")
+        XCTAssertEqual(question.solvedPrompt, "1.20 + 2.30 = 3.50")
+        XCTAssertEqual(question.answer.text, "2.30")
+    }
+
+    func testPrecisionAndDistractorRangesForAllOperationsAndPositions() {
+        var random = SeededRandomNumberGenerator(seed: 931)
+        var precisionPairs = Set<String>()
+        for op in ArithmeticOperation.allCases {
+            for position in OptiverPosition.allCases {
+                for _ in 0..<1000 {
+                    let q = OptiverGenerator().make(op, hidden: position, using: &random)
+                    if op == .addition || op == .subtraction {
+                        XCTAssertEqual(q.first.decimalPlaces, q.second.decimalPlaces)
+                        XCTAssertEqual(q.first.decimalPlaces, q.result.decimalPlaces)
+                        XCTAssertTrue([0, 2].contains(q.first.decimalPlaces))
+                    } else {
+                        let factorA = op == .division ? q.second : q.first
+                        let factorB = op == .division ? q.result : q.second
+                        let product = op == .division ? q.first : q.result
+                        XCTAssertEqual(product.decimalPlaces, factorA.decimalPlaces + factorB.decimalPlaces)
+                        precisionPairs.insert("\(factorA.decimalPlaces),\(factorB.decimalPlaces)")
+                    }
+                    XCTAssertTrue(q.choices.allSatisfy { $0.decimalPlaces == q.answer.decimalPlaces })
+                    let step = q.answer.choiceStep
+                    let differences = q.choices.filter { $0 != q.answer }.map { ($0.hundredths - q.answer.hundredths) / step }
+                    XCTAssertEqual(differences.filter { (1...9).contains($0) }.count, 1)
+                    XCTAssertEqual(differences.filter { (-9 ... -1).contains($0) }.count, 1)
+                    let maxFar = q.answer.decimalPlaces == 2 ? 100 : 90
+                    XCTAssertEqual(differences.filter { (10...maxFar).contains($0) }.count, 1)
+                }
+            }
+        }
+        XCTAssertEqual(precisionPairs, Set(["0,0", "0,1", "1,0", "1,1"]))
     }
 
     func testDifficultyOperationsAreDistinctAndValid() {
