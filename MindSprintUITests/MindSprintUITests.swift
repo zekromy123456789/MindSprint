@@ -192,6 +192,50 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertEqual(app.staticTexts["optiver-level"].label, "Easy")
     }
 
+    func testMemoryStagesAndReplay() {
+        let app = XCUIApplication()
+        app.launchArguments.append("--ui-test-memory")
+        app.launch()
+        let memory = app.buttons["game-memory"]
+        if !memory.isHittable { app.swipeUp() }
+        XCTAssertTrue(memory.waitForExistence(timeout: 15))
+        memory.tap()
+        app.buttons["start-memory"].tap()
+        XCTAssertTrue(app.staticTexts["Round 1 / 3"].waitForExistence(timeout: 10))
+        for stage in 1...3 {
+            XCTAssertTrue(app.staticTexts["Round \(stage) / 3"].waitForExistence(timeout: 10))
+            app.buttons["Start round"].tap()
+            app.buttons["Start test presentation"].tap()
+            capture(stage == 1 ? "memory-presentation" : "memory-stage-\(stage)")
+            if stage == 1 {
+                app.buttons["Finish test presentation"].tap()
+                let answer = app.staticTexts["memory-answer"]
+                XCTAssertTrue(answer.waitForExistence(timeout: 10))
+                guard let correct = answer.value as? String else { XCTFail("Test answer is unavailable"); return }
+                for digit in correct { app.buttons[String(digit)].tap() }
+                app.buttons["Submit"].tap()
+                XCTAssertTrue(app.staticTexts["memory-status"].label.contains("4 digits"))
+            }
+            for _ in 0..<2 {
+                XCTAssertTrue(app.buttons["Finish test presentation"].waitForExistence(timeout: 10))
+                app.buttons["Finish test presentation"].tap()
+                let answer = app.staticTexts["memory-answer"]
+                XCTAssertTrue(answer.waitForExistence(timeout: 10))
+                guard let correct = answer.value as? String, let first = correct.first else {
+                    XCTFail("Test answer is unavailable"); return
+                }
+                let wrong = (first == "9" ? "8" : "9") + String(correct.dropFirst())
+                for digit in wrong { app.buttons[String(digit)].tap() }
+                app.buttons["Submit"].tap()
+            }
+        }
+        XCTAssertTrue(app.staticTexts["Session complete"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["memory-final-score"].label, "1")
+        capture("memory-results")
+        app.buttons["Play again"].tap()
+        XCTAssertTrue(app.staticTexts["Round 1 / 3"].waitForExistence(timeout: 10))
+    }
+
     func testKeypadEditingSubmissionAndReset() {
         let app = XCUIApplication()
         app.launchArguments.append("--ui-test-keypad")

@@ -141,6 +141,15 @@ struct GamePreparationView: View {
                     NavigationLink("Start", destination: OptiverGameView(difficulty: difficulty))
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("start-optiver")
+                } else if game.id == .memory {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Three rounds").font(.headline)
+                        Text("Recall digits in order, in reverse, then from smallest to largest. Each length allows two attempts.")
+                            .foregroundStyle(.secondary)
+                    }
+                    NavigationLink("Start", destination: MemoryGameView())
+                        .buttonStyle(.borderedProminent)
+                        .accessibilityIdentifier("start-memory")
                 } else {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Classic").font(.headline)
