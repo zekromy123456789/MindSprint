@@ -81,7 +81,7 @@ struct LetterSpeedGameView: View {
                     .font(.title3.bold()).multilineTextAlignment(.center)
                     .accessibilityIdentifier("letter-prompt")
                     .accessibilityValue(testAnswer(question))
-                Text("A = 1, B = 2 … Z = 26. Take the positive difference for pairs; add the rows.")
+                Text("A = 1, B = 2 … Z = 26. For pairs, subtract the smaller value from the larger; add the rows.")
                     .font(.footnote).foregroundStyle(.secondary).multilineTextAlignment(.center)
                 HStack(alignment: .top, spacing: 6) {
                     ForEach(question.choices.indices, id: \.self) { index in
