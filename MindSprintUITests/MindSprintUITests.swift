@@ -314,7 +314,7 @@ final class MindSprintUITests: XCTestCase {
 
     func testLetterSpeedRoundAndReplay() {
         let app = XCUIApplication()
-        app.launchArguments.append("--ui-test-letter-speed")
+        app.launchArguments += ["--ui-test-letter-speed", "--reset-ui-test-records"]
         app.launch()
         let game = app.buttons["game-letterSpeed"]
         for _ in 0..<4 { if game.isHittable { break }; app.swipeUp() }
@@ -353,6 +353,19 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertEqual(app.staticTexts["letter-progress"].label, "Round 1 / 10")
         XCTAssertEqual(app.staticTexts["letter-level"].label, "Expert")
         XCTAssertEqual(app.staticTexts["letter-score"].label, "Score: 0")
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.tabBars.buttons["Records"].tap()
+        XCTAssertTrue(app.staticTexts["records-empty"].waitForExistence(timeout: 10))
+        app.buttons["records-difficulty"].tap()
+        app.buttons["Expert"].tap()
+        XCTAssertTrue(app.staticTexts["30 points"].waitForExistence(timeout: 10))
+        app.terminate()
+        app.launchArguments = ["--ui-test-letter-speed"]
+        app.launch()
+        app.tabBars.buttons["Records"].tap()
+        app.buttons["records-difficulty"].tap()
+        app.buttons["Expert"].tap()
+        XCTAssertTrue(app.staticTexts["30 points"].waitForExistence(timeout: 10))
     }
 
     func testKeypadEditingSubmissionAndReset() {

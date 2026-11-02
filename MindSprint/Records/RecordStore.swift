@@ -68,6 +68,19 @@ final class RecordStore {
         guard bound == SQLITE_OK, sqlite3_step(statement) == SQLITE_DONE else { throw failure() }
     }
 
+    // Retrying the same finished session is harmless; a conflicting payload
+    // with the same identifier is never silently substituted.
+    @discardableResult
+    func insertOnce(_ record: SessionRecord) throws -> Bool {
+        guard record.isValid else { throw RecordStoreError.invalidRecord }
+        if let existing = try allRecords().first(where: { $0.id == record.id }) {
+            guard existing == record else { throw RecordStoreError.invalidRecord }
+            return false
+        }
+        try insert(record)
+        return true
+    }
+
     func allRecords() throws -> [SessionRecord] {
         guard let database else { throw RecordStoreError.database("Database is closed") }
         var statement: OpaquePointer?

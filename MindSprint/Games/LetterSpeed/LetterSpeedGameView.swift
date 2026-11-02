@@ -11,6 +11,9 @@ struct LetterSpeedGameView: View {
     let difficulty: Difficulty
     @State private var round: LetterSpeedRound
     @Environment(\.scenePhase) private var scenePhase
+    @EnvironmentObject private var records: RecordsManager
+    @State private var savedSessionID: UUID?
+    @State private var saveFailed = false
     private let tick = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
     init(difficulty: Difficulty = .classic) {
@@ -57,7 +60,8 @@ struct LetterSpeedGameView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
         .onAppear { round.start() }
-        .onDisappear { round.abandon() }
+        .onDisappear { round.abandon(); saveCompletedRound() }
+        .onChange(of: round.phase) { _, phase in if phase == .completed { saveCompletedRound() } }
         .onReceive(tick) { _ in
             #if DEBUG
             if ProcessInfo.processInfo.arguments.contains("--ui-test-letter-speed") { return }
@@ -149,7 +153,12 @@ struct LetterSpeedGameView: View {
                 Text("Score: \(round.score)").font(.largeTitle.bold().monospacedDigit())
                     .accessibilityIdentifier("letter-final-score")
                 Text("out of 300 points").foregroundStyle(.secondary)
-                Button("Play again", action: replay).buttonStyle(.borderedProminent)
+                if saveFailed {
+                    Text("Your result could not be saved.").foregroundStyle(.red)
+                        .accessibilityIdentifier("letter-save-error")
+                    Button("Retry saving", action: saveCompletedRound)
+                }
+                Button("Play again", action: replay).buttonStyle(.borderedProminent).disabled(saveFailed)
                 LazyVStack(alignment: .leading, spacing: 10) {
                     ForEach(round.results.indices, id: \.self) { index in
                         let result = round.results[index]
@@ -173,6 +182,16 @@ struct LetterSpeedGameView: View {
         if ProcessInfo.processInfo.arguments.contains("--ui-test-letter-speed") { return String(question.correctIndex) }
         #endif
         return ""
+    }
+
+    private func saveCompletedRound() {
+        guard let record = round.completedRecord, savedSessionID != record.id else { return }
+        if records.save(record) {
+            savedSessionID = record.id
+            saveFailed = false
+        } else {
+            saveFailed = true
+        }
     }
 
     private func replay() {

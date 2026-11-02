@@ -1,0 +1,60 @@
+import SwiftUI
+
+struct RecordsView: View {
+    @EnvironmentObject private var records: RecordsManager
+    @State private var difficulty: Difficulty = .classic
+
+    private var configuration: RecordConfiguration {
+        RecordConfiguration(game: .letterSpeed, difficulty: difficulty, mode: "ten-round", rulesVersion: 1, durationLimit: 30)
+    }
+    private var attempts: [SessionRecord] {
+        records.records.filter { $0.configuration == configuration && $0.outcome == .completed }
+    }
+    private var summary: RecordSummary { RecordSummary(records: records.records, configuration: configuration) }
+
+    var body: some View {
+        List {
+            Section("Letter Speed") {
+                Picker("Difficulty", selection: $difficulty) {
+                    ForEach(Difficulty.allCases, id: \.self) { level in
+                        Text(level.rawValue.capitalized).tag(level)
+                    }
+                }.accessibilityIdentifier("records-difficulty")
+                if let error = records.loadError {
+                    Text(error).foregroundStyle(.red)
+                    Button("Try again") { records.reload() }
+                } else if attempts.isEmpty {
+                    Text("No completed sessions at this difficulty yet.").foregroundStyle(.secondary)
+                        .accessibilityIdentifier("records-empty")
+                } else {
+                    LabeledContent("Personal best", value: "\(summary.bestScore ?? 0)")
+                        .accessibilityIdentifier("records-best")
+                    LabeledContent("Completed sessions", value: "\(summary.completedCount)")
+                        .accessibilityIdentifier("records-count")
+                    if let average = summary.averageScore {
+                        LabeledContent("Average score", value: average.formatted(.number.precision(.fractionLength(1))))
+                    }
+                }
+            }
+            if !attempts.isEmpty {
+                Section("Recent sessions") {
+                    ForEach(attempts) { record in
+                        HStack {
+                            Text(record.finishedAt, style: .date)
+                            Spacer()
+                            Text("\(record.score) points").bold().monospacedDigit()
+                        }
+                        .accessibilityElement(children: .combine)
+                        .accessibilityIdentifier("record-\(record.id.uuidString)")
+                    }
+                }
+            }
+            Section {
+                Text("Records for other games will be added as they become available.")
+                    .font(.footnote).foregroundStyle(.secondary)
+            }
+        }
+        .navigationTitle("Records")
+        .onAppear { records.reload() }
+    }
+}

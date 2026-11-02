@@ -15,6 +15,8 @@ struct LetterSpeedRound {
     static let questionCount = 10
 
     let difficulty: Difficulty
+    let sessionID = UUID()
+    private(set) var finishedAt: Date?
     private let clock: any SessionClock
     private var random: SeededRandomNumberGenerator
     private var countdownEndsAt: TimeInterval?
@@ -90,6 +92,7 @@ struct LetterSpeedRound {
         results.append(result)
         if results.count == Self.questionCount {
             phase = .completed
+            finishedAt = Date()
             question = nil
         } else {
             nextQuestion(at: now)

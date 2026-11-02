@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var records = RecordsManager.makeDefault()
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     @AppStorage("keypressHapticsEnabled") private var keypressHapticsEnabled = true
 
@@ -9,8 +10,7 @@ struct ContentView: View {
             NavigationStack { GamesHomeView() }
                 .tabItem { Label("Games", systemImage: "square.grid.2x2") }
             NavigationStack {
-                ContentUnavailableView("No records yet", systemImage: "chart.line.uptrend.xyaxis", description: Text("Saved results will appear here when records are available."))
-                    .navigationTitle("Records")
+                RecordsView()
             }
             .tabItem { Label("Records", systemImage: "chart.bar") }
             NavigationStack {
@@ -29,5 +29,6 @@ struct ContentView: View {
             .tabItem { Label("Settings", systemImage: "gearshape") }
         }
         .tint(.teal)
+        .environmentObject(records)
     }
 }

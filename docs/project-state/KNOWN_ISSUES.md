@@ -22,4 +22,4 @@
 - Local Git status and commit are blocked by a Windows ownership mismatch. The GitHub connector updates the remote; local and remote Git histories are not synchronized.
 - Local Windows lacks Xcode and the iOS SDK. CI installs an unpinned XcodeGen version; runner or dependency changes can affect reproducibility.
 
-- A versioned SQLite record store and compatible-score summary passed simulator CI run 41398019339; no game writes to it and no Records UI uses it. Migration beyond the initial schema, backup/import and real-device persistence remain unverified.
+- A versioned SQLite record store and compatible-score summary passed simulator CI run 41398019339; Letter Speed completed-result saving and a difficulty-filtered Records UI are authored but await CI; other games do not write records. Abandoned results are not saved. Migration beyond the initial schema, backup/import and real-device persistence remain unverified.
