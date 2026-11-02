@@ -1,7 +1,7 @@
 PROJECT: MindSprint
 
 CURRENT MILESTONE: 16 — Letter Speed (IN PROGRESS). Milestone 15 Flexibility is COMPLETED to simulator verification limits.
-CURRENT SUBTASK: 16F — Letter Speed difficulty picker, round propagation and replay authored; CI pending.
+CURRENT SUBTASK: 16F / 17A — Letter Speed difficulty integration and a local SQLite records foundation authored; CI pending. Records are not yet connected to games or UI.
 
 LAST COMPLETED WORK: Added four tappable ten-row letter grids, highest/lowest prompt, per-question timer, progress, ten-round score, result review and replay. The first UI run 41343951538 failed because the grid choices lacked an accessible button trait; explicit button traits fixed it in source 6f717d13585b8e9da1475d692cbbfc5f8a60f181. Run 41345066774 passed. DEBUG-only frozen-clock controls exercise a correct answer, wrong answer, eight timeouts, results and replay; they are not in release. Grids have spoken row labels but VoiceOver has not been tested. Default light-mode active and results screenshots on iPhone 17 Pro and Pro Max were visually reviewed; grids and visible result rows showed no clipping or overlap. DEBUG-only controls are visible in those captures. Wording was clarified for equal-value pairs; run 41347270311 passed both simulator suites and the unsigned app build. The subsequent Classic label passed in run 41349614809. Custom generator domains then passed CI in run 41349614809. Generator/round source handles ties with a 128-try fallback, and delayed callbacks time out only one question and start the next clock when processed.
 
@@ -17,8 +17,8 @@ KNOWN ISSUES: All eight games are playable in simulator; records are not saved. 
 
 CURRENT BLOCKERS: Windows lacks Xcode and the iOS simulator; use GitHub Actions. Physical checks require a device.
 
-NEXT EXACT TASK: Verify difficulty selection, round generation and replay in CI. Classic uses A–Z unchanged; custom Easy A–F, Normal A–L, Hard H–Z and Expert N–Z are independently chosen letter domains, not reference rules or guaranteed strictly increasing difficulty. Keep per-round rules unchanged, label the distinctions clearly, and keep future records separate by difficulty. Records remain milestone 17.
+NEXT EXACT TASK: Verify Letter Speed difficulty integration and SQLite record-store tests in CI. Classic uses A–Z unchanged; custom Easy A–F, Normal A–L, Hard H–Z and Expert N–Z are independently chosen letter domains, not reference rules or guaranteed strictly increasing difficulty. Keep per-round rules unchanged, label the distinctions clearly, and keep future records separate by difficulty. The records store is a foundation only; connect game results and the Records UI in later steps.
 
-NEXT TASK ACCEPTANCE CRITERIA: Custom-domain tests and full CI passed; integration must preserve each selection through replay and expose its actual range. Do not mark milestone 16 complete without meeting the brief's acceptance criteria.
+NEXT TASK ACCEPTANCE CRITERIA: CI must verify difficulty selection, round, replay, database reopen, compatible score grouping, duplicate handling and future schema rejection. Do not mark milestone 16 complete without meeting the brief's acceptance criteria.
 
 IMPORTANT CONTEXT: Read HANDOFF then ROADMAP; verify main/build. Requirements in docs/MASTER_BRIEF.md and evidence in docs/OPENQUANT_GAME_MECHANICS.md. User approved public repository. Never copy protected Pro question pools or claim LiveContainer compatibility without evidence.
