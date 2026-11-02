@@ -20,8 +20,8 @@ The definitive tasks and acceptance criteria for each milestone are in [MASTER_B
 | 13 | COMPLETED | Complete and test Memory. |
 | 14 | COMPLETED | Complete and test Risk. |
 | 15 | COMPLETED | Complete and test Flexibility. |
-| 16 | IN PROGRESS | Complete and test Letter Speed. |
-| 17 | NOT STARTED | Offline history, personal records, statistics, migrations and tests. |
+| 16 | COMPLETED | Complete and test Letter Speed. |
+| 17 | IN PROGRESS | Offline history, personal records, statistics, migrations and tests. |
 | 18 | NOT STARTED | Settings, backups, accessibility and polish; split if necessary. |
 | 19 | NOT STARTED | Full QA, release IPA, installation instructions and limitations; split if necessary. |
 
