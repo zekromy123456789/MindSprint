@@ -3,7 +3,7 @@
 - Project: MindSprint
 - Repository: https://github.com/zekromy123456789/MindSprint (public, approved by user).
 - Last completed milestone: 16 — Letter Speed, verified to simulator limits.
-- Current milestone: 17 — Local records (in progress); Arithmetic and Pro result persistence and game filtering authored, CI pending.
+- Current milestone: 17 — Local records (in progress); Arithmetic and Pro result persistence and game filtering authored; CI run 41515826851 remains queued.
 - Next subtask: verify Arithmetic and Pro records in CI.
 - Overall status: All eight games are playable in simulator; Letter Speed records passed CI; Arithmetic and Pro integration awaits CI, with five other games unconnected.
 - Last passing build: GitHub Actions run 41401651147, source commit fd56e4ae2e17d680cc217fb52f8aea8379d67c66.
