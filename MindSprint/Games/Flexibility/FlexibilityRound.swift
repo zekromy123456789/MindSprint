@@ -94,6 +94,12 @@ struct FlexibilityRound {
         refresh()
         guard phase != .completed else { return }
         session.abandon()
+        if session.phase == .completed {
+            phase = .completed
+            finishedAt = Date()
+            question = nil
+            return
+        }
         if hasPlayed { finishedAt = Date() }
         phase = .abandoned
         question = nil

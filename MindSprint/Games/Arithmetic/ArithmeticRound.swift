@@ -83,6 +83,13 @@ struct ArithmeticRound {
         refresh()
         guard phase != .completed else { return }
         session.abandon()
+        if session.phase == .completed {
+            phase = .completed
+            finishedAt = Date()
+            lastQuestion = question
+            question = nil
+            return
+        }
         if hasPlayed { finishedAt = Date() }
         phase = .abandoned
         question = nil

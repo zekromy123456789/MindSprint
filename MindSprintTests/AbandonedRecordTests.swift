@@ -2,6 +2,14 @@ import XCTest
 @testable import MindSprint
 
 private final class AbandonedClock: SessionClock { var now: TimeInterval = 0 }
+private final class CrossingClock: SessionClock {
+    var time: TimeInterval = 0
+    var samples: [TimeInterval] = []
+    var now: TimeInterval {
+        if !samples.isEmpty { return samples.removeFirst() }
+        return time
+    }
+}
 
 final class AbandonedRecordTests: XCTestCase {
     func testAllGamesRecordOnlyStartedAbandonment() throws {
@@ -59,6 +67,19 @@ final class AbandonedRecordTests: XCTestCase {
         XCTAssertEqual(a.completedRecord, record)
         a.abandon()
         XCTAssertEqual(a.terminalRecord, record)
+    }
+
+    func testExpiryBetweenLeaveChecksStillCompletes() throws {
+        let clock = CrossingClock()
+        var round = ArithmeticRound(difficulty: .classic, clock: clock, seed: 1)
+        round.start(); clock.time = 3; round.refresh()
+        clock.samples = [122.999, 123]
+        clock.time = 123
+        round.abandon()
+        let record = try XCTUnwrap(round.terminalRecord)
+        XCTAssertEqual(round.phase, .completed)
+        XCTAssertEqual(record.outcome, .completed)
+        XCTAssertEqual(round.completedRecord, record)
     }
 
     @MainActor
