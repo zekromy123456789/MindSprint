@@ -8,7 +8,9 @@ struct OptiverRound {
     static let questionCount = 80
 
     private let clock: any SessionClock
-    private let difficulty: Difficulty
+    let difficulty: Difficulty
+    let sessionID = UUID()
+    private(set) var finishedAt: Date?
     private var random: SeededRandomNumberGenerator
     private var session: GameSession
     private var countdownEndsAt: TimeInterval?
@@ -55,7 +57,7 @@ struct OptiverRound {
         }
         if phase == .active {
             session.refresh()
-            if session.phase == .completed { phase = .completed }
+            if session.phase == .completed { phase = .completed; finishedAt = Date() }
         }
     }
 
@@ -72,6 +74,7 @@ struct OptiverRound {
         if index == Self.questionCount {
             session.finish()
             phase = .completed
+            finishedAt = Date()
         }
         return true
     }

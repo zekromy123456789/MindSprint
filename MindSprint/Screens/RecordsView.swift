@@ -7,8 +7,10 @@ struct RecordsView: View {
 
     private var configuration: RecordConfiguration {
         switch game {
-        case .arithmetic, .arithmeticPro:
+        case .arithmetic, .arithmeticPro, .sequence:
             return RecordConfiguration(game: game, difficulty: difficulty, mode: "timed", rulesVersion: 1, durationLimit: 120)
+        case .optiver:
+            return RecordConfiguration(game: .optiver, difficulty: difficulty, mode: "timed-80", rulesVersion: 1, durationLimit: 480)
         default:
             return RecordConfiguration(game: .letterSpeed, difficulty: difficulty, mode: "ten-round", rulesVersion: 1, durationLimit: 30)
         }
@@ -28,6 +30,8 @@ struct RecordsView: View {
                     Text("Letter Speed").tag(GameID.letterSpeed)
                     Text("Arithmetic").tag(GameID.arithmetic)
                     Text("Arithmetic Pro").tag(GameID.arithmeticPro)
+                    Text("Sequence").tag(GameID.sequence)
+                    Text("Optiver 80 in 8").tag(GameID.optiver)
                 }.accessibilityIdentifier("records-game")
                 Picker("Difficulty", selection: $difficulty) {
                     ForEach(difficulties, id: \.self) { level in

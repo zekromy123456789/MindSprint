@@ -140,7 +140,7 @@ final class MindSprintUITests: XCTestCase {
 
     func testSequenceRoundAndReplay() {
         let app = XCUIApplication()
-        app.launchArguments.append("--ui-test-sequence")
+        app.launchArguments += ["--ui-test-sequence", "--reset-ui-test-records"]
         app.launch()
         XCTAssertTrue(app.buttons["game-sequence"].waitForExistence(timeout: 15))
         app.buttons["game-sequence"].tap()
@@ -173,11 +173,27 @@ final class MindSprintUITests: XCTestCase {
         app.buttons["Start test round"].tap()
         XCTAssertTrue(app.staticTexts["sequence-question"].waitForExistence(timeout: 15))
         XCTAssertEqual(app.staticTexts["sequence-level"].label, "Expert")
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.tabBars.buttons["Records"].tap()
+        app.buttons["records-game"].tap()
+        app.buttons["Sequence"].tap()
+        app.buttons["records-difficulty"].tap()
+        app.buttons["Expert"].tap()
+        XCTAssertTrue(app.staticTexts["1 points"].waitForExistence(timeout: 10))
+        app.terminate()
+        app.launchArguments = ["--ui-test-sequence"]
+        app.launch()
+        app.tabBars.buttons["Records"].tap()
+        app.buttons["records-game"].tap()
+        app.buttons["Sequence"].tap()
+        app.buttons["records-difficulty"].tap()
+        app.buttons["Expert"].tap()
+        XCTAssertTrue(app.staticTexts["1 points"].waitForExistence(timeout: 10))
     }
 
     func testOptiverRoundResultsAndReplay() {
         let app = XCUIApplication()
-        app.launchArguments.append("--ui-test-optiver")
+        app.launchArguments += ["--ui-test-optiver", "--reset-ui-test-records"]
         app.launch()
         XCTAssertTrue(app.buttons["game-optiver"].waitForExistence(timeout: 15))
         app.buttons["game-optiver"].tap()
@@ -218,6 +234,22 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["optiver-progress"].waitForExistence(timeout: 15))
         XCTAssertEqual(app.staticTexts["optiver-progress"].label, "Question 1 / 80")
         XCTAssertEqual(app.staticTexts["optiver-level"].label, "Easy")
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.tabBars.buttons["Records"].tap()
+        app.buttons["records-game"].tap()
+        app.buttons["Optiver 80 in 8"].tap()
+        app.buttons["records-difficulty"].tap()
+        app.buttons["Easy"].tap()
+        XCTAssertTrue(app.staticTexts["-1 points"].waitForExistence(timeout: 10))
+        app.terminate()
+        app.launchArguments = ["--ui-test-optiver"]
+        app.launch()
+        app.tabBars.buttons["Records"].tap()
+        app.buttons["records-game"].tap()
+        app.buttons["Optiver 80 in 8"].tap()
+        app.buttons["records-difficulty"].tap()
+        app.buttons["Easy"].tap()
+        XCTAssertTrue(app.staticTexts["-1 points"].waitForExistence(timeout: 10))
     }
 
     func testMemoryStagesAndReplay() {

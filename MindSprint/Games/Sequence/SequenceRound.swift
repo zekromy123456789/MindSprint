@@ -9,6 +9,9 @@ struct SequenceRound {
     static let countdownDuration: TimeInterval = 3
     static let roundDuration: TimeInterval = 120
 
+    let difficulty: Difficulty
+    let sessionID = UUID()
+    private(set) var finishedAt: Date?
     private let clock: any SessionClock
     private let generator: SequenceGenerator
     private var random: SeededRandomNumberGenerator
@@ -21,6 +24,7 @@ struct SequenceRound {
 
     init(difficulty: Difficulty = .classic, clock: any SessionClock = MonotonicSessionClock(),
          seed: UInt64 = UInt64.random(in: .min ... .max)) {
+        self.difficulty = difficulty
         self.clock = clock
         generator = SequenceGenerator(difficulty: difficulty)
         random = SeededRandomNumberGenerator(seed: seed)
@@ -52,6 +56,7 @@ struct SequenceRound {
             session.refresh()
             if session.phase == .completed {
                 phase = .completed
+                finishedAt = Date()
                 lastQuestion = question
                 question = nil
             }
