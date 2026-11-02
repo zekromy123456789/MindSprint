@@ -26,7 +26,7 @@ final class MindSprintUITests: XCTestCase {
         app.tabBars.buttons["Settings"].tap()
         XCTAssertTrue(app.switches["Haptics"].waitForExistence(timeout: 5))
         app.tabBars.buttons["Records"].tap()
-        XCTAssertTrue(app.staticTexts["No records yet"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["records-empty"].waitForExistence(timeout: 5))
     }
 
     func testArithmeticRoundAndReplay() {
