@@ -10,6 +10,9 @@ private final class RiskUITestClock: SessionClock {
 struct RiskGameView: View {
     @State private var round: RiskRound
     @Environment(\.scenePhase) private var scenePhase
+    @EnvironmentObject private var records: RecordsManager
+    @State private var savedSessionID: UUID?
+    @State private var saveFailed = false
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     @AppStorage("keypressHapticsEnabled") private var keypressHapticsEnabled = true
     private let tick = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
@@ -79,7 +82,11 @@ struct RiskGameView: View {
                     Text("\(round.score)").font(.largeTitle.bold().monospacedDigit())
                         .accessibilityIdentifier("risk-final-score")
                     Text("Points collected").foregroundStyle(.secondary)
-                    Button("Play again", action: replay).buttonStyle(.borderedProminent)
+                    if saveFailed {
+                        Text("Your result could not be saved.").foregroundStyle(.red)
+                        Button("Retry saving", action: saveCompletedRound)
+                    }
+                    Button("Play again", action: replay).buttonStyle(.borderedProminent).disabled(saveFailed)
                 }
             case .abandoned:
                 EmptyView()
@@ -90,7 +97,8 @@ struct RiskGameView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
         .onAppear { round.start(); HapticFeedback.shared.prepare() }
-        .onDisappear { round.abandon() }
+        .onDisappear { round.abandon(); saveCompletedRound() }
+        .onChange(of: round.phase) { _, phase in if phase == .completed { saveCompletedRound() } }
         .onReceive(tick) { _ in
             #if DEBUG
             if ProcessInfo.processInfo.arguments.contains("--ui-test-risk") { return }
@@ -129,6 +137,16 @@ struct RiskGameView: View {
             }
         case .collect:
             if round.collect(forRound: token) { HapticFeedback.shared.result(.success, enabled: hapticsEnabled) }
+        }
+    }
+
+    private func saveCompletedRound() {
+        guard let record = round.completedRecord, savedSessionID != record.id else { return }
+        if records.save(record) {
+            savedSessionID = record.id
+            saveFailed = false
+        } else {
+            saveFailed = true
         }
     }
 

@@ -8,6 +8,8 @@ struct RiskRound {
     static let countdownDuration: TimeInterval = 3
     static let totalRounds = 20
 
+    let sessionID = UUID()
+    private(set) var finishedAt: Date?
     private let clock: any SessionClock
     private var random: SeededRandomNumberGenerator
     private var countdownEndsAt: TimeInterval?
@@ -93,6 +95,7 @@ struct RiskRound {
     private mutating func advance() {
         if roundNumber == Self.totalRounds {
             phase = .completed
+            finishedAt = Date()
         } else {
             roundNumber += 1
             newBalloon()

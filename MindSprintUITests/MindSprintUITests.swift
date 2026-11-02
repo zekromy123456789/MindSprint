@@ -254,7 +254,7 @@ final class MindSprintUITests: XCTestCase {
 
     func testMemoryStagesAndReplay() {
         let app = XCUIApplication()
-        app.launchArguments.append("--ui-test-memory")
+        app.launchArguments += ["--ui-test-memory", "--reset-ui-test-records"]
         app.launch()
         let memory = app.buttons["game-memory"]
         if !memory.isHittable { app.swipeUp() }
@@ -304,11 +304,23 @@ final class MindSprintUITests: XCTestCase {
         capture("memory-results")
         app.buttons["Play again"].tap()
         XCTAssertTrue(app.staticTexts["Round 1 / 3"].waitForExistence(timeout: 10))
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.tabBars.buttons["Records"].tap()
+        app.buttons["records-game"].tap()
+        app.buttons["Memory"].tap()
+        XCTAssertTrue(app.staticTexts["1 points"].waitForExistence(timeout: 10))
+        app.terminate()
+        app.launchArguments = ["--ui-test-memory"]
+        app.launch()
+        app.tabBars.buttons["Records"].tap()
+        app.buttons["records-game"].tap()
+        app.buttons["Memory"].tap()
+        XCTAssertTrue(app.staticTexts["1 points"].waitForExistence(timeout: 10))
     }
 
     func testRiskRoundAndReplay() {
         let app = XCUIApplication()
-        app.launchArguments.append("--ui-test-risk")
+        app.launchArguments += ["--ui-test-risk", "--reset-ui-test-records"]
         app.launch()
         let risk = app.buttons["game-risk"]
         if !risk.isHittable { app.swipeUp() }
@@ -327,18 +339,31 @@ final class MindSprintUITests: XCTestCase {
             app.buttons["Collect"].tap()
         }
         XCTAssertTrue(app.staticTexts["Session complete"].waitForExistence(timeout: 10))
-        XCTAssertTrue(["19", "21"].contains(app.staticTexts["risk-final-score"].label))
+        let finishedScore = app.staticTexts["risk-final-score"].label
+        XCTAssertTrue(["19", "21"].contains(finishedScore))
         capture("risk-results")
         app.buttons["Play again"].tap()
         XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
         app.buttons["Start test round"].tap()
         XCTAssertEqual(app.staticTexts["risk-progress"].label, "Round 1 / 20")
         XCTAssertEqual(app.staticTexts["risk-unbanked"].label, "Unbanked: 1")
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.tabBars.buttons["Records"].tap()
+        app.buttons["records-game"].tap()
+        app.buttons["Risk"].tap()
+        XCTAssertTrue(app.staticTexts["\(finishedScore) points"].waitForExistence(timeout: 10))
+        app.terminate()
+        app.launchArguments = ["--ui-test-risk"]
+        app.launch()
+        app.tabBars.buttons["Records"].tap()
+        app.buttons["records-game"].tap()
+        app.buttons["Risk"].tap()
+        XCTAssertTrue(app.staticTexts["\(finishedScore) points"].waitForExistence(timeout: 10))
     }
 
     func testFlexibilityRoundAndReplay() {
         let app = XCUIApplication()
-        app.launchArguments.append("--ui-test-flexibility")
+        app.launchArguments += ["--ui-test-flexibility", "--reset-ui-test-records"]
         app.launch()
         let game = app.buttons["game-flexibility"]
         for _ in 0..<3 { if game.isHittable { break }; app.swipeUp() }
@@ -370,6 +395,18 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
         app.buttons["Start test round"].tap()
         XCTAssertTrue(prompt.waitForExistence(timeout: 10))
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.tabBars.buttons["Records"].tap()
+        app.buttons["records-game"].tap()
+        app.buttons["Flexibility"].tap()
+        XCTAssertTrue(app.staticTexts["0 points"].waitForExistence(timeout: 10))
+        app.terminate()
+        app.launchArguments = ["--ui-test-flexibility"]
+        app.launch()
+        app.tabBars.buttons["Records"].tap()
+        app.buttons["records-game"].tap()
+        app.buttons["Flexibility"].tap()
+        XCTAssertTrue(app.staticTexts["0 points"].waitForExistence(timeout: 10))
     }
 
     func testLetterSpeedRoundAndReplay() {

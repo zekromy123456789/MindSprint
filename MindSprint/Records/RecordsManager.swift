@@ -15,7 +15,7 @@ final class RecordsManager: ObservableObject {
     static func makeDefault() -> RecordsManager {
         #if DEBUG
         let arguments = ProcessInfo.processInfo.arguments
-        let testNames = [("--ui-test-letter-speed", "letter"), ("--ui-test-arithmetic-fast", "arithmetic"), ("--ui-test-pro", "pro"), ("--ui-test-sequence", "sequence"), ("--ui-test-optiver", "optiver")]
+        let testNames = [("--ui-test-letter-speed", "letter"), ("--ui-test-arithmetic-fast", "arithmetic"), ("--ui-test-pro", "pro"), ("--ui-test-sequence", "sequence"), ("--ui-test-optiver", "optiver"), ("--ui-test-memory", "memory"), ("--ui-test-risk", "risk"), ("--ui-test-flexibility", "flexibility")]
         if let test = testNames.first(where: { arguments.contains($0.0) }) {
             let url = FileManager.default.temporaryDirectory.appendingPathComponent("mindsprint-\(test.1)-ui-test.sqlite")
             if ProcessInfo.processInfo.arguments.contains("--reset-ui-test-records") {

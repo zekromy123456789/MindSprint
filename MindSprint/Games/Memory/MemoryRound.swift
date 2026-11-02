@@ -32,6 +32,8 @@ struct MemoryRound {
     static let leadIn: TimeInterval = 1
     static let digitDuration: TimeInterval = 1
 
+    let sessionID = UUID()
+    private(set) var finishedAt: Date?
     private let clock: any SessionClock
     private var random: SeededRandomNumberGenerator
     private var countdownEndsAt: TimeInterval?
@@ -41,6 +43,7 @@ struct MemoryRound {
     private(set) var length = 3
     private(set) var attempt = 1
     private(set) var score = 0
+    private(set) var incorrectCount = 0
     private(set) var digits: [Int] = []
     private(set) var questionID = 0
     private(set) var isSuspended = false
@@ -104,19 +107,23 @@ struct MemoryRound {
             visibleIndex = nil
             phase = .presenting
         } else if attempt == 1 {
+            incorrectCount += 1
             attempt = 2
             newQuestion()
             presentationStartedAt = clock.now
             visibleIndex = nil
             phase = .presenting
         } else if let next = MemoryStage(rawValue: stage.rawValue + 1) {
+            incorrectCount += 1
             stage = next
             length = 3
             attempt = 1
             digits = []
             phase = .instructions
         } else {
+            incorrectCount += 1
             phase = .completed
+            finishedAt = Date()
         }
         return true
     }

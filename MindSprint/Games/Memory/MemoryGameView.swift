@@ -11,6 +11,9 @@ struct MemoryGameView: View {
     @State private var round: MemoryRound
     @State private var input = NumericInput(allowsNegative: false, allowsDecimal: false, maxDigits: 3)
     @Environment(\.scenePhase) private var scenePhase
+    @EnvironmentObject private var records: RecordsManager
+    @State private var savedSessionID: UUID?
+    @State private var saveFailed = false
     private let tick = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
     init() { _round = State(initialValue: Self.makeRound()) }
@@ -104,7 +107,11 @@ struct MemoryGameView: View {
                     Text("\(round.score)").font(.largeTitle.bold().monospacedDigit())
                         .accessibilityIdentifier("memory-final-score")
                     Text("Correct sequences").foregroundStyle(.secondary)
-                    Button("Play again", action: replay).buttonStyle(.borderedProminent)
+                    if saveFailed {
+                        Text("Your result could not be saved.").foregroundStyle(.red)
+                        Button("Retry saving", action: saveCompletedRound)
+                    }
+                    Button("Play again", action: replay).buttonStyle(.borderedProminent).disabled(saveFailed)
                 }
             case .abandoned:
                 EmptyView()
@@ -115,7 +122,8 @@ struct MemoryGameView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
         .onAppear { if scenePhase != .active { round.suspend() } }
-        .onDisappear { round.abandon() }
+        .onDisappear { round.abandon(); saveCompletedRound() }
+        .onChange(of: round.phase) { _, phase in if phase == .completed { saveCompletedRound() } }
         .onReceive(tick) { _ in
             #if DEBUG
             if ProcessInfo.processInfo.arguments.contains("--ui-test-memory") { return }
@@ -148,6 +156,16 @@ struct MemoryGameView: View {
             input = NumericInput(allowsNegative: false, allowsDecimal: false, maxDigits: round.length)
         } else {
             input.reset()
+        }
+    }
+
+    private func saveCompletedRound() {
+        guard let record = round.completedRecord, savedSessionID != record.id else { return }
+        if records.save(record) {
+            savedSessionID = record.id
+            saveFailed = false
+        } else {
+            saveFailed = true
         }
     }
 

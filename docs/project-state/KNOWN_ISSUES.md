@@ -27,3 +27,5 @@
 - Arithmetic and Arithmetic Pro completed-result persistence and game selection passed CI run 41517688924. Partial typed inputs are not counted as incorrect and response times are not recorded. Memory, Risk and Flexibility remain unconnected.
 
 - Sequence and Optiver completed-result persistence and game selection passed CI run 41517688924. Sequence does not count partial typed inputs as incorrect; Optiver tracks answered correct and incorrect choices, not response times. Memory, Risk and Flexibility remain unconnected.
+
+- Memory, Risk and Flexibility completed-record integration and selector expansion are authored but await CI. Memory tracks submitted wrong attempts, Flexibility tracks correct and incorrect decisions, and Risk does not invent accuracy counts. UI test stores are isolated.

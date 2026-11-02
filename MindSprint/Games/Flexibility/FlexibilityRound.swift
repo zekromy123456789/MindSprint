@@ -30,6 +30,8 @@ struct FlexibilityRound {
     static let countdownDuration: TimeInterval = 3
     static let roundDuration: TimeInterval = 60
 
+    let sessionID = UUID()
+    private(set) var finishedAt: Date?
     private let clock: any SessionClock
     private var random: SeededRandomNumberGenerator
     private var session: GameSession
@@ -37,6 +39,8 @@ struct FlexibilityRound {
     private(set) var phase: FlexibilityPhase = .ready
     private(set) var question: FlexibilityQuestion?
     private(set) var questionID = 0
+    private(set) var correctCount = 0
+    private(set) var incorrectCount = 0
 
     init(clock: any SessionClock = MonotonicSessionClock(),
          seed: UInt64 = UInt64.random(in: .min ... .max)) {
@@ -68,7 +72,7 @@ struct FlexibilityRound {
         }
         if phase == .active {
             session.refresh()
-            if session.phase == .completed { phase = .completed; question = nil }
+            if session.phase == .completed { phase = .completed; finishedAt = Date(); question = nil }
         }
     }
 
@@ -76,7 +80,9 @@ struct FlexibilityRound {
     mutating func answer(_ matches: Bool, forQuestion token: Int) -> Bool {
         refresh()
         guard phase == .active, token == questionID, let question else { return false }
-        guard session.award(matches == question.isMatch ? 1 : -1) else { refresh(); return false }
+        let correct = matches == question.isMatch
+        guard session.award(correct ? 1 : -1) else { refresh(); return false }
+        if correct { correctCount += 1 } else { incorrectCount += 1 }
         advance()
         return true
     }

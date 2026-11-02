@@ -9,6 +9,12 @@ struct RecordsView: View {
         switch game {
         case .arithmetic, .arithmeticPro, .sequence:
             return RecordConfiguration(game: game, difficulty: difficulty, mode: "timed", rulesVersion: 1, durationLimit: 120)
+        case .memory:
+            return RecordConfiguration(game: .memory, difficulty: difficulty, mode: "three-stage", rulesVersion: 1, durationLimit: nil)
+        case .risk:
+            return RecordConfiguration(game: .risk, difficulty: difficulty, mode: "20-balloon", rulesVersion: 1, durationLimit: nil)
+        case .flexibility:
+            return RecordConfiguration(game: .flexibility, difficulty: difficulty, mode: "timed", rulesVersion: 1, durationLimit: 60)
         case .optiver:
             return RecordConfiguration(game: .optiver, difficulty: difficulty, mode: "timed-80", rulesVersion: 1, durationLimit: 480)
         default:
@@ -16,7 +22,11 @@ struct RecordsView: View {
         }
     }
     private var difficulties: [Difficulty] {
-        game == .arithmeticPro ? [.easy, .normal, .hard, .expert] : Difficulty.allCases
+        switch game {
+        case .arithmeticPro: return [.easy, .normal, .hard, .expert]
+        case .memory, .risk, .flexibility: return [.classic]
+        default: return Difficulty.allCases
+        }
     }
     private var attempts: [SessionRecord] {
         records.records.filter { $0.configuration == configuration && $0.outcome == .completed }
@@ -32,6 +42,9 @@ struct RecordsView: View {
                     Text("Arithmetic Pro").tag(GameID.arithmeticPro)
                     Text("Sequence").tag(GameID.sequence)
                     Text("Optiver 80 in 8").tag(GameID.optiver)
+                    Text("Memory").tag(GameID.memory)
+                    Text("Risk").tag(GameID.risk)
+                    Text("Flexibility").tag(GameID.flexibility)
                 }.accessibilityIdentifier("records-game")
                 Picker("Difficulty", selection: $difficulty) {
                     ForEach(difficulties, id: \.self) { level in
@@ -66,10 +79,6 @@ struct RecordsView: View {
                         .accessibilityIdentifier("record-\(record.id.uuidString)")
                     }
                 }
-            }
-            Section {
-                Text("Records for the remaining games will be added as they become available.")
-                    .font(.footnote).foregroundStyle(.secondary)
             }
         }
         .navigationTitle("Records")
