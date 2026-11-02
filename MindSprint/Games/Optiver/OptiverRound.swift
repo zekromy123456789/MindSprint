@@ -11,6 +11,7 @@ struct OptiverRound {
     let difficulty: Difficulty
     let sessionID = UUID()
     private(set) var finishedAt: Date?
+    private(set) var hasPlayed = false
     private var random: SeededRandomNumberGenerator
     private var session: GameSession
     private var countdownEndsAt: TimeInterval?
@@ -54,6 +55,7 @@ struct OptiverRound {
         if phase == .countdown, let end = countdownEndsAt, clock.now >= end {
             guard session.start(at: end) else { return }
             phase = .active
+            hasPlayed = true
         }
         if phase == .active {
             session.refresh()
@@ -84,6 +86,7 @@ struct OptiverRound {
         refresh()
         guard phase != .completed else { return }
         session.abandon()
+        if hasPlayed { finishedAt = Date() }
         phase = .abandoned
     }
 }

@@ -141,7 +141,7 @@ struct RiskGameView: View {
     }
 
     private func saveCompletedRound() {
-        guard let record = round.completedRecord, savedSessionID != record.id else { return }
+        guard let record = round.terminalRecord, savedSessionID != record.id else { return }
         if records.save(record) {
             savedSessionID = record.id
             saveFailed = false

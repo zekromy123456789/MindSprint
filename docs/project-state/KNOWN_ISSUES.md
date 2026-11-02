@@ -29,3 +29,5 @@
 - Sequence and Optiver completed-result persistence and game selection passed CI run 41517688924. Sequence does not count partial typed inputs as incorrect; Optiver tracks answered correct and incorrect choices, not response times. Memory, Risk and Flexibility records passed CI run 41522584961.
 
 - Memory, Risk and Flexibility completed-record integration and selector expansion passed CI run 41522584961. Memory tracks submitted wrong attempts, Flexibility tracks correct and incorrect decisions, and Risk does not invent accuracy counts. UI test stores are isolated.
+
+- Abandoned-session persistence, history filtering and in-memory failed-save retry are authored but await CI. Failed writes queued for retry are held only while the app remains open; app termination before retry may lose those unsaved results. Actual lifecycle interruptions and physical-device behavior remain unverified.

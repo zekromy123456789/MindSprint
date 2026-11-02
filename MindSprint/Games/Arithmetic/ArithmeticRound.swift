@@ -12,6 +12,7 @@ struct ArithmeticRound {
     let difficulty: Difficulty
     let sessionID = UUID()
     private(set) var finishedAt: Date?
+    private(set) var hasPlayed = false
     private let clock: any SessionClock
     private let generator: ArithmeticGenerator
     private var random: SeededRandomNumberGenerator
@@ -49,6 +50,7 @@ struct ArithmeticRound {
         if phase == .countdown, let end = countdownEndsAt, clock.now >= end {
             guard session.start(at: end) else { return }
             phase = .active
+            hasPlayed = true
             session.refresh()
             if session.phase == .active { advanceQuestion() }
         }
@@ -81,6 +83,7 @@ struct ArithmeticRound {
         refresh()
         guard phase != .completed else { return }
         session.abandon()
+        if hasPlayed { finishedAt = Date() }
         phase = .abandoned
         question = nil
     }

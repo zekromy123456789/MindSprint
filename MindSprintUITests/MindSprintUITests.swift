@@ -456,6 +456,9 @@ final class MindSprintUITests: XCTestCase {
         app.buttons["records-difficulty"].tap()
         app.buttons["Expert"].tap()
         XCTAssertTrue(app.staticTexts["30 points"].waitForExistence(timeout: 10))
+        app.buttons["records-outcome"].tap()
+        app.buttons["Abandoned"].tap()
+        XCTAssertTrue(app.staticTexts["0 points"].waitForExistence(timeout: 10))
         app.terminate()
         app.launchArguments = ["--ui-test-letter-speed"]
         app.launch()
@@ -463,6 +466,9 @@ final class MindSprintUITests: XCTestCase {
         app.buttons["records-difficulty"].tap()
         app.buttons["Expert"].tap()
         XCTAssertTrue(app.staticTexts["30 points"].waitForExistence(timeout: 10))
+        app.buttons["records-outcome"].tap()
+        app.buttons["Abandoned"].tap()
+        XCTAssertTrue(app.staticTexts["0 points"].waitForExistence(timeout: 10))
     }
 
     func testKeypadEditingSubmissionAndReset() {

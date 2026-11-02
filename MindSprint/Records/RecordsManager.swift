@@ -6,6 +6,8 @@ final class RecordsManager: ObservableObject {
     @Published private(set) var records: [SessionRecord] = []
     @Published private(set) var loadError: String?
     private let databaseURL: URL
+    private var pending: [UUID: SessionRecord] = [:]
+    @Published private(set) var pendingCount = 0
 
     init(databaseURL: URL) {
         self.databaseURL = databaseURL
@@ -32,7 +34,7 @@ final class RecordsManager: ObservableObject {
         do {
             try FileManager.default.createDirectory(at: databaseURL.deletingLastPathComponent(), withIntermediateDirectories: true)
             records = try RecordStore(url: databaseURL).allRecords()
-            loadError = nil
+            loadError = pending.isEmpty ? nil : "Some results could not be saved. Please try again."
         } catch {
             loadError = "Records could not be loaded. Please try again."
         }
@@ -45,11 +47,20 @@ final class RecordsManager: ObservableObject {
             let store = try RecordStore(url: databaseURL)
             try store.insertOnce(record)
             records = try store.allRecords()
-            loadError = nil
+            pending.removeValue(forKey: record.id)
+            pendingCount = pending.count
+            loadError = pending.isEmpty ? nil : "Some results could not be saved. Please try again."
             return true
         } catch {
-            loadError = "Your result could not be saved. Please try again."
+            pending[record.id] = record
+            pendingCount = pending.count
+            loadError = "Some results could not be saved. Please try again."
             return false
         }
+    }
+
+    func retryPending() {
+        for record in Array(pending.values) { _ = save(record) }
+        if pending.isEmpty { reload() }
     }
 }

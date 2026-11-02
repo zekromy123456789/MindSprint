@@ -1,9 +1,15 @@
 import SwiftUI
 
+private enum HistoryFilter: String, CaseIterable {
+    case completed = "Completed"
+    case abandoned = "Abandoned"
+}
+
 struct RecordsView: View {
     @EnvironmentObject private var records: RecordsManager
     @State private var game: GameID = .letterSpeed
     @State private var difficulty: Difficulty = .classic
+    @State private var historyFilter: HistoryFilter = .completed
 
     private var configuration: RecordConfiguration {
         switch game {
@@ -29,7 +35,8 @@ struct RecordsView: View {
         }
     }
     private var attempts: [SessionRecord] {
-        records.records.filter { $0.configuration == configuration && $0.outcome == .completed }
+        let outcome: RecordOutcome = historyFilter == .completed ? .completed : .abandoned
+        return records.records.filter { $0.configuration == configuration && $0.outcome == outcome }
     }
     private var summary: RecordSummary { RecordSummary(records: records.records, configuration: configuration) }
 
@@ -53,8 +60,12 @@ struct RecordsView: View {
                 }.accessibilityIdentifier("records-difficulty")
                 if let error = records.loadError {
                     Text(error).foregroundStyle(.red)
-                    Button("Try again") { records.reload() }
-                } else if attempts.isEmpty {
+                    if records.pendingCount > 0 {
+                        Button("Retry saving") { records.retryPending() }
+                    } else {
+                        Button("Try again") { records.reload() }
+                    }
+                } else if summary.completedCount == 0 {
                     Text("No completed sessions at this difficulty yet.").foregroundStyle(.secondary)
                         .accessibilityIdentifier("records-empty")
                 } else {
@@ -67,11 +78,26 @@ struct RecordsView: View {
                     }
                 }
             }
+            Section("History") {
+                Picker("Show", selection: $historyFilter) {
+                    ForEach(HistoryFilter.allCases, id: \.self) { filter in
+                        Text(filter.rawValue).tag(filter)
+                    }
+                }.accessibilityIdentifier("records-outcome")
+                if attempts.isEmpty {
+                    Text(historyFilter == .completed ? "No completed sessions to show." : "No abandoned sessions to show.")
+                        .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("records-history-empty")
+                }
+            }
             if !attempts.isEmpty {
                 Section("Recent sessions") {
                     ForEach(attempts) { record in
                         HStack {
-                            Text(record.finishedAt, style: .date)
+                            VStack(alignment: .leading) {
+                                Text(record.finishedAt, style: .date)
+                                if record.outcome == .abandoned { Text("Abandoned").font(.caption).foregroundStyle(.secondary) }
+                            }
                             Spacer()
                             Text("\(record.score) points").bold().monospacedDigit()
                         }

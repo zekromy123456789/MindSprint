@@ -10,6 +10,7 @@ struct RiskRound {
 
     let sessionID = UUID()
     private(set) var finishedAt: Date?
+    private(set) var hasPlayed = false
     private let clock: any SessionClock
     private var random: SeededRandomNumberGenerator
     private var countdownEndsAt: TimeInterval?
@@ -54,7 +55,7 @@ struct RiskRound {
     }
 
     mutating func refresh() {
-        if phase == .countdown, let end = countdownEndsAt, clock.now >= end { phase = .active }
+        if phase == .countdown, let end = countdownEndsAt, clock.now >= end { phase = .active; hasPlayed = true }
     }
 
     // A caller-supplied roll is useful for deterministic rule tests.
@@ -89,6 +90,8 @@ struct RiskRound {
 
     mutating func abandon() {
         guard phase != .completed, phase != .abandoned else { return }
+        refresh()
+        if hasPlayed { finishedAt = Date() }
         phase = .abandoned
     }
 

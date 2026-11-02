@@ -32,6 +32,7 @@ struct FlexibilityRound {
 
     let sessionID = UUID()
     private(set) var finishedAt: Date?
+    private(set) var hasPlayed = false
     private let clock: any SessionClock
     private var random: SeededRandomNumberGenerator
     private var session: GameSession
@@ -67,6 +68,7 @@ struct FlexibilityRound {
         if phase == .countdown, let end = countdownEndsAt, clock.now >= end {
             guard session.start(at: end) else { return }
             phase = .active
+            hasPlayed = true
             session.refresh()
             if session.phase == .active { advance() }
         }
@@ -92,6 +94,7 @@ struct FlexibilityRound {
         refresh()
         guard phase != .completed else { return }
         session.abandon()
+        if hasPlayed { finishedAt = Date() }
         phase = .abandoned
         question = nil
     }

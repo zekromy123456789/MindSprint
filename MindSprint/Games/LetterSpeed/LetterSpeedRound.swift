@@ -17,6 +17,7 @@ struct LetterSpeedRound {
     let difficulty: Difficulty
     let sessionID = UUID()
     private(set) var finishedAt: Date?
+    private(set) var hasPlayed = false
     private let clock: any SessionClock
     private var random: SeededRandomNumberGenerator
     private var countdownEndsAt: TimeInterval?
@@ -58,6 +59,7 @@ struct LetterSpeedRound {
     private mutating func refresh(at now: TimeInterval) {
         if phase == .countdown, let end = countdownEndsAt, now >= end {
             phase = .active
+            hasPlayed = true
             nextQuestion(at: now)
         } else if phase == .active, let start = questionStartedAt,
                   now - start >= Self.questionDuration, let question {
@@ -83,6 +85,7 @@ struct LetterSpeedRound {
         guard phase == .ready || phase == .countdown || phase == .active else { return }
         refresh()
         guard phase != .completed else { return }
+        if hasPlayed { finishedAt = Date() }
         phase = .abandoned
         question = nil
     }

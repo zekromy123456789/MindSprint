@@ -34,6 +34,7 @@ struct MemoryRound {
 
     let sessionID = UUID()
     private(set) var finishedAt: Date?
+    private(set) var hasPlayed = false
     private let clock: any SessionClock
     private var random: SeededRandomNumberGenerator
     private var countdownEndsAt: TimeInterval?
@@ -82,6 +83,7 @@ struct MemoryRound {
         guard !isSuspended else { return }
         if phase == .countdown, let end = countdownEndsAt, clock.now >= end {
             presentationStartedAt = clock.now
+            hasPlayed = true
             phase = .presenting
         }
         if phase == .presenting, let start = presentationStartedAt {
@@ -143,6 +145,7 @@ struct MemoryRound {
 
     mutating func abandon() {
         guard phase != .completed, phase != .abandoned else { return }
+        if hasPlayed { finishedAt = Date() }
         phase = .abandoned
     }
 
