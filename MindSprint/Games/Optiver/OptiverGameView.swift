@@ -15,6 +15,8 @@ struct OptiverGameView: View {
     @EnvironmentObject private var records: RecordsManager
     @State private var savedSessionID: UUID?
     @State private var saveFailed = false
+    @State private var countdownSeconds = 3
+    @State private var timeSeconds = 480
     private let tick = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
     init(difficulty: Difficulty) {
@@ -37,13 +39,18 @@ struct OptiverGameView: View {
             case .ready, .countdown:
                 VStack(spacing: 12) {
                     Text("Get ready").font(.title2.bold())
-                    Text("\(max(1, Int(ceil(round.countdownRemaining))))")
+                    Text("\(max(1, countdownSeconds))")
                         .font(.system(size: 64, weight: .bold, design: .rounded))
+                        .accessibilityIdentifier("optiver-countdown")
                     #if DEBUG
                     if ProcessInfo.processInfo.arguments.contains("--ui-test-optiver") {
+                        Button("Advance test countdown") {
+                            OptiverUITestClock.shared.offset += 1
+                            refreshClockDisplay()
+                        }
                         Button("Start test round") {
-                            OptiverUITestClock.shared.offset += OptiverRound.countdownDuration
-                            round.refresh()
+                            OptiverUITestClock.shared.offset += round.countdownRemaining
+                            refreshClockDisplay()
                         }
                     }
                     #endif
@@ -62,7 +69,7 @@ struct OptiverGameView: View {
                             if ProcessInfo.processInfo.arguments.contains("--ui-test-optiver") {
                                 Button("Finish test round") {
                                     OptiverUITestClock.shared.offset += OptiverRound.roundDuration
-                                    round.refresh()
+                                    refreshClockDisplay()
                                 }.font(.footnote)
                             }
                             #endif
@@ -94,17 +101,17 @@ struct OptiverGameView: View {
         .navigationTitle("Optiver 80 in 8")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
-        .onAppear { round.start() }
+        .onAppear { round.start(); refreshClockDisplay() }
         .onDisappear { round.abandon(); saveCompletedRound() }
         .onChange(of: round.phase) { _, phase in if phase == .completed { saveCompletedRound() } }
         .onReceive(tick) { _ in
             #if DEBUG
             if ProcessInfo.processInfo.arguments.contains("--ui-test-optiver") { return }
             #endif
-            round.refresh()
+            refreshClockDisplay()
         }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active { round.refresh() }
+            if phase == .active { refreshClockDisplay() }
         }
     }
 
@@ -146,7 +153,7 @@ struct OptiverGameView: View {
     }
 
     private var formattedTime: String {
-        let seconds = Int(ceil(round.remaining))
+        let seconds = timeSeconds
         return String(format: "%d:%02d", seconds / 60, seconds % 60)
     }
 
@@ -157,6 +164,14 @@ struct OptiverGameView: View {
         }
         #endif
         return ""
+    }
+
+    // Snapshot clock-derived values into view state so the displayed seconds
+    // update even when a refresh doesn't change the round's phase.
+    private func refreshClockDisplay() {
+        round.refresh()
+        countdownSeconds = max(0, Int(ceil(round.countdownRemaining)))
+        timeSeconds = max(0, Int(ceil(round.remaining)))
     }
 
     private func saveCompletedRound() {
@@ -173,5 +188,6 @@ struct OptiverGameView: View {
         var next = Self.makeRound(difficulty)
         next.start()
         round = next
+        refreshClockDisplay()
     }
 }

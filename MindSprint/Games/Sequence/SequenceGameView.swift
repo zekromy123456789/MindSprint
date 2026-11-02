@@ -18,6 +18,8 @@ struct SequenceGameView: View {
     @EnvironmentObject private var records: RecordsManager
     @State private var savedSessionID: UUID?
     @State private var saveFailed = false
+    @State private var countdownSeconds = 3
+    @State private var timeSeconds = 120
     private let tick = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
     init(difficulty: Difficulty) {
@@ -40,14 +42,18 @@ struct SequenceGameView: View {
             case .ready, .countdown:
                 VStack(spacing: 12) {
                     Text("Get ready").font(.title2.bold())
-                    Text("\(max(1, Int(ceil(round.countdownRemaining))))")
+                    Text("\(max(1, countdownSeconds))")
                         .font(.system(size: 64, weight: .bold, design: .rounded))
                         .accessibilityIdentifier("sequence-countdown")
                     #if DEBUG
                     if ProcessInfo.processInfo.arguments.contains("--ui-test-sequence") {
+                        Button("Advance test countdown") {
+                            SequenceUITestClock.shared.offset += 1
+                            refreshClockDisplay()
+                        }
                         Button("Start test round") {
-                            SequenceUITestClock.shared.offset += SequenceRound.countdownDuration
-                            round.refresh()
+                            SequenceUITestClock.shared.offset += round.countdownRemaining
+                            refreshClockDisplay()
                         }
                     }
                     #endif
@@ -65,7 +71,7 @@ struct SequenceGameView: View {
                             if ProcessInfo.processInfo.arguments.contains("--ui-test-sequence") {
                                 Button("Finish test round") {
                                     SequenceUITestClock.shared.offset += SequenceRound.roundDuration
-                                    round.refresh()
+                                    refreshClockDisplay()
                                 }
                                 .font(.footnote)
                             }
@@ -116,17 +122,17 @@ struct SequenceGameView: View {
         .navigationTitle("Sequence")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
-        .onAppear { round.start() }
+        .onAppear { round.start(); refreshClockDisplay() }
         .onDisappear { round.abandon(); saveCompletedRound() }
         .onChange(of: round.phase) { _, phase in if phase == .completed { saveCompletedRound() } }
         .onReceive(tick) { _ in
             #if DEBUG
             if ProcessInfo.processInfo.arguments.contains("--ui-test-sequence") { return }
             #endif
-            round.refresh()
+            refreshClockDisplay()
         }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active { round.refresh() }
+            if phase == .active { refreshClockDisplay() }
         }
     }
 
@@ -138,13 +144,21 @@ struct SequenceGameView: View {
     }
 
     private var formattedTime: String {
-        let seconds = Int(ceil(round.remaining))
+        let seconds = timeSeconds
         return String(format: "%d:%02d", seconds / 60, seconds % 60)
     }
 
     private func answerChanged(_ text: String) {
         let id = round.questionID
         if round.accept(text, forQuestion: id) { input.reset() }
+    }
+
+    // Snapshot clock-derived values into view state so the displayed seconds
+    // update even when a refresh doesn't change the round's phase.
+    private func refreshClockDisplay() {
+        round.refresh()
+        countdownSeconds = max(0, Int(ceil(round.countdownRemaining)))
+        timeSeconds = max(0, Int(ceil(round.remaining)))
     }
 
     private func saveCompletedRound() {
@@ -162,5 +176,6 @@ struct SequenceGameView: View {
         var next = Self.makeRound(difficulty)
         next.start()
         round = next
+        refreshClockDisplay()
     }
 }

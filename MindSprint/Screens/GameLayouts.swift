@@ -12,7 +12,7 @@ struct ActiveGameLayout<Question: View, Controls: View>: View {
             HStack {
                 Text(score).font(.headline).accessibilityIdentifier("game-score")
                 Spacer()
-                if let time { Text(time).font(.headline.monospacedDigit()) }
+                if let time { Text(time).font(.headline.monospacedDigit()).accessibilityIdentifier("game-timer") }
             }
             .accessibilityElement(children: .combine)
             Spacer(minLength: 8)

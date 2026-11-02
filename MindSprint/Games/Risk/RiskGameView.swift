@@ -13,6 +13,7 @@ struct RiskGameView: View {
     @EnvironmentObject private var records: RecordsManager
     @State private var savedSessionID: UUID?
     @State private var saveFailed = false
+    @State private var countdownSeconds = 3
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     @AppStorage("keypressHapticsEnabled") private var keypressHapticsEnabled = true
     private let tick = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
@@ -34,13 +35,18 @@ struct RiskGameView: View {
             case .ready, .countdown:
                 VStack(spacing: 12) {
                     Text("Get ready").font(.title2.bold())
-                    Text("\(max(1, Int(ceil(round.countdownRemaining))))")
+                    Text("\(max(1, countdownSeconds))")
                         .font(.system(size: 64, weight: .bold, design: .rounded))
+                        .accessibilityIdentifier("risk-countdown")
                     #if DEBUG
                     if ProcessInfo.processInfo.arguments.contains("--ui-test-risk") {
+                        Button("Advance test countdown") {
+                            RiskUITestClock.shared.now += 1
+                            refreshClockDisplay()
+                        }
                         Button("Start test round") {
-                            RiskUITestClock.shared.now += RiskRound.countdownDuration
-                            round.refresh()
+                            RiskUITestClock.shared.now += round.countdownRemaining
+                            refreshClockDisplay()
                         }
                     }
                     #endif
@@ -96,16 +102,16 @@ struct RiskGameView: View {
         .navigationTitle("Risk")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
-        .onAppear { round.start(); HapticFeedback.shared.prepare() }
+        .onAppear { round.start(); refreshClockDisplay(); HapticFeedback.shared.prepare() }
         .onDisappear { round.abandon(); saveCompletedRound() }
         .onChange(of: round.phase) { _, phase in if phase == .completed { saveCompletedRound() } }
         .onReceive(tick) { _ in
             #if DEBUG
             if ProcessInfo.processInfo.arguments.contains("--ui-test-risk") { return }
             #endif
-            round.refresh()
+            refreshClockDisplay()
         }
-        .onChange(of: scenePhase) { _, phase in if phase == .active { round.refresh() } }
+        .onChange(of: scenePhase) { _, phase in if phase == .active { refreshClockDisplay() } }
     }
 
     private var balloonColor: Color {
@@ -140,6 +146,13 @@ struct RiskGameView: View {
         }
     }
 
+    // Snapshot clock-derived values into view state so the displayed seconds
+    // update even when a refresh doesn't change the round's phase.
+    private func refreshClockDisplay() {
+        round.refresh()
+        countdownSeconds = max(0, Int(ceil(round.countdownRemaining)))
+    }
+
     private func saveCompletedRound() {
         guard let record = round.terminalRecord, savedSessionID != record.id else { return }
         if records.save(record) {
@@ -154,5 +167,6 @@ struct RiskGameView: View {
         var next = Self.makeRound()
         next.start()
         round = next
+        refreshClockDisplay()
     }
 }

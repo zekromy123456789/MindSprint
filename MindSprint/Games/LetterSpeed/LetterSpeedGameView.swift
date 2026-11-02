@@ -14,6 +14,8 @@ struct LetterSpeedGameView: View {
     @EnvironmentObject private var records: RecordsManager
     @State private var savedSessionID: UUID?
     @State private var saveFailed = false
+    @State private var countdownSeconds = 3
+    @State private var timeSeconds = 30
     private let tick = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
     init(difficulty: Difficulty = .classic) {
@@ -36,13 +38,18 @@ struct LetterSpeedGameView: View {
             case .ready, .countdown:
                 VStack(spacing: 12) {
                     Text("Get ready").font(.title2.bold())
-                    Text("\(max(1, Int(ceil(round.countdownRemaining))))")
+                    Text("\(max(1, countdownSeconds))")
                         .font(.system(size: 64, weight: .bold, design: .rounded))
+                        .accessibilityIdentifier("letter-countdown")
                     #if DEBUG
                     if ProcessInfo.processInfo.arguments.contains("--ui-test-letter-speed") {
+                        Button("Advance test countdown") {
+                            LetterSpeedUITestClock.shared.now += 1
+                            refreshClockDisplay()
+                        }
                         Button("Start test round") {
-                            LetterSpeedUITestClock.shared.now += LetterSpeedRound.countdownDuration
-                            round.refresh()
+                            LetterSpeedUITestClock.shared.now += round.countdownRemaining
+                            refreshClockDisplay()
                         }
                     }
                     #endif
@@ -59,16 +66,16 @@ struct LetterSpeedGameView: View {
         .navigationTitle("Letter Speed")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
-        .onAppear { round.start() }
+        .onAppear { round.start(); refreshClockDisplay() }
         .onDisappear { round.abandon(); saveCompletedRound() }
         .onChange(of: round.phase) { _, phase in if phase == .completed { saveCompletedRound() } }
         .onReceive(tick) { _ in
             #if DEBUG
             if ProcessInfo.processInfo.arguments.contains("--ui-test-letter-speed") { return }
             #endif
-            round.refresh()
+            refreshClockDisplay()
         }
-        .onChange(of: scenePhase) { _, phase in if phase == .active { round.refresh() } }
+        .onChange(of: scenePhase) { _, phase in if phase == .active { refreshClockDisplay() } }
     }
 
     private func active(_ question: LetterQuestion) -> some View {
@@ -78,8 +85,8 @@ struct LetterSpeedGameView: View {
                 HStack {
                     Text("Score: \(round.score)").accessibilityIdentifier("letter-score")
                     Spacer()
-                    Text("\(Int(ceil(round.remaining)))s").monospacedDigit()
-                        .accessibilityLabel("\(Int(ceil(round.remaining))) seconds remaining")
+                    Text("\(timeSeconds)s").monospacedDigit()
+                        .accessibilityLabel("\(timeSeconds) seconds remaining")
                         .accessibilityIdentifier("letter-time")
                 }.font(.headline)
                 Text(difficulty.rawValue.capitalized).font(.footnote).foregroundStyle(.secondary)
@@ -125,7 +132,7 @@ struct LetterSpeedGameView: View {
                 if ProcessInfo.processInfo.arguments.contains("--ui-test-letter-speed") {
                     Button("Expire test question") {
                         LetterSpeedUITestClock.shared.now += LetterSpeedRound.questionDuration
-                        round.refresh()
+                        refreshClockDisplay()
                     }.font(.footnote)
                 }
                 #endif
@@ -184,6 +191,14 @@ struct LetterSpeedGameView: View {
         return ""
     }
 
+    // Snapshot clock-derived values into view state so the displayed seconds
+    // update even when a refresh doesn't change the round's phase.
+    private func refreshClockDisplay() {
+        round.refresh()
+        countdownSeconds = max(0, Int(ceil(round.countdownRemaining)))
+        timeSeconds = max(0, Int(ceil(round.remaining)))
+    }
+
     private func saveCompletedRound() {
         guard let record = round.terminalRecord, savedSessionID != record.id else { return }
         if records.save(record) {
@@ -198,5 +213,6 @@ struct LetterSpeedGameView: View {
         var next = Self.makeRound(difficulty)
         next.start()
         round = next
+        refreshClockDisplay()
     }
 }

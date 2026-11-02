@@ -13,6 +13,8 @@ struct FlexibilityGameView: View {
     @EnvironmentObject private var records: RecordsManager
     @State private var savedSessionID: UUID?
     @State private var saveFailed = false
+    @State private var countdownSeconds = 3
+    @State private var timeSeconds = 60
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     private let tick = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
@@ -33,13 +35,18 @@ struct FlexibilityGameView: View {
             case .ready, .countdown:
                 VStack(spacing: 12) {
                     Text("Get ready").font(.title2.bold())
-                    Text("\(max(1, Int(ceil(round.countdownRemaining))))")
+                    Text("\(max(1, countdownSeconds))")
                         .font(.system(size: 64, weight: .bold, design: .rounded))
+                        .accessibilityIdentifier("flexibility-countdown")
                     #if DEBUG
                     if ProcessInfo.processInfo.arguments.contains("--ui-test-flexibility") {
+                        Button("Advance test countdown") {
+                            FlexibilityUITestClock.shared.now += 1
+                            refreshClockDisplay()
+                        }
                         Button("Start test round") {
-                            FlexibilityUITestClock.shared.now += FlexibilityRound.countdownDuration
-                            round.refresh()
+                            FlexibilityUITestClock.shared.now += round.countdownRemaining
+                            refreshClockDisplay()
                         }
                     }
                     #endif
@@ -61,7 +68,7 @@ struct FlexibilityGameView: View {
                             if ProcessInfo.processInfo.arguments.contains("--ui-test-flexibility") {
                                 Button("Finish test round") {
                                     FlexibilityUITestClock.shared.now += FlexibilityRound.roundDuration
-                                    round.refresh()
+                                    refreshClockDisplay()
                                 }.font(.footnote)
                             }
                             #endif
@@ -101,16 +108,16 @@ struct FlexibilityGameView: View {
         .navigationTitle("Flexibility")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
-        .onAppear { round.start(); HapticFeedback.shared.prepare() }
+        .onAppear { round.start(); refreshClockDisplay(); HapticFeedback.shared.prepare() }
         .onDisappear { round.abandon(); saveCompletedRound() }
         .onChange(of: round.phase) { _, phase in if phase == .completed { saveCompletedRound() } }
         .onReceive(tick) { _ in
             #if DEBUG
             if ProcessInfo.processInfo.arguments.contains("--ui-test-flexibility") { return }
             #endif
-            round.refresh()
+            refreshClockDisplay()
         }
-        .onChange(of: scenePhase) { _, phase in if phase == .active { round.refresh() } }
+        .onChange(of: scenePhase) { _, phase in if phase == .active { refreshClockDisplay() } }
     }
 
     private func card(word: FlexibilityColor, ink: FlexibilityColor, side: String) -> some View {
@@ -136,7 +143,7 @@ struct FlexibilityGameView: View {
     }
 
     private var formattedTime: String {
-        let seconds = Int(ceil(round.remaining))
+        let seconds = timeSeconds
         return String(format: "%d:%02d", seconds / 60, seconds % 60)
     }
 
@@ -145,6 +152,14 @@ struct FlexibilityGameView: View {
         if round.answer(matches, forQuestion: token) {
             HapticFeedback.shared.result(correct ? .success : .error, enabled: hapticsEnabled)
         }
+    }
+
+    // Snapshot clock-derived values into view state so the displayed seconds
+    // update even when a refresh doesn't change the round's phase.
+    private func refreshClockDisplay() {
+        round.refresh()
+        countdownSeconds = max(0, Int(ceil(round.countdownRemaining)))
+        timeSeconds = max(0, Int(ceil(round.remaining)))
     }
 
     private func saveCompletedRound() {
@@ -161,5 +176,6 @@ struct FlexibilityGameView: View {
         var next = Self.makeRound()
         next.start()
         round = next
+        refreshClockDisplay()
     }
 }

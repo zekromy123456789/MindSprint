@@ -1,7 +1,7 @@
 PROJECT: MindSprint
 
 CURRENT MILESTONE: 17 — Local leaderboards and statistics (IN PROGRESS). Milestone 16 Letter Speed is completed to simulator verification limits.
-CURRENT SUBTASK: 17L–17O — Abandoned-session history, completed/abandoned filter and in-memory retry passed CI. Advanced statistics remain unfinished.
+CURRENT SUBTASK: Countdown display fix across all eight games authored after device report; CI pending. Abandoned-session history passed prior CI.
 
 LAST COMPLETED WORK: Leaving a game after it has started records an abandoned session for all eight games using the same stable ID and actual score/configuration; leaving before play starts does not create history. Timed games refresh on exit, and if the deadline crosses between their two exit checks they record completion instead of abandonment. Completed and abandoned history are separately filterable; only completed sessions contribute to personal best, count and average. Failed saves remain in an in-memory retry queue with an app-level alert and a Retry saving button in Records. The queue is lost if the app terminates before retry; force termination is not recorded as an abandonment. Tests cover all eight games, pre-play exits, expiry races, duplicate prevention, retry, filtering and relaunch. CI run 41544443226 passed.
 
@@ -13,11 +13,11 @@ BUILD STATUS: GitHub Actions run 41544443226 passed both simulator suites and un
 
 TEST STATUS: 95 unit tests and 12 UI tests on each of iPhone 17 Pro and Pro Max passed. Unit tests cover all eight abandoned records, pre-play exits, expiry races, duplicate prevention and failure retry. UI tests cover Letter Speed abandoned filtering and app relaunch. Error-alert UI, other games' abandoned history UI, actual background/termination behavior, VoiceOver, dark mode, small phones, concurrent store use and physical-device persistence remain unverified.
 
-KNOWN ISSUES: Failed-save retry is held in memory only and can be lost on app termination. Force termination does not record an abandoned session. Response times and elapsed values are not collected by current integrations. Records lacks richer filtering, top rankings and charts/trends; backups/import and migration beyond schema baseline are unfinished. See KNOWN_ISSUES.md.
+KNOWN ISSUES: User reported the countdown stayed at 3 across all games while gameplay started on time; display fix authored but awaits CI and real-device verification. Failed-save retry is held in memory only and can be lost on app termination. Force termination does not record an abandoned session. Response times and elapsed values are not collected by current integrations. Records lacks richer filtering, top rankings and charts/trends; backups/import and migration beyond schema baseline are unfinished. See KNOWN_ISSUES.md.
 
 CURRENT BLOCKERS: Windows lacks Xcode and the iOS simulator; use GitHub Actions. Physical checks require a device.
 
-NEXT EXACT TASK: Implement completed-session top rankings and useful statistics/trends in Records while preserving exact configuration separation and excluding abandoned/invalid entries. Define and test tie ordering, empty data, negative scores, per-game/difficulty filtering and stable timestamps. Do not infer missing response-time or accuracy statistics. Continue with database migrations, backups, accessibility and device QA afterward.
+NEXT EXACT TASK: Verify countdown and game-timer display fix in CI and repair any failures. User reported the countdown remained at 3 in every game while gameplay started on time. Explicit displayed-second state is now updated on clock ticks; tests check 3/2/1 in all games and a real-time Arithmetic timer. Actual device/LiveContainer verification remains needed. Then implement completed-session top rankings and useful statistics/trends in Records while preserving exact configuration separation and excluding abandoned/invalid entries. Define and test tie ordering, empty data, negative scores, per-game/difficulty filtering and stable timestamps. Do not infer missing response-time or accuracy statistics. Continue with database migrations, backups, accessibility and device QA afterward.
 
 NEXT TASK ACCEPTANCE CRITERIA: Rankings and calculated statistics use only compatible completed sessions; ordering, ties, empty/negative scores and tests are verified. Milestone 17 remains incomplete until required history, statistics, migrations and acceptance criteria are addressed.
 

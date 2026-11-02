@@ -29,6 +29,31 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["records-empty"].waitForExistence(timeout: 5))
     }
 
+    private func verifyCountdown(_ app: XCUIApplication, identifier: String) {
+        let countdown = app.staticTexts[identifier]
+        XCTAssertTrue(countdown.waitForExistence(timeout: 10))
+        XCTAssertEqual(countdown.label, "3")
+        app.buttons["Advance test countdown"].tap()
+        XCTAssertEqual(countdown.label, "2")
+        app.buttons["Advance test countdown"].tap()
+        XCTAssertEqual(countdown.label, "1")
+    }
+
+    func testRealClockStartsGameAndUpdatesTimer() {
+        let app = XCUIApplication()
+        app.launchArguments += ["--ui-test-live-clock", "--reset-ui-test-records"]
+        app.launch()
+        XCTAssertTrue(app.buttons["game-arithmetic"].waitForExistence(timeout: 15))
+        app.buttons["game-arithmetic"].tap()
+        app.buttons["start-arithmetic"].tap()
+        XCTAssertTrue(app.staticTexts["arithmetic-first"].waitForExistence(timeout: 15))
+        let timer = app.staticTexts["game-timer"]
+        XCTAssertTrue(timer.waitForExistence(timeout: 5))
+        let initial = timer.label
+        let changes = expectation(for: NSPredicate(format: "label != %@", initial), evaluatedWith: timer)
+        wait(for: [changes], timeout: 6)
+    }
+
     func testArithmeticRoundAndReplay() {
         let app = XCUIApplication()
         app.launchArguments += ["--ui-test-arithmetic-fast", "--reset-ui-test-records"]
@@ -37,9 +62,13 @@ final class MindSprintUITests: XCTestCase {
         app.buttons["game-arithmetic"].tap()
         app.buttons["start-arithmetic"].tap()
         XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        verifyCountdown(app, identifier: "arithmetic-countdown")
         app.buttons["Start test round"].tap()
         let first = app.staticTexts["arithmetic-first"]
         XCTAssertTrue(first.waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["game-timer"].label, "2:00")
+        app.buttons["Advance test second"].tap()
+        XCTAssertEqual(app.staticTexts["game-timer"].label, "1:59")
         app.buttons["Hide timer"].tap()
         XCTAssertTrue(app.buttons["Show timer"].exists)
         app.buttons["Show timer"].tap()
@@ -96,6 +125,7 @@ final class MindSprintUITests: XCTestCase {
         app.buttons["Hard"].tap()
         app.buttons["start-pro"].tap()
         XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        verifyCountdown(app, identifier: "pro-countdown")
         app.buttons["Start test round"].tap()
         let question = app.staticTexts["pro-question"]
         XCTAssertTrue(question.waitForExistence(timeout: 20))
@@ -148,6 +178,7 @@ final class MindSprintUITests: XCTestCase {
         app.buttons["Expert"].tap()
         app.buttons["start-sequence"].tap()
         XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        verifyCountdown(app, identifier: "sequence-countdown")
         app.buttons["Start test round"].tap()
         let question = app.staticTexts["sequence-question"]
         XCTAssertTrue(question.waitForExistence(timeout: 15))
@@ -201,6 +232,7 @@ final class MindSprintUITests: XCTestCase {
         app.buttons["Easy"].tap()
         app.buttons["start-optiver"].tap()
         XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        verifyCountdown(app, identifier: "optiver-countdown")
         app.buttons["Start test round"].tap()
         let question = app.staticTexts["optiver-question"]
         XCTAssertTrue(question.waitForExistence(timeout: 15))
@@ -265,6 +297,7 @@ final class MindSprintUITests: XCTestCase {
         for stage in 1...3 {
             XCTAssertTrue(app.staticTexts["Round \(stage) / 3"].waitForExistence(timeout: 10))
             app.buttons["Start round"].tap()
+            if stage == 1 { verifyCountdown(app, identifier: "memory-countdown") }
             app.buttons["Start test presentation"].tap()
             if stage == 1 {
                 XCTAssertFalse(app.buttons["Submit"].exists)
@@ -328,6 +361,7 @@ final class MindSprintUITests: XCTestCase {
         risk.tap()
         app.buttons["start-risk"].tap()
         XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        verifyCountdown(app, identifier: "risk-countdown")
         app.buttons["Start test round"].tap()
         XCTAssertTrue(app.staticTexts["risk-progress"].waitForExistence(timeout: 10))
         XCTAssertEqual(app.staticTexts["risk-progress"].label, "Round 1 / 20")
@@ -371,6 +405,7 @@ final class MindSprintUITests: XCTestCase {
         game.tap()
         app.buttons["start-flexibility"].tap()
         XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        verifyCountdown(app, identifier: "flexibility-countdown")
         app.buttons["Start test round"].tap()
         let prompt = app.staticTexts["flexibility-prompt"]
         XCTAssertTrue(prompt.waitForExistence(timeout: 15))
@@ -421,6 +456,7 @@ final class MindSprintUITests: XCTestCase {
         app.buttons["Expert"].tap()
         app.buttons["start-letter-speed"].tap()
         XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
+        verifyCountdown(app, identifier: "letter-countdown")
         app.buttons["Start test round"].tap()
         let prompt = app.staticTexts["letter-prompt"]
         XCTAssertTrue(prompt.waitForExistence(timeout: 15))

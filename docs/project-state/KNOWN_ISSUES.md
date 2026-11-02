@@ -31,3 +31,5 @@
 - Memory, Risk and Flexibility completed-record integration and selector expansion passed CI run 41522584961. Memory tracks submitted wrong attempts, Flexibility tracks correct and incorrect decisions, and Risk does not invent accuracy counts. UI test stores are isolated.
 
 - Abandoned-session persistence, history filtering and in-memory failed-save retry passed CI run 41544443226. Failed writes queued for retry are held only while the app remains open; app termination before retry may lose those unsaved results. Actual lifecycle interruptions and physical-device behavior remain unverified.
+
+- User reported on device that all game countdowns stayed at 3 although games started on time. Explicit view-state snapshots for displayed countdown and remaining seconds are authored, with deterministic countdown checks and a live-clock UI test; CI and physical-device/LiveContainer verification are pending. Root cause is not yet independently confirmed.

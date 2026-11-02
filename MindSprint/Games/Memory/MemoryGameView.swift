@@ -14,6 +14,7 @@ struct MemoryGameView: View {
     @EnvironmentObject private var records: RecordsManager
     @State private var savedSessionID: UUID?
     @State private var saveFailed = false
+    @State private var countdownSeconds = 3
     private let tick = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
     init() { _round = State(initialValue: Self.makeRound()) }
@@ -35,18 +36,23 @@ struct MemoryGameView: View {
                     Text("Round \(round.stage.rawValue + 1) / 3").font(.title2.bold())
                     Text(round.stage.instruction).multilineTextAlignment(.center)
                     Text("You have two attempts at each length.").foregroundStyle(.secondary)
-                    Button("Start round") { round.beginStage() }.buttonStyle(.borderedProminent)
+                    Button("Start round") { round.beginStage(); refreshClockDisplay() }.buttonStyle(.borderedProminent)
                 }.padding()
             case .countdown:
                 VStack(spacing: 12) {
                     Text("Get ready").font(.title2.bold())
-                    Text("\(max(1, Int(ceil(round.countdownRemaining))))")
+                    Text("\(max(1, countdownSeconds))")
                         .font(.system(size: 64, weight: .bold, design: .rounded))
+                        .accessibilityIdentifier("memory-countdown")
                     #if DEBUG
                     if ProcessInfo.processInfo.arguments.contains("--ui-test-memory") {
+                        Button("Advance test countdown") {
+                            MemoryUITestClock.shared.now += 1
+                            refreshClockDisplay()
+                        }
                         Button("Start test presentation") {
-                            MemoryUITestClock.shared.now += MemoryRound.countdownDuration
-                            round.refresh()
+                            MemoryUITestClock.shared.now += round.countdownRemaining
+                            refreshClockDisplay()
                         }
                     }
                     #endif
@@ -78,11 +84,11 @@ struct MemoryGameView: View {
                     if ProcessInfo.processInfo.arguments.contains("--ui-test-memory") {
                         Button("Advance test playback") {
                             MemoryUITestClock.shared.now += MemoryRound.digitDuration
-                            round.refresh()
+                            refreshClockDisplay()
                         }
                         Button("Finish test presentation") {
                             MemoryUITestClock.shared.now += MemoryRound.leadIn + Double(round.length) * MemoryRound.digitDuration
-                            round.refresh()
+                            refreshClockDisplay()
                         }
                     }
                     #endif
@@ -128,10 +134,10 @@ struct MemoryGameView: View {
             #if DEBUG
             if ProcessInfo.processInfo.arguments.contains("--ui-test-memory") { return }
             #endif
-            round.refresh()
+            refreshClockDisplay()
         }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active { round.resume(); round.refresh() } else { round.suspend() }
+            if phase == .active { round.resume(); refreshClockDisplay() } else { round.suspend() }
         }
     }
 
@@ -159,6 +165,13 @@ struct MemoryGameView: View {
         }
     }
 
+    // Snapshot clock-derived values into view state so the displayed seconds
+    // update even when a refresh doesn't change the round's phase.
+    private func refreshClockDisplay() {
+        round.refresh()
+        countdownSeconds = max(0, Int(ceil(round.countdownRemaining)))
+    }
+
     private func saveCompletedRound() {
         guard let record = round.terminalRecord, savedSessionID != record.id else { return }
         if records.save(record) {
@@ -172,5 +185,6 @@ struct MemoryGameView: View {
     private func replay() {
         input = NumericInput(allowsNegative: false, allowsDecimal: false, maxDigits: 3)
         round = Self.makeRound()
+        refreshClockDisplay()
     }
 }
