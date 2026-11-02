@@ -170,12 +170,21 @@ struct GamePreparationView: View {
                         .accessibilityIdentifier("start-flexibility")
                 } else if game.id == .letterSpeed {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Classic").font(.headline)
+                        Text("Difficulty").font(.headline)
+                        Picker("Difficulty", selection: $difficulty) {
+                            ForEach(Difficulty.allCases, id: \.self) { level in
+                                Text(level.rawValue.capitalized).tag(level)
+                            }
+                        }.accessibilityIdentifier("letter-difficulty")
+                        Text("Classic: A–Z · Easy: A–F · Normal: A–L · Hard: H–Z · Expert: N–Z")
+                            .font(.footnote).foregroundStyle(.secondary)
+                        Text("Custom levels use different letter ranges; their difficulty can vary by question.")
+                            .font(.footnote).foregroundStyle(.secondary)
                         Text("10 rounds · 30 seconds each").font(.subheadline)
                         Text("A = 1 through Z = 26. For two letters, take the difference between their values; for one letter, use its value. Add the ten rows and choose the highest or lowest total. Faster correct answers earn more points.")
                             .foregroundStyle(.secondary)
                     }
-                    NavigationLink("Start", destination: LetterSpeedGameView())
+                    NavigationLink("Start", destination: LetterSpeedGameView(difficulty: difficulty))
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("start-letter-speed")
                 } else {

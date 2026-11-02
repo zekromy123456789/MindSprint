@@ -320,12 +320,15 @@ final class MindSprintUITests: XCTestCase {
         for _ in 0..<4 { if game.isHittable { break }; app.swipeUp() }
         XCTAssertTrue(game.waitForExistence(timeout: 15))
         game.tap()
+        app.buttons["letter-difficulty"].tap()
+        app.buttons["Expert"].tap()
         app.buttons["start-letter-speed"].tap()
         XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
         app.buttons["Start test round"].tap()
         let prompt = app.staticTexts["letter-prompt"]
         XCTAssertTrue(prompt.waitForExistence(timeout: 15))
         XCTAssertEqual(app.staticTexts["letter-progress"].label, "Round 1 / 10")
+        XCTAssertEqual(app.staticTexts["letter-level"].label, "Expert")
         for index in 0..<4 { XCTAssertTrue(app.buttons["letter-choice-\(index)"].exists) }
         guard let answer = prompt.value as? String, let correct = Int(answer), (0..<4).contains(correct) else {
             XCTFail("Test answer is unavailable"); return
@@ -348,6 +351,7 @@ final class MindSprintUITests: XCTestCase {
         app.buttons["Start test round"].tap()
         XCTAssertTrue(prompt.waitForExistence(timeout: 10))
         XCTAssertEqual(app.staticTexts["letter-progress"].label, "Round 1 / 10")
+        XCTAssertEqual(app.staticTexts["letter-level"].label, "Expert")
         XCTAssertEqual(app.staticTexts["letter-score"].label, "Score: 0")
     }
 

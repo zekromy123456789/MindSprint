@@ -94,4 +94,23 @@ final class LetterSpeedRoundTests: XCTestCase {
         XCTAssertFalse(round.choose(4, forQuestion: round.questionID))
         XCTAssertTrue(round.results.isEmpty)
     }
+    func testSelectedDifficultyAppliesThroughoutRound() {
+        let clock = LetterSpeedTestClock()
+        var round = LetterSpeedRound(difficulty: .expert, clock: clock, seed: 55)
+        round.start()
+        clock.now = 3
+        round.refresh()
+        for _ in 0..<10 {
+            XCTAssertEqual(round.difficulty, .expert)
+            for choice in round.question!.choices {
+                for row in choice.rows {
+                    if let a = row.first { XCTAssertTrue((14...26).contains(a)) }
+                    if let b = row.second { XCTAssertTrue((14...26).contains(b)) }
+                }
+            }
+            XCTAssertTrue(round.choose(round.question!.correctIndex, forQuestion: round.questionID))
+        }
+        XCTAssertEqual(round.phase, .completed)
+    }
+
 }

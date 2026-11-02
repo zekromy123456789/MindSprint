@@ -8,19 +8,23 @@ private final class LetterSpeedUITestClock: SessionClock {
 #endif
 
 struct LetterSpeedGameView: View {
+    let difficulty: Difficulty
     @State private var round: LetterSpeedRound
     @Environment(\.scenePhase) private var scenePhase
     private let tick = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
-    init() { _round = State(initialValue: Self.makeRound()) }
+    init(difficulty: Difficulty = .classic) {
+        self.difficulty = difficulty
+        _round = State(initialValue: Self.makeRound(difficulty))
+    }
 
-    private static func makeRound() -> LetterSpeedRound {
+    private static func makeRound(_ difficulty: Difficulty) -> LetterSpeedRound {
         #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("--ui-test-letter-speed") {
-            return LetterSpeedRound(clock: LetterSpeedUITestClock.shared, seed: 42)
+            return LetterSpeedRound(difficulty: difficulty, clock: LetterSpeedUITestClock.shared, seed: 42)
         }
         #endif
-        return LetterSpeedRound()
+        return LetterSpeedRound(difficulty: difficulty)
     }
 
     var body: some View {
@@ -74,6 +78,8 @@ struct LetterSpeedGameView: View {
                         .accessibilityLabel("\(Int(ceil(round.remaining))) seconds remaining")
                         .accessibilityIdentifier("letter-time")
                 }.font(.headline)
+                Text(difficulty.rawValue.capitalized).font(.footnote).foregroundStyle(.secondary)
+                    .accessibilityIdentifier("letter-level")
                 Text("Round \(round.roundNumber) / \(LetterSpeedRound.questionCount)")
                     .font(.subheadline).foregroundStyle(.secondary)
                     .accessibilityIdentifier("letter-progress")
@@ -170,7 +176,7 @@ struct LetterSpeedGameView: View {
     }
 
     private func replay() {
-        var next = Self.makeRound()
+        var next = Self.makeRound(difficulty)
         next.start()
         round = next
     }

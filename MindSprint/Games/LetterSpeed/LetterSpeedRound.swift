@@ -14,6 +14,7 @@ struct LetterSpeedRound {
     static let questionDuration: TimeInterval = 30
     static let questionCount = 10
 
+    let difficulty: Difficulty
     private let clock: any SessionClock
     private var random: SeededRandomNumberGenerator
     private var countdownEndsAt: TimeInterval?
@@ -24,8 +25,10 @@ struct LetterSpeedRound {
     private(set) var score = 0
     private(set) var results: [LetterSpeedResult] = []
 
-    init(clock: any SessionClock = MonotonicSessionClock(),
+    init(difficulty: Difficulty = .classic,
+         clock: any SessionClock = MonotonicSessionClock(),
          seed: UInt64 = UInt64.random(in: .min ... .max)) {
+        self.difficulty = difficulty
         self.clock = clock
         random = SeededRandomNumberGenerator(seed: seed)
     }
@@ -94,7 +97,7 @@ struct LetterSpeedRound {
     }
 
     private mutating func nextQuestion(at now: TimeInterval) {
-        question = LetterSpeedGenerator().next(using: &random)
+        question = LetterSpeedGenerator(difficulty: difficulty).next(using: &random)
         questionStartedAt = now
         questionID += 1
     }
