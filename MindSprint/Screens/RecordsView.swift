@@ -2,10 +2,19 @@ import SwiftUI
 
 struct RecordsView: View {
     @EnvironmentObject private var records: RecordsManager
+    @State private var game: GameID = .letterSpeed
     @State private var difficulty: Difficulty = .classic
 
     private var configuration: RecordConfiguration {
-        RecordConfiguration(game: .letterSpeed, difficulty: difficulty, mode: "ten-round", rulesVersion: 1, durationLimit: 30)
+        switch game {
+        case .arithmetic, .arithmeticPro:
+            return RecordConfiguration(game: game, difficulty: difficulty, mode: "timed", rulesVersion: 1, durationLimit: 120)
+        default:
+            return RecordConfiguration(game: .letterSpeed, difficulty: difficulty, mode: "ten-round", rulesVersion: 1, durationLimit: 30)
+        }
+    }
+    private var difficulties: [Difficulty] {
+        game == .arithmeticPro ? [.easy, .normal, .hard, .expert] : Difficulty.allCases
     }
     private var attempts: [SessionRecord] {
         records.records.filter { $0.configuration == configuration && $0.outcome == .completed }
@@ -14,9 +23,14 @@ struct RecordsView: View {
 
     var body: some View {
         List {
-            Section("Letter Speed") {
+            Section("Game and difficulty") {
+                Picker("Game", selection: $game) {
+                    Text("Letter Speed").tag(GameID.letterSpeed)
+                    Text("Arithmetic").tag(GameID.arithmetic)
+                    Text("Arithmetic Pro").tag(GameID.arithmeticPro)
+                }.accessibilityIdentifier("records-game")
                 Picker("Difficulty", selection: $difficulty) {
-                    ForEach(Difficulty.allCases, id: \.self) { level in
+                    ForEach(difficulties, id: \.self) { level in
                         Text(level.rawValue.capitalized).tag(level)
                     }
                 }.accessibilityIdentifier("records-difficulty")
@@ -50,11 +64,14 @@ struct RecordsView: View {
                 }
             }
             Section {
-                Text("Records for other games will be added as they become available.")
+                Text("Records for the remaining games will be added as they become available.")
                     .font(.footnote).foregroundStyle(.secondary)
             }
         }
         .navigationTitle("Records")
         .onAppear { records.reload() }
+        .onChange(of: game) { _, selected in
+            difficulty = selected == .arithmeticPro ? .normal : .classic
+        }
     }
 }

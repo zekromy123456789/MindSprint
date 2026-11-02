@@ -9,6 +9,9 @@ struct ArithmeticRound {
     static let countdownDuration: TimeInterval = 3
     static let roundDuration: TimeInterval = 120
 
+    let difficulty: Difficulty
+    let sessionID = UUID()
+    private(set) var finishedAt: Date?
     private let clock: any SessionClock
     private let generator: ArithmeticGenerator
     private var random: SeededRandomNumberGenerator
@@ -21,6 +24,7 @@ struct ArithmeticRound {
 
     init(difficulty: Difficulty, clock: any SessionClock = MonotonicSessionClock(),
          seed: UInt64 = UInt64.random(in: .min ... .max)) {
+        self.difficulty = difficulty
         self.clock = clock
         generator = ArithmeticGenerator(difficulty: difficulty)
         random = SeededRandomNumberGenerator(seed: seed)
@@ -52,6 +56,7 @@ struct ArithmeticRound {
             session.refresh()
             if session.phase == .completed {
                 phase = .completed
+                finishedAt = Date()
                 lastQuestion = question
                 question = nil
             }

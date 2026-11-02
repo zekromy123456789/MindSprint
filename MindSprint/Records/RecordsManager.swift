@@ -14,8 +14,10 @@ final class RecordsManager: ObservableObject {
 
     static func makeDefault() -> RecordsManager {
         #if DEBUG
-        if ProcessInfo.processInfo.arguments.contains("--ui-test-letter-speed") {
-            let url = FileManager.default.temporaryDirectory.appendingPathComponent("mindsprint-letter-ui-test.sqlite")
+        let arguments = ProcessInfo.processInfo.arguments
+        let testNames = [("--ui-test-letter-speed", "letter"), ("--ui-test-arithmetic-fast", "arithmetic"), ("--ui-test-pro", "pro")]
+        if let test = testNames.first(where: { arguments.contains($0.0) }) {
+            let url = FileManager.default.temporaryDirectory.appendingPathComponent("mindsprint-\(test.1)-ui-test.sqlite")
             if ProcessInfo.processInfo.arguments.contains("--reset-ui-test-records") {
                 try? FileManager.default.removeItem(at: url)
             }

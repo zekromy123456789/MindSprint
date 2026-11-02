@@ -15,6 +15,9 @@ struct ArithmeticGameView: View {
     @State private var input = NumericInput(allowsNegative: true, allowsDecimal: false, maxDigits: 8)
     @State private var showTimer = true
     @Environment(\.scenePhase) private var scenePhase
+    @EnvironmentObject private var records: RecordsManager
+    @State private var savedSessionID: UUID?
+    @State private var saveFailed = false
     private let tick = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
     init(difficulty: Difficulty) {
@@ -93,7 +96,11 @@ struct ArithmeticGameView: View {
                                 .accessibilityIdentifier("arithmetic-last-question")
                         }
                     }
-                    Button("Play again", action: replay).buttonStyle(.borderedProminent)
+                    if saveFailed {
+                        Text("Your result could not be saved.").foregroundStyle(.red)
+                        Button("Retry saving", action: saveCompletedRound)
+                    }
+                    Button("Play again", action: replay).buttonStyle(.borderedProminent).disabled(saveFailed)
                 }
             case .abandoned:
                 EmptyView()
@@ -104,7 +111,8 @@ struct ArithmeticGameView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
         .onAppear { round.start() }
-        .onDisappear { round.abandon() }
+        .onDisappear { round.abandon(); saveCompletedRound() }
+        .onChange(of: round.phase) { _, phase in if phase == .completed { saveCompletedRound() } }
         .onReceive(tick) { _ in
             #if DEBUG
             if ProcessInfo.processInfo.arguments.contains("--ui-test-arithmetic-fast") { return }
@@ -124,6 +132,16 @@ struct ArithmeticGameView: View {
     private func answerChanged(_ text: String) {
         let id = round.questionID
         if round.accept(text, forQuestion: id) { input.reset() }
+    }
+
+    private func saveCompletedRound() {
+        guard let record = round.completedRecord, savedSessionID != record.id else { return }
+        if records.save(record) {
+            savedSessionID = record.id
+            saveFailed = false
+        } else {
+            saveFailed = true
+        }
     }
 
     private func replay() {

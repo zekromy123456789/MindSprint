@@ -31,7 +31,7 @@ final class MindSprintUITests: XCTestCase {
 
     func testArithmeticRoundAndReplay() {
         let app = XCUIApplication()
-        app.launchArguments.append("--ui-test-arithmetic-fast")
+        app.launchArguments += ["--ui-test-arithmetic-fast", "--reset-ui-test-records"]
         app.launch()
         XCTAssertTrue(app.buttons["game-arithmetic"].waitForExistence(timeout: 15))
         app.buttons["game-arithmetic"].tap()
@@ -71,11 +71,23 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
         app.buttons["Start test round"].tap()
         XCTAssertTrue(app.staticTexts["arithmetic-first"].waitForExistence(timeout: 10))
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.tabBars.buttons["Records"].tap()
+        app.buttons["records-game"].tap()
+        app.buttons["Arithmetic"].tap()
+        XCTAssertTrue(app.staticTexts["1 points"].waitForExistence(timeout: 10))
+        app.terminate()
+        app.launchArguments = ["--ui-test-arithmetic-fast"]
+        app.launch()
+        app.tabBars.buttons["Records"].tap()
+        app.buttons["records-game"].tap()
+        app.buttons["Arithmetic"].tap()
+        XCTAssertTrue(app.staticTexts["1 points"].waitForExistence(timeout: 10))
     }
 
     func testArithmeticProRoundAndReplay() {
         let app = XCUIApplication()
-        app.launchArguments.append("--ui-test-pro")
+        app.launchArguments += ["--ui-test-pro", "--reset-ui-test-records"]
         app.launch()
         XCTAssertTrue(app.buttons["game-arithmeticPro"].waitForExistence(timeout: 15))
         app.buttons["game-arithmeticPro"].tap()
@@ -108,6 +120,22 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertTrue(app.buttons["Start test round"].waitForExistence(timeout: 10))
         app.buttons["Start test round"].tap()
         XCTAssertTrue(app.staticTexts["pro-question"].waitForExistence(timeout: 15))
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.tabBars.buttons["Records"].tap()
+        app.buttons["records-game"].tap()
+        app.buttons["Arithmetic Pro"].tap()
+        app.buttons["records-difficulty"].tap()
+        app.buttons["Hard"].tap()
+        XCTAssertTrue(app.staticTexts["1 points"].waitForExistence(timeout: 10))
+        app.terminate()
+        app.launchArguments = ["--ui-test-pro"]
+        app.launch()
+        app.tabBars.buttons["Records"].tap()
+        app.buttons["records-game"].tap()
+        app.buttons["Arithmetic Pro"].tap()
+        app.buttons["records-difficulty"].tap()
+        app.buttons["Hard"].tap()
+        XCTAssertTrue(app.staticTexts["1 points"].waitForExistence(timeout: 10))
     }
 
     func testSequenceRoundAndReplay() {

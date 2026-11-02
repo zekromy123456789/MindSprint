@@ -23,3 +23,5 @@
 - Local Windows lacks Xcode and the iOS SDK. CI installs an unpinned XcodeGen version; runner or dependency changes can affect reproducibility.
 
 - A versioned SQLite record store and compatible-score summary passed simulator CI run 41398019339; Letter Speed completed-result saving and a difficulty-filtered Records UI passed CI run 41401651147; other games do not write records. Abandoned results are not saved; Letter Speed response times and total elapsed are not collected. Records screen visuals, accessibility, actual app interruptions and physical-device persistence remain unverified. Migration beyond the initial schema, backup/import and real-device persistence remain unverified.
+
+- Arithmetic and Arithmetic Pro completed-result persistence and game selection in Records are authored but await CI. Partial typed inputs are not counted as incorrect and response times are not recorded. Five other games remain unconnected.
