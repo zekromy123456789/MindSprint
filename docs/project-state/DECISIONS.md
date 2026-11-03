@@ -60,3 +60,7 @@
 ## 2026-11-03 — Records rankings and measured statistics
 
 Rank only completed sessions with matching game, difficulty, mode, rules version and duration. Tied scores share a rank, with deterministic ordering. Show a chronological running personal best; calculate accuracy from measured answered questions and response time from recorded samples only. Leave unavailable statistics absent rather than fabricating them. Simulator CI run 41580439517 verified the calculations and chart UI.
+
+## 2026-11-03 � Measured timing and backup merge
+
+Record actual response times for seven question-and-answer games, excluding unanswered timeouts and interrupted Memory recalls; Risk has no comparable single-answer response. Chronological trends include only sessions with measured data. Session elapsed time uses each game clock, includes time spent away, and excludes the initial countdown. Versioned JSON backups merge records transactionally: matching IDs are skipped, conflicting IDs reject the import, and a 10 MB limit is enforced while reading. The native picker and physical-device persistence still need QA.

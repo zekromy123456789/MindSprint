@@ -22,7 +22,7 @@ The definitive tasks and acceptance criteria for each milestone are in [MASTER_B
 | 15 | COMPLETED | Complete and test Flexibility. |
 | 16 | COMPLETED | Complete and test Letter Speed. |
 | 17 | IN PROGRESS | Offline history, personal records, statistics, migrations and tests. |
-| 18 | NOT STARTED | Settings, backups, accessibility and polish; split if necessary. |
+| 18 | IN PROGRESS | Backup model, merge and navigation passed simulator tests; settings, file-picker device QA, accessibility and polish remain. |
 | 19 | NOT STARTED | Full QA, release IPA, installation instructions and limitations; split if necessary. |
 
 
