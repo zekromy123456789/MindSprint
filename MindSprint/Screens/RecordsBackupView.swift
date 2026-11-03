@@ -24,7 +24,7 @@ struct RecordsBackupView: View {
     var body: some View {
         Form {
             Section("Your records") {
-                Text("Export a JSON copy of your saved sessions. Import adds new sessions and keeps existing ones. If an ID conflicts, nothing is imported.")
+                Text("Export a JSON copy of your saved sessions. Import adds new sessions and keeps existing ones. If an ID conflicts, nothing is imported. Backup files are limited to 10 MB.")
                 Button("Export backup") {
                     do {
                         document = BackupDocument(data: try records.exportBackup())

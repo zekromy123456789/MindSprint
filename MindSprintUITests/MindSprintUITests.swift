@@ -74,6 +74,15 @@ final class MindSprintUITests: XCTestCase {
         app.tabBars.buttons["Records"].tap()
         XCTAssertTrue(app.descendants(matching: .any)["records-best"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.descendants(matching: .any)["records-best"].label.contains("25"))
+        let backup = app.buttons["Export or import records"]
+        for _ in 0..<6 {
+            if backup.isHittable { break }
+            app.swipeUp()
+        }
+        XCTAssertTrue(backup.isHittable)
+        backup.tap()
+        XCTAssertTrue(app.buttons["Export backup"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["Import backup"].exists)
     }
 
     func testArithmeticRoundAndReplay() {
