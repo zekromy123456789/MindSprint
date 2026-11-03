@@ -56,3 +56,7 @@
 - 2026-11-02: Save an abandoned record only after a game has entered play; opening and leaving during pre-play does not create one. On timed-game exit, completion takes precedence if the deadline crosses during exit checks. Records filters completed and abandoned history, while best and average include only completed sessions. Failed writes are queued in memory with an alert and retry while the app stays open; this queue is not durable and force termination is not captured. CI run 41544443226 passed.
 
 - 2026-11-02: After the user reported all pre-game countdowns remained visually at 3 while play began on time, all game views now snapshot clock-derived displayed seconds on refresh. Controlled-clock UI tests cover 3/2/1 in all eight games; real-time Arithmetic timer checks pass on both simulator sizes in run 41568379810. Root cause and actual device behavior remain unconfirmed. The iOS workflow timeout was extended to 45 minutes for the expanded suites.
+
+## 2026-11-03 — Records rankings and measured statistics
+
+Rank only completed sessions with matching game, difficulty, mode, rules version and duration. Tied scores share a rank, with deterministic ordering. Show a chronological running personal best; calculate accuracy from measured answered questions and response time from recorded samples only. Leave unavailable statistics absent rather than fabricating them. Simulator CI run 41580439517 verified the calculations and chart UI.
