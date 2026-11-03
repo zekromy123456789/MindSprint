@@ -356,7 +356,10 @@ final class MindSprintUITests: XCTestCase {
                 guard let correct = answer.value as? String else { XCTFail("Test answer is unavailable"); return }
                 for digit in correct { app.buttons[String(digit)].tap() }
                 app.buttons["Submit"].tap()
-                XCTAssertTrue(app.staticTexts["memory-status"].label.contains("4 digits"))
+                let nextMemoryStatus = app.staticTexts["memory-status"]
+                let nextQuestion = expectation(for: NSPredicate(format: "label CONTAINS %@", "4 digits"),
+                                               evaluatedWith: nextMemoryStatus)
+                wait(for: [nextQuestion], timeout: 10)
             } else {
                 capture("memory-stage-\(stage)")
             }
