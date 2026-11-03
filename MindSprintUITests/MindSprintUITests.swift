@@ -54,6 +54,28 @@ final class MindSprintUITests: XCTestCase {
         wait(for: [changes], timeout: 6)
     }
 
+    func testRecordsRankingAndProgress() {
+        let app = XCUIApplication()
+        app.launchArguments += ["--ui-test-records-chart", "--reset-ui-test-records"]
+        app.launch()
+        app.tabBars.buttons["Records"].tap()
+        let best = app.descendants(matching: .any)["records-best"]
+        XCTAssertTrue(best.waitForExistence(timeout: 10))
+        XCTAssertTrue(best.label.contains("25"))
+        for _ in 0..<4 {
+            if app.descendants(matching: .any)["records-progress-chart"].exists { break }
+            app.swipeUp()
+        }
+        XCTAssertTrue(app.descendants(matching: .any)["top-score-0"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["records-progress-chart"].exists)
+        app.terminate()
+        app.launchArguments = ["--ui-test-records-chart"]
+        app.launch()
+        app.tabBars.buttons["Records"].tap()
+        XCTAssertTrue(app.descendants(matching: .any)["records-best"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.descendants(matching: .any)["records-best"].label.contains("25"))
+    }
+
     func testArithmeticRoundAndReplay() {
         let app = XCUIApplication()
         app.launchArguments += ["--ui-test-arithmetic-fast", "--reset-ui-test-records"]
@@ -505,6 +527,8 @@ final class MindSprintUITests: XCTestCase {
         app.buttons["records-outcome"].tap()
         app.buttons["Abandoned"].tap()
         XCTAssertTrue(app.staticTexts["0 points"].waitForExistence(timeout: 10))
+        app.swipeUp()
+        XCTAssertTrue(app.descendants(matching: .any)["top-score-0"].waitForExistence(timeout: 10))
     }
 
     func testKeypadEditingSubmissionAndReset() {

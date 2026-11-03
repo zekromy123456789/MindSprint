@@ -1,4 +1,5 @@
 import SwiftUI
+import Charts
 
 private enum HistoryFilter: String, CaseIterable {
     case completed = "Completed"
@@ -39,6 +40,7 @@ struct RecordsView: View {
         return records.records.filter { $0.configuration == configuration && $0.outcome == outcome }
     }
     private var summary: RecordSummary { RecordSummary(records: records.records, configuration: configuration) }
+    private var analytics: RecordAnalytics { RecordAnalytics(records: records.records, configuration: configuration) }
 
     var body: some View {
         List {
@@ -76,6 +78,16 @@ struct RecordsView: View {
                     if let average = summary.averageScore {
                         LabeledContent("Average score", value: average.formatted(.number.precision(.fractionLength(1))))
                     }
+                    if let accuracy = analytics.accuracy {
+                        LabeledContent("Accuracy", value: accuracy.formatted(.percent.precision(.fractionLength(1))))
+                        Text("Based on answered questions from \(analytics.accuracySessionCount) measured sessions.")
+                            .font(.footnote).foregroundStyle(.secondary)
+                    }
+                    if let responseTime = analytics.averageResponseTime {
+                        LabeledContent("Average response", value: "\(responseTime.formatted(.number.precision(.fractionLength(2)))) s")
+                        Text("Based on \(analytics.responseCount) recorded responses.")
+                            .font(.footnote).foregroundStyle(.secondary)
+                    }
                 }
             }
             Section("History") {
@@ -103,6 +115,37 @@ struct RecordsView: View {
                         }
                         .accessibilityElement(children: .combine)
                         .accessibilityIdentifier("record-\(record.id.uuidString)")
+                    }
+                }
+            }
+            if !analytics.ranked.isEmpty {
+                Section("Top scores") {
+                    ForEach(Array(analytics.ranked.prefix(5).enumerated()), id: \.element.id) { index, entry in
+                        HStack {
+                            Text("#\(entry.rank)").bold().frame(width: 32, alignment: .leading)
+                            Text(entry.record.finishedAt, style: .date).foregroundStyle(.secondary)
+                            Spacer()
+                            Text("\(entry.record.score)").bold().monospacedDigit()
+                        }
+                        .accessibilityElement(children: .combine)
+                        .accessibilityIdentifier("top-score-\(index)")
+                    }
+                    Text("Tied scores share a rank; earlier sessions appear first.")
+                        .font(.footnote).foregroundStyle(.secondary)
+                }
+                Section("Personal best over time") {
+                    if analytics.progress.count > 1 {
+                        Chart(analytics.progress) { point in
+                            LineMark(x: .value("Date", point.record.finishedAt), y: .value("Best score", point.bestScore))
+                            PointMark(x: .value("Date", point.record.finishedAt), y: .value("Best score", point.bestScore))
+                        }
+                        .chartYScale(domain: .automatic(includesZero: false))
+                        .frame(height: 160)
+                        .accessibilityLabel("Personal best over time")
+                        .accessibilityIdentifier("records-progress-chart")
+                    } else {
+                        Text("Complete another session to see your progress.")
+                            .foregroundStyle(.secondary)
                     }
                 }
             }

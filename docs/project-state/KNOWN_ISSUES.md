@@ -33,3 +33,5 @@
 - Abandoned-session persistence, history filtering and in-memory failed-save retry passed CI run 41544443226. Failed writes queued for retry are held only while the app remains open; app termination before retry may lose those unsaved results. Actual lifecycle interruptions and physical-device behavior remain unverified.
 
 - User reported on device that all game countdowns stayed at 3 although games started on time. Explicit view-state snapshots for displayed countdown and remaining seconds passed CI run 41568379810. Controlled-clock checks cover 3/2/1 in all eight games and a real-time Arithmetic timer runs on both simulator sizes; physical-device/LiveContainer verification remains pending. Root cause is not yet independently confirmed.
+
+- Completed-session rankings, measured-only accuracy/response averages and personal-best chart are authored but await CI and visual/accessibility review. Most games do not yet collect response times; unavailable data is omitted.
