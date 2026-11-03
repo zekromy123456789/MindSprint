@@ -24,6 +24,23 @@ struct RecordBackup: Codable {
         return data
     }
 
+    // Some file providers do not report a size. Read incrementally so those
+    // files still work without loading an unbounded amount into memory.
+    static func readFile(at url: URL) throws -> Data {
+        if let size = (try? url.resourceValues(forKeys: [.fileSizeKey]))?.fileSize, size > maxBytes {
+            throw RecordBackupError.fileTooLarge
+        }
+        let handle = try FileHandle(forReadingFrom: url)
+        defer { try? handle.close() }
+        var data = Data()
+        while data.count <= maxBytes {
+            let chunk = try handle.read(upToCount: min(64 * 1024, maxBytes + 1 - data.count)) ?? Data()
+            if chunk.isEmpty { return data }
+            data.append(chunk)
+        }
+        throw RecordBackupError.fileTooLarge
+    }
+
     static func decode(_ data: Data) throws -> [SessionRecord] {
         guard data.count <= maxBytes else { throw RecordBackupError.fileTooLarge }
         let backup = try JSONDecoder().decode(RecordBackup.self, from: data)

@@ -48,10 +48,7 @@ struct RecordsBackupView: View {
                 let url = try result.get()
                 let accessed = url.startAccessingSecurityScopedResource()
                 defer { if accessed { url.stopAccessingSecurityScopedResource() } }
-                let size = try url.resourceValues(forKeys: [.fileSizeKey]).fileSize
-                guard let size, size <= RecordBackup.maxBytes else { throw RecordBackupError.fileTooLarge }
-                let data = try Data(contentsOf: url)
-                guard data.count <= RecordBackup.maxBytes else { throw RecordBackupError.fileTooLarge }
+                let data = try RecordBackup.readFile(at: url)
                 let count = try records.importBackup(data)
                 message = "Imported \(count) new \(count == 1 ? "session" : "sessions"). Existing sessions were kept."
             } catch {

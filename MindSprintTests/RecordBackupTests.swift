@@ -57,4 +57,16 @@ final class RecordBackupTests: XCTestCase {
         XCTAssertEqual(second.records, [record])
     }
 
+    func testReadingBackupFileIsBounded() throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let url = directory.appendingPathComponent("backup.json")
+        let data = try RecordBackup.encode([SessionRecord(configuration: configuration, outcome: .completed, score: 8)])
+        try data.write(to: url)
+        XCTAssertEqual(try RecordBackup.readFile(at: url), data)
+        try Data(repeating: 32, count: RecordBackup.maxBytes + 1).write(to: url)
+        XCTAssertThrowsError(try RecordBackup.readFile(at: url))
+    }
+
 }
