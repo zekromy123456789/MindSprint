@@ -15,6 +15,7 @@ final class RecordBackupTests: XCTestCase {
         object["version"] = 99
         XCTAssertThrowsError(try RecordBackup.decode(JSONSerialization.data(withJSONObject: object)))
         XCTAssertThrowsError(try RecordBackup.decode(Data("bad json".utf8)))
+        XCTAssertThrowsError(try RecordBackup.decode(Data(repeating: 32, count: RecordBackup.maxBytes + 1)))
         let invalid = SessionRecord(configuration: configuration, outcome: .completed, score: 1, responseTimes: [-1])
         XCTAssertThrowsError(try RecordBackup.encode([invalid]))
     }

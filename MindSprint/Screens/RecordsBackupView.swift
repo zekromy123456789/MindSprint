@@ -20,7 +20,6 @@ struct RecordsBackupView: View {
     @State private var exporting = false
     @State private var importing = false
     @State private var message: String?
-    private let maxBackupBytes = 10 * 1024 * 1024
 
     var body: some View {
         Form {
@@ -50,9 +49,9 @@ struct RecordsBackupView: View {
                 let accessed = url.startAccessingSecurityScopedResource()
                 defer { if accessed { url.stopAccessingSecurityScopedResource() } }
                 let size = try url.resourceValues(forKeys: [.fileSizeKey]).fileSize
-                guard let size, size <= maxBackupBytes else { throw RecordBackupError.fileTooLarge }
+                guard let size, size <= RecordBackup.maxBytes else { throw RecordBackupError.fileTooLarge }
                 let data = try Data(contentsOf: url)
-                guard data.count <= maxBackupBytes else { throw RecordBackupError.fileTooLarge }
+                guard data.count <= RecordBackup.maxBytes else { throw RecordBackupError.fileTooLarge }
                 let count = try records.importBackup(data)
                 message = "Imported \(count) new \(count == 1 ? "session" : "sessions"). Existing sessions were kept."
             } catch {
