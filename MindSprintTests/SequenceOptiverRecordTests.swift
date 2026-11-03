@@ -41,7 +41,7 @@ final class SequenceOptiverRecordTests: XCTestCase {
         XCTAssertEqual(record.score, -1)
         XCTAssertEqual(record.correct, 1)
         XCTAssertEqual(record.incorrect, 1)
-        XCTAssertNil(record.responseTimes)
+        XCTAssertEqual(record.responseTimes, [0, 0])
         XCTAssertEqual(round.completedRecord, record)
         let sequence = RecordConfiguration(game: .sequence, difficulty: .easy, mode: "timed", rulesVersion: 1, durationLimit: 120)
         XCTAssertNil(RecordSummary(records: [record], configuration: sequence).bestScore)

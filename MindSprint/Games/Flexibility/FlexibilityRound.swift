@@ -37,6 +37,8 @@ struct FlexibilityRound {
     private var random: SeededRandomNumberGenerator
     private var session: GameSession
     private var countdownEndsAt: TimeInterval?
+    private var questionStartedAt: TimeInterval?
+    private(set) var responseTimes: [TimeInterval] = []
     private(set) var phase: FlexibilityPhase = .ready
     private(set) var question: FlexibilityQuestion?
     private(set) var questionID = 0
@@ -84,6 +86,7 @@ struct FlexibilityRound {
         guard phase == .active, token == questionID, let question else { return false }
         let correct = matches == question.isMatch
         guard session.award(correct ? 1 : -1) else { refresh(); return false }
+        if let start = questionStartedAt { responseTimes.append(max(0, clock.now - start)) }
         if correct { correctCount += 1 } else { incorrectCount += 1 }
         advance()
         return true
@@ -108,5 +111,6 @@ struct FlexibilityRound {
     private mutating func advance() {
         question = FlexibilityGenerator().next(using: &random)
         questionID += 1
+        questionStartedAt = clock.now
     }
 }

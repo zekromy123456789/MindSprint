@@ -27,7 +27,7 @@ final class RemainingGameRecordTests: XCTestCase {
         XCTAssertEqual(record.score, 1)
         XCTAssertEqual(record.correct, 1)
         XCTAssertEqual(record.incorrect, 6)
-        XCTAssertNil(record.responseTimes)
+        XCTAssertEqual(record.responseTimes, [0, 0, 0, 0, 0, 0, 0])
         try assertPersistsOnce(record)
     }
 

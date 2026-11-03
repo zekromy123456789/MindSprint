@@ -23,7 +23,7 @@ final class LetterSpeedRecordTests: XCTestCase {
         XCTAssertEqual(record.score, 30)
         XCTAssertEqual(record.correct, 1)
         XCTAssertEqual(record.incorrect, 0)
-        XCTAssertNil(record.responseTimes)
+        XCTAssertEqual(record.responseTimes, [0])
         XCTAssertEqual(round.completedRecord, record)
         do {
             let store = try RecordStore(url: url)

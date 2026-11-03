@@ -10,7 +10,8 @@ extension ArithmeticRound {
         return SessionRecord(id: sessionID,
             configuration: RecordConfiguration(game: .arithmetic, difficulty: difficulty,
                 mode: "timed", rulesVersion: 1, durationLimit: Self.roundDuration),
-            outcome: phase == .completed ? .completed : .abandoned, finishedAt: finishedAt, score: score, correct: score)
+            outcome: phase == .completed ? .completed : .abandoned, finishedAt: finishedAt, score: score, correct: score,
+            responseTimes: responseTimes.isEmpty ? nil : responseTimes)
     }
 }
 
@@ -24,6 +25,7 @@ extension ArithmeticProRound {
         return SessionRecord(id: sessionID,
             configuration: RecordConfiguration(game: .arithmeticPro, difficulty: difficulty,
                 mode: "timed", rulesVersion: 1, durationLimit: Self.roundDuration),
-            outcome: phase == .completed ? .completed : .abandoned, finishedAt: finishedAt, score: score, correct: score)
+            outcome: phase == .completed ? .completed : .abandoned, finishedAt: finishedAt, score: score, correct: score,
+            responseTimes: responseTimes.isEmpty ? nil : responseTimes)
     }
 }

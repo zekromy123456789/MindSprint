@@ -27,6 +27,7 @@ struct LetterSpeedRound {
     private(set) var questionID = 0
     private(set) var score = 0
     private(set) var results: [LetterSpeedResult] = []
+    private(set) var responseTimes: [TimeInterval] = []
 
     init(difficulty: Difficulty = .classic,
          clock: any SessionClock = MonotonicSessionClock(),
@@ -76,6 +77,7 @@ struct LetterSpeedRound {
         guard phase == .active, token == questionID, let question,
               question.choices.indices.contains(index), let start = questionStartedAt else { return false }
         let elapsed = max(0, now - start)
+        responseTimes.append(elapsed)
         let points = index == question.correctIndex ? max(0, 30 - Int(floor(elapsed))) : 0
         finishQuestion(LetterSpeedResult(question: question, selectedIndex: index, points: points, timedOut: false), at: now)
         return true

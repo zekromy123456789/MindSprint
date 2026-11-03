@@ -18,6 +18,8 @@ struct ArithmeticProRound {
     private var random: SeededRandomNumberGenerator
     private var session: GameSession
     private var countdownEndsAt: TimeInterval?
+    private var questionStartedAt: TimeInterval?
+    private(set) var responseTimes: [TimeInterval] = []
     private(set) var phase: ArithmeticProRoundPhase = .ready
     private(set) var question: ArithmeticProQuestion?
     private(set) var lastQuestion: ArithmeticProQuestion?
@@ -74,6 +76,7 @@ struct ArithmeticProRound {
             refresh()
             return false
         }
+        if let start = questionStartedAt { responseTimes.append(max(0, clock.now - start)) }
         advanceQuestion()
         return true
     }
@@ -98,5 +101,6 @@ struct ArithmeticProRound {
     private mutating func advanceQuestion() {
         question = generator.next(using: &random)
         questionID += 1
+        questionStartedAt = clock.now
     }
 }

@@ -15,7 +15,7 @@ extension LetterSpeedRound {
             configuration: RecordConfiguration(game: .letterSpeed, difficulty: difficulty,
                 mode: "ten-round", rulesVersion: 1, durationLimit: Self.questionDuration),
             outcome: phase == .completed ? .completed : .abandoned, finishedAt: finishedAt, score: score,
-            correct: correct, incorrect: incorrect
+            correct: correct, incorrect: incorrect, responseTimes: responseTimes.isEmpty ? nil : responseTimes
         )
     }
 }

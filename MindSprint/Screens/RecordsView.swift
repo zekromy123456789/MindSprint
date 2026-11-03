@@ -85,7 +85,7 @@ struct RecordsView: View {
                     }
                     if let responseTime = analytics.averageResponseTime {
                         LabeledContent("Average response", value: "\(responseTime.formatted(.number.precision(.fractionLength(2)))) s")
-                        Text("Based on \(analytics.responseCount) recorded responses.")
+                        Text("Based on \(analytics.responseCount) recorded answers. Timeouts are excluded; time spent away may be included.")
                             .font(.footnote).foregroundStyle(.secondary)
                     }
                 }

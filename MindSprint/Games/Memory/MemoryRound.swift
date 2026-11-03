@@ -39,6 +39,8 @@ struct MemoryRound {
     private var random: SeededRandomNumberGenerator
     private var countdownEndsAt: TimeInterval?
     private var presentationStartedAt: TimeInterval?
+    private var recallStartedAt: TimeInterval?
+    private(set) var responseTimes: [TimeInterval] = []
     private(set) var phase: MemoryPhase = .instructions
     private(set) var stage: MemoryStage = .original
     private(set) var length = 3
@@ -90,6 +92,7 @@ struct MemoryRound {
             if clock.now - start >= Self.leadIn + Double(digits.count) * Self.digitDuration {
                 visibleIndex = nil
                 phase = .recall
+                recallStartedAt = clock.now
             } else {
                 visibleIndex = currentVisibleIndex()
             }
@@ -100,6 +103,8 @@ struct MemoryRound {
     mutating func submit(_ answer: String, forQuestion token: Int) -> Bool {
         refresh()
         guard phase == .recall, !isSuspended, token == questionID else { return false }
+        if let start = recallStartedAt { responseTimes.append(max(0, clock.now - start)) }
+        recallStartedAt = nil
         if answer == stage.answer(for: digits) {
             score += 1
             length += 1
@@ -133,6 +138,8 @@ struct MemoryRound {
     mutating func suspend() {
         guard phase != .completed, phase != .abandoned else { return }
         isSuspended = true
+        // A recall interrupted by backgrounding is not comparable to uninterrupted responses.
+        if phase == .recall { recallStartedAt = nil }
         visibleIndex = nil
     }
 

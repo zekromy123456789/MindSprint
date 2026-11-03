@@ -15,6 +15,8 @@ struct OptiverRound {
     private var random: SeededRandomNumberGenerator
     private var session: GameSession
     private var countdownEndsAt: TimeInterval?
+    private var questionStartedAt: TimeInterval?
+    private(set) var responseTimes: [TimeInterval] = []
     private(set) var phase: OptiverRoundPhase = .ready
     private(set) var questions: [OptiverQuestion] = []
     private(set) var responses: [Bool?] = []
@@ -56,6 +58,7 @@ struct OptiverRound {
             guard session.start(at: end) else { return }
             phase = .active
             hasPlayed = true
+            questionStartedAt = clock.now
         }
         if phase == .active {
             session.refresh()
@@ -71,8 +74,10 @@ struct OptiverRound {
               question.choices.contains(choice) else { return false }
         let correct = choice == question.answer
         guard session.award(correct ? 1 : -2) else { refresh(); return false }
+        if let start = questionStartedAt { responseTimes.append(max(0, clock.now - start)) }
         responses[index] = correct
         index += 1
+        questionStartedAt = clock.now
         if index == Self.questionCount {
             session.finish()
             phase = .completed

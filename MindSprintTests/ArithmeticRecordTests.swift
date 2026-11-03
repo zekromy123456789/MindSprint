@@ -18,7 +18,7 @@ final class ArithmeticRecordTests: XCTestCase {
         XCTAssertEqual(record.score, 1)
         XCTAssertEqual(record.correct, 1)
         XCTAssertNil(record.incorrect)
-        XCTAssertNil(record.responseTimes)
+        XCTAssertEqual(record.responseTimes, [0])
         XCTAssertEqual(round.completedRecord, record)
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
