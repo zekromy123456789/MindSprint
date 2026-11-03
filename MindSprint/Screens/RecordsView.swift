@@ -149,6 +149,41 @@ struct RecordsView: View {
                     }
                 }
             }
+            if analytics.accuracyProgress.count > 1 {
+                Section("Accuracy over time") {
+                    Chart(analytics.accuracyProgress) { point in
+                        LineMark(x: .value("Date", point.record.finishedAt), y: .value("Accuracy", point.value))
+                        PointMark(x: .value("Date", point.record.finishedAt), y: .value("Accuracy", point.value))
+                    }
+                    .chartYScale(domain: 0...1)
+                    .chartYAxis {
+                        AxisMarks { value in
+                            AxisValueLabel {
+                                if let number = value.as(Double.self) { Text(number, format: .percent) }
+                            }
+                        }
+                    }
+                    .frame(height: 160)
+                    .accessibilityLabel("Accuracy over time")
+                    .accessibilityIdentifier("records-accuracy-chart")
+                    Text("Sessions with measured answers only.")
+                        .font(.footnote).foregroundStyle(.secondary)
+                }
+            }
+            if analytics.responseProgress.count > 1 {
+                Section("Response time over time") {
+                    Chart(analytics.responseProgress) { point in
+                        LineMark(x: .value("Date", point.record.finishedAt), y: .value("Seconds", point.value))
+                        PointMark(x: .value("Date", point.record.finishedAt), y: .value("Seconds", point.value))
+                    }
+                    .chartYScale(domain: .automatic(includesZero: false))
+                    .frame(height: 160)
+                    .accessibilityLabel("Average response time over time, in seconds")
+                    .accessibilityIdentifier("records-response-chart")
+                    Text("Average recorded answer time in each measured session. Lower is faster.")
+                        .font(.footnote).foregroundStyle(.secondary)
+                }
+            }
             Section("Backups") {
                 NavigationLink("Export or import records") { RecordsBackupView() }
             }

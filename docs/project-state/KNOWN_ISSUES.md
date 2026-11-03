@@ -35,3 +35,5 @@
 - User reported on device that all game countdowns stayed at 3 although games started on time. Explicit view-state snapshots for displayed countdown and remaining seconds passed CI run 41568379810. Controlled-clock checks cover 3/2/1 in all eight games and a real-time Arithmetic timer runs on both simulator sizes; physical-device/LiveContainer verification remains pending. Root cause is not yet independently confirmed.
 
 - Completed-session rankings, measured-only accuracy/response averages and personal-best chart passed simulator CI run 41580439517 but await visual/accessibility review. Most games do not yet collect response times; unavailable data is omitted.
+
+- Seven question-and-answer games now record response times; Risk is excluded because its multi-action balloons do not map to a single answer. Timings and JSON backup import/export are awaiting simulator CI and physical-device review. Memory excludes recalls interrupted while backgrounded; other games may include time away. Backup file-picker and cloud-provider behavior require device QA.

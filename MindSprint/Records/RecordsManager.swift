@@ -26,7 +26,9 @@ final class RecordsManager: ObservableObject {
                     mode: "ten-round", rulesVersion: 1, durationLimit: 30)
                 for (score, time, outcome) in [(10, 1.0, RecordOutcome.completed), (25, 2.0, .completed), (999, 3.0, .abandoned)] {
                     _ = manager.save(SessionRecord(configuration: config, outcome: outcome,
-                        finishedAt: Date(timeIntervalSince1970: time), score: score))
+                        finishedAt: Date(timeIntervalSince1970: time), score: score,
+                        correct: outcome == .completed ? score : nil, incorrect: outcome == .completed ? 5 : nil,
+                        responseTimes: outcome == .completed ? [time] : nil))
                 }
             }
             return manager

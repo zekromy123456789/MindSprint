@@ -12,11 +12,19 @@ struct BestProgressPoint: Identifiable, Equatable {
     var id: UUID { record.id }
 }
 
+struct MeasuredProgressPoint: Identifiable, Equatable {
+    let record: SessionRecord
+    let value: Double
+    var id: UUID { record.id }
+}
+
 // Only exactly compatible, completed sessions are compared. Ties share a rank;
 // earlier completion then UUID gives a deterministic order inside a tie.
 struct RecordAnalytics {
     let ranked: [RankedAttempt]
     let progress: [BestProgressPoint]
+    let accuracyProgress: [MeasuredProgressPoint]
+    let responseProgress: [MeasuredProgressPoint]
     let accuracy: Double?
     let accuracySessionCount: Int
     let averageResponseTime: TimeInterval?
@@ -45,6 +53,20 @@ struct RecordAnalytics {
         progress = chronological.map { record in
             best = max(best ?? record.score, record.score)
             return BestProgressPoint(record: record, bestScore: best!)
+        }
+        accuracyProgress = chronological.compactMap { record in
+            guard let correct = record.correct, let incorrect = record.incorrect,
+                  correct > 0 || incorrect > 0 else { return nil }
+            let total = Double(correct) + Double(incorrect)
+            return MeasuredProgressPoint(record: record, value: Double(correct) / total)
+        }
+        responseProgress = chronological.compactMap { record in
+            guard let times = record.responseTimes, !times.isEmpty else { return nil }
+            var mean = 0.0
+            for (index, time) in times.enumerated() {
+                mean += (time - mean) / Double(index + 1)
+            }
+            return MeasuredProgressPoint(record: record, value: mean)
         }
         var totalCorrect = 0.0
         var totalAnswered = 0.0

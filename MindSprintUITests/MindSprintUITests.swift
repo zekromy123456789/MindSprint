@@ -68,6 +68,16 @@ final class MindSprintUITests: XCTestCase {
         }
         XCTAssertTrue(app.descendants(matching: .any)["top-score-0"].exists)
         XCTAssertTrue(app.descendants(matching: .any)["records-progress-chart"].exists)
+        for _ in 0..<6 {
+            if app.descendants(matching: .any)["records-accuracy-chart"].exists { break }
+            app.swipeUp()
+        }
+        XCTAssertTrue(app.descendants(matching: .any)["records-accuracy-chart"].exists)
+        for _ in 0..<6 {
+            if app.descendants(matching: .any)["records-response-chart"].exists { break }
+            app.swipeUp()
+        }
+        XCTAssertTrue(app.descendants(matching: .any)["records-response-chart"].exists)
         app.terminate()
         app.launchArguments = ["--ui-test-records-chart"]
         app.launch()
@@ -75,7 +85,7 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertTrue(app.descendants(matching: .any)["records-best"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.descendants(matching: .any)["records-best"].label.contains("25"))
         let backup = app.buttons["Export or import records"]
-        for _ in 0..<6 {
+        for _ in 0..<10 {
             if backup.isHittable { break }
             app.swipeUp()
         }

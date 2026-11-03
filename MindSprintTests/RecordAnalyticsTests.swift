@@ -38,10 +38,14 @@ final class RecordAnalyticsTests: XCTestCase {
         XCTAssertEqual(result.accuracySessionCount, 2)
         XCTAssertEqual(result.averageResponseTime!, 2, accuracy: 0.00001)
         XCTAssertEqual(result.responseCount, 3)
+        XCTAssertEqual(result.accuracyProgress.map(\.value), [2.0 / 3.0, 1.0 / 3.0])
+        XCTAssertEqual(result.responseProgress.map(\.value), [2, 2])
         let empty = RecordAnalytics(records: [missing,noAnswers], configuration: base)
         XCTAssertNil(empty.accuracy)
         XCTAssertNil(empty.averageResponseTime)
         XCTAssertEqual(empty.responseCount, 0)
+        XCTAssertTrue(empty.accuracyProgress.isEmpty)
+        XCTAssertTrue(empty.responseProgress.isEmpty)
     }
 
     func testDifferentModesRulesAndDurationsNeverMix() {
