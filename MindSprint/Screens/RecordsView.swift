@@ -90,6 +90,9 @@ struct RecordsView: View {
                     }
                 }
             }
+            Section("Backups") {
+                NavigationLink("Export or import records") { RecordsBackupView() }
+            }
             Section("History") {
                 Picker("Show", selection: $historyFilter) {
                     ForEach(HistoryFilter.allCases, id: \.self) { filter in

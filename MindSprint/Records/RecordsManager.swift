@@ -73,6 +73,22 @@ final class RecordsManager: ObservableObject {
         }
     }
 
+    func exportBackup() throws -> Data {
+        guard pending.isEmpty, loadError == nil else { throw RecordBackupError.unsavedRecords }
+        let store = try RecordStore(url: databaseURL)
+        return try RecordBackup.encode(store.allRecords())
+    }
+
+    @discardableResult
+    func importBackup(_ data: Data) throws -> Int {
+        guard pending.isEmpty, loadError == nil else { throw RecordBackupError.unsavedRecords }
+        let imported = try RecordBackup.decode(data)
+        let store = try RecordStore(url: databaseURL)
+        let added = try store.importRecords(imported)
+        records = try store.allRecords()
+        return added
+    }
+
     func retryPending() {
         for record in Array(pending.values) { _ = save(record) }
         if pending.isEmpty { reload() }

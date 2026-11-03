@@ -81,6 +81,32 @@ final class RecordStore {
         return true
     }
 
+    // Merge atomically: identical IDs are skipped, conflicting IDs reject the
+    // entire import, and a failure leaves the existing database unchanged.
+    @discardableResult
+    func importRecords(_ imported: [SessionRecord]) throws -> Int {
+        try execute("BEGIN IMMEDIATE TRANSACTION")
+        do {
+            var existing = Dictionary(uniqueKeysWithValues: try allRecords().map { ($0.id, $0) })
+            var count = 0
+            for record in imported {
+                guard record.isValid else { throw RecordStoreError.invalidRecord }
+                if let prior = existing[record.id] {
+                    guard prior == record else { throw RecordBackupError.conflictingRecord }
+                    continue
+                }
+                try insert(record)
+                existing[record.id] = record
+                count += 1
+            }
+            try execute("COMMIT")
+            return count
+        } catch {
+            try? execute("ROLLBACK")
+            throw error
+        }
+    }
+
     func allRecords() throws -> [SessionRecord] {
         guard let database else { throw RecordStoreError.database("Database is closed") }
         var statement: OpaquePointer?
