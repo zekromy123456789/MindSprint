@@ -10,7 +10,7 @@ extension SequenceRound {
         return SessionRecord(id: sessionID,
             configuration: RecordConfiguration(game: .sequence, difficulty: difficulty,
                 mode: "timed", rulesVersion: 1, durationLimit: Self.roundDuration),
-            outcome: phase == .completed ? .completed : .abandoned, finishedAt: finishedAt, score: score, correct: score,
+            outcome: phase == .completed ? .completed : .abandoned, finishedAt: finishedAt, score: score, elapsed: elapsed, correct: score,
             responseTimes: responseTimes.isEmpty ? nil : responseTimes)
     }
 }
@@ -25,7 +25,7 @@ extension OptiverRound {
         return SessionRecord(id: sessionID,
             configuration: RecordConfiguration(game: .optiver, difficulty: difficulty,
                 mode: "timed-80", rulesVersion: 1, durationLimit: Self.roundDuration),
-            outcome: phase == .completed ? .completed : .abandoned, finishedAt: finishedAt, score: score,
+            outcome: phase == .completed ? .completed : .abandoned, finishedAt: finishedAt, score: score, elapsed: elapsed,
             correct: responses.filter { $0 == true }.count,
             incorrect: responses.filter { $0 == false }.count,
             responseTimes: responseTimes.isEmpty ? nil : responseTimes)

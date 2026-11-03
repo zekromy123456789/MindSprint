@@ -22,6 +22,8 @@ struct LetterSpeedRound {
     private var random: SeededRandomNumberGenerator
     private var countdownEndsAt: TimeInterval?
     private var questionStartedAt: TimeInterval?
+    private var playStartedAt: TimeInterval?
+    private(set) var elapsed: TimeInterval?
     private(set) var phase: LetterSpeedPhase = .ready
     private(set) var question: LetterQuestion?
     private(set) var questionID = 0
@@ -61,6 +63,7 @@ struct LetterSpeedRound {
         if phase == .countdown, let end = countdownEndsAt, now >= end {
             phase = .active
             hasPlayed = true
+            playStartedAt = now
             nextQuestion(at: now)
         } else if phase == .active, let start = questionStartedAt,
                   now - start >= Self.questionDuration, let question {
@@ -87,7 +90,10 @@ struct LetterSpeedRound {
         guard phase == .ready || phase == .countdown || phase == .active else { return }
         refresh()
         guard phase != .completed else { return }
-        if hasPlayed { finishedAt = Date() }
+        if hasPlayed {
+            finishedAt = Date()
+            elapsed = playStartedAt.map { max(0, clock.now - $0) }
+        }
         phase = .abandoned
         question = nil
     }
@@ -98,6 +104,7 @@ struct LetterSpeedRound {
         if results.count == Self.questionCount {
             phase = .completed
             finishedAt = Date()
+            elapsed = playStartedAt.map { max(0, now - $0) }
             question = nil
         } else {
             nextQuestion(at: now)

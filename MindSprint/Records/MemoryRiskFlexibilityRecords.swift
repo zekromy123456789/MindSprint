@@ -10,7 +10,7 @@ extension MemoryRound {
         return SessionRecord(id: sessionID,
             configuration: RecordConfiguration(game: .memory, difficulty: .classic,
                 mode: "three-stage", rulesVersion: 1, durationLimit: nil),
-            outcome: phase == .completed ? .completed : .abandoned, finishedAt: finishedAt, score: score,
+            outcome: phase == .completed ? .completed : .abandoned, finishedAt: finishedAt, score: score, elapsed: elapsed,
             correct: score, incorrect: incorrectCount,
             responseTimes: responseTimes.isEmpty ? nil : responseTimes)
     }
@@ -26,7 +26,7 @@ extension RiskRound {
         return SessionRecord(id: sessionID,
             configuration: RecordConfiguration(game: .risk, difficulty: .classic,
                 mode: "20-balloon", rulesVersion: 1, durationLimit: nil),
-            outcome: phase == .completed ? .completed : .abandoned, finishedAt: finishedAt, score: score)
+            outcome: phase == .completed ? .completed : .abandoned, finishedAt: finishedAt, score: score, elapsed: elapsed)
     }
 }
 
@@ -40,7 +40,7 @@ extension FlexibilityRound {
         return SessionRecord(id: sessionID,
             configuration: RecordConfiguration(game: .flexibility, difficulty: .classic,
                 mode: "timed", rulesVersion: 1, durationLimit: Self.roundDuration),
-            outcome: phase == .completed ? .completed : .abandoned, finishedAt: finishedAt, score: score,
+            outcome: phase == .completed ? .completed : .abandoned, finishedAt: finishedAt, score: score, elapsed: elapsed,
             correct: correctCount, incorrect: incorrectCount,
             responseTimes: responseTimes.isEmpty ? nil : responseTimes)
     }

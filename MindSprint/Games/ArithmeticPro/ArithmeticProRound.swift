@@ -36,6 +36,7 @@ struct ArithmeticProRound {
     }
 
     var score: Int { session.score }
+    var elapsed: TimeInterval? { session.elapsed }
     var remaining: TimeInterval { session.remaining ?? 0 }
     var countdownRemaining: TimeInterval {
         guard phase == .countdown, let end = countdownEndsAt else { return 0 }

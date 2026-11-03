@@ -64,6 +64,12 @@ struct GameSession {
         return max(0, duration - max(0, (endedAt ?? clock.now) - startedAt))
     }
 
+    // This includes time spent away, matching the monotonic game clock.
+    var elapsed: TimeInterval? {
+        guard let startedAt else { return nil }
+        return max(0, (endedAt ?? clock.now) - startedAt)
+    }
+
     // Rules own answer validation and progression; score changes only while active.
     @discardableResult
     mutating func award(_ points: Int) -> Bool {

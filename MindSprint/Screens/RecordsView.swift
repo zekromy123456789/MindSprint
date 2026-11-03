@@ -108,6 +108,10 @@ struct RecordsView: View {
                         HStack {
                             VStack(alignment: .leading) {
                                 Text(record.finishedAt, style: .date)
+                                if let elapsed = record.elapsed {
+                                    Text("Played \(elapsed.formatted(.number.precision(.fractionLength(1)))) s")
+                                        .font(.caption).foregroundStyle(.secondary)
+                                }
                                 if record.outcome == .abandoned { Text("Abandoned").font(.caption).foregroundStyle(.secondary) }
                             }
                             Spacer()

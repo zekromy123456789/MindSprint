@@ -14,6 +14,8 @@ struct RiskRound {
     private let clock: any SessionClock
     private var random: SeededRandomNumberGenerator
     private var countdownEndsAt: TimeInterval?
+    private var playStartedAt: TimeInterval?
+    private(set) var elapsed: TimeInterval?
     private(set) var phase: RiskPhase = .ready
     private(set) var probabilities: [RiskColor: Int] = [:]
     private(set) var roundNumber = 1
@@ -55,7 +57,11 @@ struct RiskRound {
     }
 
     mutating func refresh() {
-        if phase == .countdown, let end = countdownEndsAt, clock.now >= end { phase = .active; hasPlayed = true }
+        if phase == .countdown, let end = countdownEndsAt, clock.now >= end {
+            phase = .active
+            hasPlayed = true
+            playStartedAt = clock.now
+        }
     }
 
     // A caller-supplied roll is useful for deterministic rule tests.
@@ -91,7 +97,10 @@ struct RiskRound {
     mutating func abandon() {
         guard phase != .completed, phase != .abandoned else { return }
         refresh()
-        if hasPlayed { finishedAt = Date() }
+        if hasPlayed {
+            finishedAt = Date()
+            elapsed = playStartedAt.map { max(0, clock.now - $0) }
+        }
         phase = .abandoned
     }
 
@@ -99,6 +108,7 @@ struct RiskRound {
         if roundNumber == Self.totalRounds {
             phase = .completed
             finishedAt = Date()
+            elapsed = playStartedAt.map { max(0, clock.now - $0) }
         } else {
             roundNumber += 1
             newBalloon()

@@ -39,6 +39,8 @@ struct MemoryRound {
     private var random: SeededRandomNumberGenerator
     private var countdownEndsAt: TimeInterval?
     private var presentationStartedAt: TimeInterval?
+    private var playStartedAt: TimeInterval?
+    private(set) var elapsed: TimeInterval?
     private var recallStartedAt: TimeInterval?
     private(set) var responseTimes: [TimeInterval] = []
     private(set) var phase: MemoryPhase = .instructions
@@ -85,6 +87,7 @@ struct MemoryRound {
         guard !isSuspended else { return }
         if phase == .countdown, let end = countdownEndsAt, clock.now >= end {
             presentationStartedAt = clock.now
+            if !hasPlayed { playStartedAt = clock.now }
             hasPlayed = true
             phase = .presenting
         }
@@ -131,6 +134,7 @@ struct MemoryRound {
             incorrectCount += 1
             phase = .completed
             finishedAt = Date()
+            elapsed = playStartedAt.map { max(0, clock.now - $0) }
         }
         return true
     }
@@ -152,7 +156,10 @@ struct MemoryRound {
 
     mutating func abandon() {
         guard phase != .completed, phase != .abandoned else { return }
-        if hasPlayed { finishedAt = Date() }
+        if hasPlayed {
+            finishedAt = Date()
+            elapsed = playStartedAt.map { max(0, clock.now - $0) }
+        }
         phase = .abandoned
     }
 
