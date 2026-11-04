@@ -586,6 +586,33 @@ final class MindSprintUITests: XCTestCase {
         XCTAssertFalse(app.buttons["Submit"].isEnabled)
     }
 
+    func testAppearanceChoicePersistsAcrossRelaunch() {
+        let app = XCUIApplication()
+        app.launch()
+        app.tabBars.buttons["Settings"].tap()
+        let picker = app.segmentedControls["appearance-picker"]
+        XCTAssertTrue(picker.waitForExistence(timeout: 10))
+        let dark = picker.buttons["Dark"]
+        dark.tap()
+        expectation(for: NSPredicate(format: "selected == true"), evaluatedWith: dark)
+        waitForExpectations(timeout: 5)
+        capture("settings-dark")
+        app.tabBars.buttons["Records"].tap()
+        XCTAssertTrue(app.navigationBars["Records"].waitForExistence(timeout: 5))
+        capture("records-dark")
+        app.terminate()
+        app.launch()
+        app.tabBars.buttons["Settings"].tap()
+        let reopenedPicker = app.segmentedControls["appearance-picker"]
+        XCTAssertTrue(reopenedPicker.waitForExistence(timeout: 10))
+        XCTAssertTrue(reopenedPicker.buttons["Dark"].isSelected)
+        reopenedPicker.buttons["Light"].tap()
+        XCTAssertTrue(reopenedPicker.buttons["Light"].isSelected)
+        capture("settings-light")
+        reopenedPicker.buttons["System"].tap()
+        XCTAssertTrue(reopenedPicker.buttons["System"].isSelected)
+    }
+
     func testHapticPreferencePersists() {
         let app = XCUIApplication()
         app.launch()

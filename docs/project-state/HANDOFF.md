@@ -1,7 +1,7 @@
 PROJECT: MindSprint
 
 CURRENT MILESTONE: 17 — Local leaderboards and statistics (IN PROGRESS). Milestone 16 Letter Speed is completed to simulator verification limits.
-CURRENT SUBTASK: Response-time tracking, measured trends, JSON backup, elapsed-time tracking and bounded backup reading passed simulator CI. Continue remaining statistics, migration and settings work; countdown and file picker still need device verification.
+CURRENT SUBTASK: Persistent System, Light and Dark appearance settings authored; simulator CI pending. Countdown and backup picker still need device verification.
 
 LAST COMPLETED WORK: Leaving a game after it has started records an abandoned session for all eight games using the same stable ID and actual score/configuration; leaving before play starts does not create history. Timed games refresh on exit, and if the deadline crosses between their two exit checks they record completion instead of abandonment. Completed and abandoned history are separately filterable; only completed sessions contribute to personal best, count and average. Failed saves remain in an in-memory retry queue with an app-level alert and a Retry saving button in Records. The queue is lost if the app terminates before retry; force termination is not recorded as an abandonment. Tests cover all eight games, pre-play exits, expiry races, duplicate prevention, retry, filtering and relaunch. CI run 41544443226 passed.
 
@@ -17,7 +17,7 @@ KNOWN ISSUES: User reported the earlier IPA countdown stayed at 3 in all games w
 
 CURRENT BLOCKERS: Windows lacks Xcode and the iOS simulator; use GitHub Actions. Physical checks require a device.
 
-NEXT EXACT TASK: Continue milestone 17 with remaining statistics and database migration, and milestone 18 with settings, accessibility and device QA. The user may independently test the newest IPA on their phone, especially countdowns, native JSON export/import, and persistence; do not assume LiveContainer preserves data on reinstall. Backup import merges transactionally, skips identical IDs and rejects conflicts. Rankings compare only compatible completed sessions; statistics omit unmeasured values. The isolated DEBUG-only chart store is used for UI tests.
+NEXT EXACT TASK: Verify persistent appearance setting in simulator CI, fix failures, and inspect available dark/light screenshots. Continue remaining statistics, database migration, settings and accessibility. The countdown and native backup picker still need device verification; do not assume LiveContainer preserves data on reinstall.
 
 NEXT TASK ACCEPTANCE CRITERIA: Preserve existing records and do not fabricate missing measurements; verify new work in CI. Milestone 17 remains incomplete until required history, statistics, migrations and acceptance criteria are addressed. Chart visual appearance and accessibility still need review.
 
